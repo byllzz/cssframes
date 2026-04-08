@@ -1,6 +1,5 @@
 #  Cssframes
 **The open-source library for everyday CSS animations.**
-
 Cssframes is a curated collection of high-quality, copy-paste CSS animations designed specifically for React developers. No heavy libraries, just pure CSS keyframes.
 
 
