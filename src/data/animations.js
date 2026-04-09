@@ -11,6 +11,7 @@ export const animations = [
     `,
     css: '@keyframes float-anim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }',
     tailwind: 'animate-[float-anim_3s_ease-in-out_infinite]',
+    desc: "A weightless vertical oscillation. Perfect for adding a premium, airy feel to icons and floating UI elements."
   },
   {
     id: 'pulse-soft',
@@ -24,6 +25,7 @@ export const animations = [
     `,
     css: '@keyframes pulse-soft { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }',
     tailwind: 'animate-[pulse-soft_2s_ease-in-out_infinite]',
+    desc: "Subtle rhythmic expansion. Designed to draw focus to call-to-action buttons without overwhelming the user interface."
   },
   {
     id: 'slide-up-fade',
@@ -36,6 +38,7 @@ export const animations = [
     `,
     css: '@keyframes slide-up-fade { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }',
     tailwind: 'animate-[slide-up-fade_0.6s_ease-out_forwards]',
+    desc: "Elegant vertical emergence. Combines upward motion with a smooth opacity ramp for clean and modern content entries."
   },
   {
     id: 'spin-slow',
@@ -48,6 +51,7 @@ export const animations = [
     `,
     css: '@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }',
     tailwind: 'animate-[spin-slow_8s_linear_infinite]',
+    desc: "A continuous, low-velocity rotation. Ideal for sophisticated background motifs or minimalist loading states."
   },
   {
     id: 'shake-error',
@@ -61,6 +65,7 @@ export const animations = [
     `,
     css: '@keyframes shake-error { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }',
     tailwind: 'animate-[shake-error_0.4s_ease-in-out]',
+    desc: "Tactile horizontal feedback. Mimics a physical head shake to communicate failed validation or restricted user actions."
   },
   {
     id: 'bounce-light',
@@ -74,6 +79,7 @@ export const animations = [
     `,
     css: '@keyframes bounce-light { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }',
     tailwind: 'animate-[bounce-light_2s_infinite]',
+    desc: "A dynamic, gravity-inspired vertical bounce. Adds a playful yet professional personality to notifications and alerts."
   },
   {
     id: 'blur-in',
@@ -86,6 +92,7 @@ export const animations = [
     `,
     css: '@keyframes blur-in { from { filter: blur(10px); opacity: 0; } to { filter: blur(0); opacity: 1; } }',
     tailwind: 'animate-[blur-in_1s_ease-out_forwards]',
+    desc: "Cinematic focal transition. Shifts from a soft blur to crystal clarity for a high-end, high-impact content reveal."
   },
   {
     id: 'shimmer-effect',
@@ -98,6 +105,7 @@ export const animations = [
     `,
     css: '.shimmer { background: linear-gradient(90deg, #18181b 25%, #27272a 50%, #18181b 75%); background-size: 200% 100%; animation: shimmer-effect 2s infinite; }',
     tailwind: 'bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 bg-[length:200%_100%] animate-[shimmer-effect_2s_linear_infinite]',
+    desc: "Subtle light-path movement. The industry standard for premium skeleton loading states and metallic surface highlights."
   },
   {
     id: 'zoom-in-out',
@@ -110,6 +118,7 @@ export const animations = [
     `,
     css: '@keyframes zoom-in-out { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }',
     tailwind: 'animate-[zoom-in-out_4s_ease-in-out_infinite]',
+    desc: "Slow-tempo organic scaling. Gives static images or cards a 'living' quality by mimicking a natural breathing cycle."
   },
   {
     id: 'slide-right',
@@ -122,5 +131,6 @@ export const animations = [
     `,
     css: '@keyframes slide-right { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }',
     tailwind: 'animate-[slide-right_0.5s_ease-out_forwards]',
+    desc: "Swift lateral entry from the right. A directional movement ideal for sidebars, notification toasts, or list items."
   }
 ];

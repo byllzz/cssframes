@@ -10,12 +10,6 @@ export default function SearchNavigation({ searchQuery, setSearchQuery }) {
         </span>
         <input type="text" id="searchInput" placeholder="Search..." className="text-white outline-none border-none w-[100%]" value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)} />
-        <div className="flex items-center gap-0 px-2 rounded-[5px] bg-black relative left-2">
-          <span>
-            <Command size={15} className="text-[#ccc]" />
-          </span>
-          <h3 className='text-white'>K</h3>
-        </div>
       </label>
     </div>
   );

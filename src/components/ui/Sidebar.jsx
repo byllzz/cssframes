@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import SettingsPanel from './SettingsPanel';
-import AppearancePanel from './AppearancePanel'
+import SettingsPanel from '../settings/SettingsPanel';
+import AppearancePanel from '../settings/AppearancePanel';
 import {
   LayoutGrid,
   Layers,
   Settings2,
-  Globe,
   Palette,
-  CircleQuestionMark,
   CirclePlay,
   Loader,
   SlidersVertical,
@@ -15,38 +13,43 @@ import {
   User,
 } from 'lucide-react';
 
-
 const navigations = [
-  {name : "Home" , icon : <Home  size={20} />},
-  {name : "About" , icon : <User size={20} />}
-]
+  { name: 'Home', icon: <Home size={20} /> },
+  { name: 'About', icon: <User size={20} /> },
+];
 
 const categories = [
   { name: 'All', icon: <LayoutGrid size={20} />, count: 42 },
   { name: 'Buttons', icon: <CirclePlay size={20} />, count: 12 },
-  { name: 'Loaders', icon: <Loader size={20} className='animate-spin' />, count: 8  },
+  { name: 'Loaders', icon: <Loader size={20} className="animate-spin" />, count: 8 },
   { name: 'Entrances', icon: <Layers size={20} />, count: 15 },
   { name: 'Transitions', icon: <SlidersVertical size={20} />, count: 7 },
 ];
 
 const settings = [
   { name: 'Settings', icon: <Settings2 size={20} /> },
-  { name: 'Appearance', icon: <Palette size={20}  /> },
+  { name: 'Appearance', icon: <Palette size={20} /> },
 ];
 
-export default function Sidebar({ selectedCategory, setSelectedCategory , activeNavigation, setActiveNavigation  , previewType , setPreviewType}) {
+export default function Sidebar({
+  selectedCategory,
+  activeNavigation,
+  previewType,
+  setPreviewType,
+  onNavigate,
+}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activePanel, setActivePanel] = useState(false);
 
   return (
     <div
-      className={`h-screen bg-black border-r border-zinc-800 flex flex-col font-outfit transition-all duration-300 ease-in-out ${
-        isCollapsed ? 'w-[80px]' : 'w-[260px]'
+      className={`h-screen bg-[#050505] border-r border-zinc-900 flex flex-col font-outfit ${
+        isCollapsed ? 'w-[80px]' : 'w-[240px]'
       }`}
     >
       {/* Logo Section */}
       <div
-        className={`p-6 flex items-center justify-between gap-3 mb-3 ${isCollapsed ? 'justify-center' : ''}`}
+        className={`py-6 px-4 flex items-center justify-between gap-3 mb-3 ${isCollapsed ? 'justify-center' : ''}`}
       >
         {!isCollapsed && (
           <div className="flex items-center animate-in fade-in duration-500">
@@ -70,7 +73,7 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="cursor-pointer hover:bg-zinc-800 p-1 rounded-md transition-colors "
         >
-          {/* Your SVG Icon (simplified here for brevity) */}
+          {/* svg icon */}
           <svg height={17} fill="#ccc" viewBox="0 0 24 24">
             <path d="M20,24H4c-2.2,0-4-1.8-4-4V4c0-2.2,1.8-4,4-4h16c2.2,0,4,1.8,4,4v16C24,22.2,22.2,24,20,24z M4,2C2.9,2,2,2.9,2,4v16 c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V4c0-1.1-0.9-2-2-2H4z"></path>
             <path d="M8,24c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1s1,0.4,1,1v22C9,23.6,8.6,24,8,24z"></path>
@@ -91,9 +94,9 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
             <button
               key={item.name}
               onClick={() => {
-                setActiveNavigation(item.name);
+                onNavigate(item.name);
               }}
-              className={`w-full flex items-center p-2.5 rounded-xl transition-all group cursor-pointer ${
+              className={`w-full flex items-center p-2.5 rounded-[8px] transition-all group cursor-pointer mt-1 ${
                 activeNavigation === item.name
                   ? 'bg-zinc-800 text-white'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
@@ -119,6 +122,7 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
           ))}
         </div>
 
+        {/* categories */}
         {!isCollapsed && (
           <p className="text-xs font-semibold text-zinc-500 uppercase px-3 mb-2 animate-in fade-in">
             Categories
@@ -129,10 +133,10 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
             <button
               key={item.name}
               onClick={() => {
-                setSelectedCategory(item.name);
+                onNavigate('Home', item.name);
                 setActiveNavigation('Home');
               }}
-              className={`w-full flex items-center p-2.5 rounded-xl transition-all group cursor-pointer ${
+              className={`w-full flex items-center p-2.5 rounded-[8px] transition-all group cursor-pointer mt-1 ${
                 selectedCategory === item.name
                   ? 'bg-zinc-800 text-white'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
@@ -160,7 +164,7 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 mt-auto border-t border-zinc-800 relative">
+      <div className="p-4 mt-auto border-t border-zinc-900 relative">
         {!isCollapsed && (
           <p className="text-xs font-semibold text-zinc-500 uppercase px-3 mb-2 animate-in fade-in">
             Settings
@@ -178,22 +182,17 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
           </button>
         ))}
         {/* this is our bottom settings panel */}
-        <div
-          className={`absolute z-99 -top-70 ${isCollapsed ? '-right-85' : '-right-60 '}`}
-        >
-          {activePanel === 'Settings' && <SettingsPanel onClose={setActivePanel} previewType={previewType} setPreviewType={setPreviewType} />}
+        <div className={`absolute z-99 -top-70 ${isCollapsed ? '-right-85' : '-right-60 '}`}>
+          {activePanel === 'Settings' && (
+            <SettingsPanel
+              onClose={setActivePanel}
+              previewType={previewType}
+              setPreviewType={setPreviewType}
+            />
+          )}
           {activePanel === 'Appearance' && <AppearancePanel onClose={setActivePanel} />}
         </div>
       </div>
-    </div>
-  );
-}
-
-
-export function Panel() {
-  return (
-    <div className="h-auto w-80 rounded-[40px] bg-white text-black p-4">
-      d
     </div>
   );
 }

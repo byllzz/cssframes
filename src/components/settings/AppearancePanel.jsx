@@ -1,22 +1,18 @@
-import React, { useRef } from 'react';
+import React  from 'react';
 import { X } from 'lucide-react';
-import { handleOutsideClick } from '../hooks/outsideClicks';
 
 export default function AppearancePanel({ onClose }) {
-  const panelRef = useRef();
-  handleOutsideClick(panelRef , () => onClose(false));
   return (
-    // Fixed position to match the SettingsPanel pop-out location
+    // SettingsPanel
     <div className=" w-80 animate-in slide-in-from-left-4 fade-in duration-300">
 
-      {/* Container - Matching SettingsPanel exactly */}
-      <div className="bg-[#121212] border border-zinc-800 rounded-[2.5rem] shadow-2xl overflow-hidden font-outfit">
+      {/* Container*/}
+      <div className="bg-[#121212] border border-zinc-800 rounded-[16px] shadow-2xl overflow-hidden font-outfit">
 
-        {/* Header - Scaled down */}
+        {/* Header  */}
         <div className="px-6 py-5 flex items-center justify-between">
           <h2 className="text-lg font-normal text-zinc-100">Appearance</h2>
           <button
-            ref={panelRef}
             onClick={() => onClose(false)}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white transition-colors cursor-pointer"
           >
@@ -39,7 +35,7 @@ export default function AppearancePanel({ onClose }) {
             </div>
           </div>
 
-          {/* Sidebar Toggle Section - Compact layout */}
+          {/* Sidebar Toggle Section */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h3 className="text-sm text-zinc-100 font-medium">Sidebar</h3>
@@ -51,7 +47,7 @@ export default function AppearancePanel({ onClose }) {
             </label>
           </div>
 
-          {/* Footer Buttons - Smaller padding */}
+          {/* Footer Buttons */}
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => onClose(null)}
@@ -71,7 +67,7 @@ export default function AppearancePanel({ onClose }) {
   );
 }
 
-// Sub-component scaled for the smaller width
+// Sub-components
 function ThemeCard({ color, isActive = false }) {
   return (
     <div className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group border-2 transition-all ${isActive ? 'border-zinc-100' : 'border-transparent hover:border-zinc-700'}`}>
