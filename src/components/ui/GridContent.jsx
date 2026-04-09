@@ -3,6 +3,9 @@ import AnimationCard from '../layout/AnimationCard';
 import SearchNavigation from './SearchNavigation';
 import { Columns, Home, LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
 import PreviewType from './PreviewType';
+import FilterDropdown from '../FilterDropdown';
+
+import { Box, Type, Circle, Star } from 'lucide-react';
 
 export default function GridContent({
   animations,
@@ -44,6 +47,15 @@ export default function GridContent({
     document.getElementById('grid-top')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+
+// preview Options
+     const previewOptions = [
+       { id: 'box', label: 'Box', icon: <Box size={16} /> },
+       { id: 'text', label: 'Text', icon: <Type size={14} /> },
+       { id: 'circle', label: 'Circle', icon: <Circle size={14} /> },
+       { id: 'icon', label: 'Icon', icon: <Star size={14} /> },
+     ];
+
   return (
     <div className="flex-1 h-screen overflow-y-auto overflow-x-hidden bg-[#050505] py-6 font-outfit">
       <div id="grid-top" /> {/* Scroll anchor */}
@@ -58,17 +70,28 @@ export default function GridContent({
         <p className="text-zinc-500 text-[18px] font-outfit ">Open-Source CSS animations library</p>
       </div>
       {/* Controls */}
-      <div className="flex items-center justify-between w-full relative right-2 px-9 mb-5 ">
+      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-0 items-start justify-between w-full relative right-2 px-7 md:px-9 mb-5 ">
+
         <h2 className="text-white/70 text-md font-heading font-medium">
           Page {currentPage} of {totalPages || 1}
         </h2>
 
-        <div className="text-white flex items-center gap-2 ">
+        <div className="text-white flex  items-center gap-2 flex-wrap md:flex-nowrap ">
           <div className="h-5 w-[2px] bg-zinc-800"></div>
-          <PreviewType previewType={previewType} setPreviewType={setPreviewType} />
-          <div className="h-5 w-[2px] bg-zinc-800"></div>
+          <div className="hidden md:block">
+            <PreviewType
+              previewType={previewType}
+              setPreviewType={setPreviewType}
+              previewOptions={previewOptions}
+            />
+          </div>
+          <div className='block md:hidden'>
+            <FilterDropdown previewOptions={previewOptions} setPreviewType={setPreviewType} />
+          </div>
+
+          <div className="h-5 w-[2px] bg-zinc-800 "></div>
           {/* grid pattern btns */}
-          <div className="flex items-center gap-2">
+          <div className=" items-center gap-2 hidden md:flex">
             {gridPatternsBtns.map(btn => (
               <button
                 key={btn.id}
@@ -84,7 +107,7 @@ export default function GridContent({
       </div>
       {/* Grid Layout */}
       <div
-        className={`grid gap-6 px-5 md:px-6 mb-12 ${gridPattern === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'}`}
+        className={`grid gap-6 px-4 md:px-6 mb-12 ${gridPattern === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'}`}
       >
         {currentCards.length > 0 ? (
           currentCards.map(animation => (
@@ -133,7 +156,7 @@ export default function GridContent({
             onClick={() => paginate(currentPage + 1)}
             className="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-800 transition-colors"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
       )}

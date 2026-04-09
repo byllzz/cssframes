@@ -27,7 +27,7 @@ const categories = [
 ];
 
 const settings = [
-  { name: 'Settings', icon: <Settings2 size={20} /> },
+  // { name: 'Settings', icon: <Settings2 size={20} /> },
   { name: 'Appearance', icon: <Palette size={20} /> },
 ];
 
@@ -43,7 +43,7 @@ export default function Sidebar({
 
   return (
     <div
-      className={`h-screen bg-[#050505] border-r border-zinc-900 flex flex-col font-outfit ${
+      className={`h-screen bg-[#050505] border-r border-zinc-900 flex flex-col font-outfit transition-width duration-50 ${
         isCollapsed ? 'w-[80px]' : 'w-[240px]'
       }`}
     >
@@ -181,7 +181,6 @@ export default function Sidebar({
             {!isCollapsed && <span className="animate-in fade-in">{item.name}</span>}
           </button>
         ))}
-        {/* this is our bottom settings panel */}
         <div className={`absolute z-99 -top-70 ${isCollapsed ? '-right-85' : '-right-60 '}`}>
           {activePanel === 'Settings' && (
             <SettingsPanel
