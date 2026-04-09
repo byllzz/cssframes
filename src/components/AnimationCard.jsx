@@ -1,8 +1,8 @@
 import React from 'react';
-import { ArrowUpRight, Copy } from 'lucide-react';
-import { animations } from '../data/animations';
+import { ArrowUpRight, Star } from 'lucide-react';
+// import { animations } from '../data/animations';
 
-export default function AnimationCard({ animation, onCardClick }) {
+export default function AnimationCard({ animation, onCardClick  , previewType}) {
   const styleSheet = `
     @keyframes ${animation.id} {
       ${animation.keyframes}
@@ -17,17 +17,12 @@ export default function AnimationCard({ animation, onCardClick }) {
   //   navigator.clipboard.writeText(text);
   // };
 
-
-
-
-
-
+  const activeClass = `active-${animation.id}`;
 
   return (
     <div
       onClick={() => onCardClick(animation)}
-      className={`group  bg-black rounded-[2rem] p-2 w-full h-92 max-w-sm cursor-pointer transition-transform  duration-300 shadow-sm font-outfit`
-}
+      className={`group  bg-black rounded-[2rem] p-2 w-full h-92 max-w-sm cursor-pointer transition-transform  duration-300 shadow-sm font-outfit`}
     >
       <style>{styleSheet}</style>
 
@@ -42,16 +37,30 @@ export default function AnimationCard({ animation, onCardClick }) {
       {/* Preview Area (The "Shoe" Box) */}
       <div className="relative aspect-[4/3] bg-white/80  rounded-[2rem] overflow-hidden flex items-center justify-center border border-zinc-100">
         {/* Animated Element */}
-        <div className={`active-${animation.id} flex flex-col items-center`}>
-          <div className="w-12 h-12 bg-indigo-500 rounded-xl mb-2 shadow-lg shadow-indigo-500/40" />
-          <span className="text-white/20 font-mono text-xs uppercase tracking-widest">Preview</span>
+        <div className="relative aspect-[4/3] h-full w-full  flex items-center justify-center overflow-hidden">
+          {previewType === 'box' && (
+            <div className={`${activeClass} w-12 h-12 bg-indigo-500 rounded-xl shadow-lg`} />
+          )}
+
+          {previewType === 'text' && (
+            <h1 className={`${activeClass} text-3xl font-bold text-white tracking-tighter`}>Aa</h1>
+          )}
+
+          {previewType === 'circle' && (
+            <div className={`${activeClass} w-12 h-12 bg-indigo-500 rounded-full shadow-lg`} />
+          )}
+
+          {previewType === 'icon' && (
+            <div className={`${activeClass}`}>
+              <Star className="fill-indigo-500 text-indigo-500" />
+            </div>
+          )}
         </div>
 
         {/* Floating Action Button (Bottom Right) */}
         <button className="absolute bottom-5 right-5 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
           <ArrowUpRight size={24} />
         </button>
-
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeAnimation, setActiveAnimation] = useState(null);
   const [activeNavigation, setActiveNavigation] = useState("Home");
+  const [previewType, setPreviewType] = useState('text');
 
 
 
@@ -23,6 +24,8 @@ export default function App() {
         setSelectedCategory={setSelectedCategory}
         setActiveNavigation={setActiveNavigation}
         activeNavigation={activeNavigation}
+        previewType={previewType}
+        setPreviewType={setPreviewType}
       />
 
       {/* Grid */}
@@ -33,6 +36,8 @@ export default function App() {
           setSearchQuery={setSearchQuery}
           selectedCategory={selectedCategory}
           onCardClick={setActiveAnimation}
+          previewType={previewType}
+          setPreviewType={setPreviewType}
         />
       )}
       {activeNavigation === 'About' && <About />}

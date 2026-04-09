@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import SettingsPanel from './SettingsPanel';
+import AppearancePanel from './AppearancePanel'
 import {
   LayoutGrid,
   Layers,
@@ -29,14 +31,12 @@ const categories = [
 
 const settings = [
   { name: 'Settings', icon: <Settings2 size={20} /> },
-  { name: 'Language', icon: <Globe size={20} /> },
   { name: 'Appearance', icon: <Palette size={20}  /> },
-  { name: 'Support', icon: <CircleQuestionMark size={20} /> },
 ];
 
-export default function Sidebar({ selectedCategory, setSelectedCategory , activeNavigation, setActiveNavigation}) {
+export default function Sidebar({ selectedCategory, setSelectedCategory , activeNavigation, setActiveNavigation  , previewType , setPreviewType}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activePanel, setActivePanel] = useState(null);
+  const [activePanel, setActivePanel] = useState(false);
 
   return (
     <div
@@ -128,7 +128,10 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
           {categories.map(item => (
             <button
               key={item.name}
-              onClick={() => {setSelectedCategory(item.name); setActiveNavigation("Home")}}
+              onClick={() => {
+                setSelectedCategory(item.name);
+                setActiveNavigation('Home');
+              }}
               className={`w-full flex items-center p-2.5 rounded-xl transition-all group cursor-pointer ${
                 selectedCategory === item.name
                   ? 'bg-zinc-800 text-white'
@@ -158,6 +161,12 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
 
       {/* Bottom Section */}
       <div className="p-4 mt-auto border-t border-zinc-800 relative">
+        {!isCollapsed && (
+          <p className="text-xs font-semibold text-zinc-500 uppercase px-3 mb-2 animate-in fade-in">
+            Settings
+          </p>
+        )}
+
         {settings.map(item => (
           <button
             onClick={() => setActivePanel(item.name)}
@@ -169,9 +178,12 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
           </button>
         ))}
         {/* this is our bottom settings panel */}
-        <div className='absolute -top-40 -right-40 z-99'>
-          {activePanel === "Settings" && <Panel />}
-         </div>
+        <div
+          className={`absolute z-99 -top-70 ${isCollapsed ? '-right-85' : '-right-60 '}`}
+        >
+          {activePanel === 'Settings' && <SettingsPanel onClose={setActivePanel} previewType={previewType} setPreviewType={setPreviewType} />}
+          {activePanel === 'Appearance' && <AppearancePanel onClose={setActivePanel} />}
+        </div>
       </div>
     </div>
   );
@@ -180,8 +192,8 @@ export default function Sidebar({ selectedCategory, setSelectedCategory , active
 
 export function Panel() {
   return (
-    <div className='bg-white p-4 h-50 w-50'>
-      <h1 className="text-black">Hello I am Panel</h1>
+    <div className="h-auto w-80 rounded-[40px] bg-white text-black p-4">
+      d
     </div>
   );
 }
