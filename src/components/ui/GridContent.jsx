@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AnimationCard from '../layout/AnimationCard';
 import SearchNavigation from './SearchNavigation';
-import { Columns, Home, LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Columns, Home, LayoutGrid, ChevronLeft, ChevronRight , Plus } from 'lucide-react';
 import PreviewType from './PreviewType';
 import FilterDropdown from '../FilterDropdown';
 
@@ -15,14 +15,20 @@ export default function GridContent({
   onCardClick,
   previewType,
   setPreviewType,
+  handleStartCreating
 }) {
   //  for filtering
   const filteredPlates = animations.filter(plate => {
-    const matchesSearch = plate.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === 'All' || plate.category.toLowerCase() === selectedCategory.toLowerCase();
-    return matchesSearch && matchesCategory;
-  });
+  const matchesSearch = plate.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+  // Check both 'category' and 'type' fields
+  const itemCategory = plate.category || plate.type;
+
+  const matchesCategory =
+    selectedCategory === 'All' || itemCategory === selectedCategory;
+
+  return matchesSearch && matchesCategory;
+});
 
   // for pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,12 +63,21 @@ export default function GridContent({
      ];
 
   return (
-    <div className="flex-1 h-screen overflow-y-auto overflow-x-hidden bg-[#050505] py-6 font-outfit">
+    <div className="flex-1 h-screen  bg-[#050505] font-outfit">
       <div id="grid-top" /> {/* Scroll anchor */}
       {/* Header  */}
-      <header className="flex flex-col gap-5 items-start border-b border-zinc-900 px-8 pb-4 mb-8 ">
-        <div className="flex items-center gap-1 text-white ">
+      <header className="flex items-center justify-between gap-5 py-2  border-b border-zinc-900 px-8 pb-4 mb-8 ">
+        <div className="flex items-center gap-1 text-white relative top-1">
           <Home size={18} /> <span>Home</span>
+        </div>
+        <div className="relative top-1">
+          <button
+            onClick={handleStartCreating}
+            className="flex items-center justify-center gap-2 cursor-pointer px-4 py-2 font-outfit bg-blue-600 hover:bg-blue-700 text-white rounded-[5px] font-bold transition-colors"
+          >
+            <Plus size={18} />
+            <span className='text-[15px] font-normal'>Create</span>
+          </button>
         </div>
       </header>
       <div className="flex flex-col w-full items-start px-4  md:px-7 mb-5">
@@ -71,7 +86,6 @@ export default function GridContent({
       </div>
       {/* Controls */}
       <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-0 items-start justify-between w-full relative right-2 px-7 md:px-9 mb-5 ">
-
         <h2 className="text-white/70 text-md font-heading font-medium">
           Page {currentPage} of {totalPages || 1}
         </h2>
@@ -85,7 +99,7 @@ export default function GridContent({
               previewOptions={previewOptions}
             />
           </div>
-          <div className='block md:hidden'>
+          <div className="block md:hidden">
             <FilterDropdown previewOptions={previewOptions} setPreviewType={setPreviewType} />
           </div>
 

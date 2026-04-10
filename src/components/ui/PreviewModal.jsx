@@ -1,105 +1,191 @@
-import React, { useState } from 'react';
-import { X, Copy, Check, Code2, MonitorPlay } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Copy, Check, BookmarkIcon, MonitorPlay, Code2, ChevronRight, Star } from 'lucide-react';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import DetailsSection from '../DetailsSection';
 
-export default function PreviewModal({ animation, onClose }) {
+// --- Custom Icons ---
+const CssIcon = ({ height = 18 }) => (
+  <svg viewBox="0 0 32 32" height={height} xmlns="http://www.w3.org/2000/svg">
+    <polygon points="5.902 27.201 3.656 2 28.344 2 26.095 27.197 15.985 30 5.902 27.201" fill="#1572B6" />
+    <polygon points="16 27.858 24.17 25.593 26.092 4.061 16 4.061 16 27.858" fill="#33A9DC" />
+    <path d="M16 13.191h4.09l.282-3.165H16V6.935h7.75l-.074.829-.759 8.518H16v-3.091z" fill="#FFFFFF" />
+    <path d="M16.019 21.218l-.014.004-3.442-.93-.22-2.465H9.24l.433 4.853 6.331 1.758.015-.004v-3.216z" fill="#EBEBEB" />
+    <path d="M19.827 16.151l-.372 4.139-3.447.93v3.216l6.336-1.756.047-.522.537-6.007h-3.101z" fill="#FFFFFF" />
+    <path d="M16.011 6.935v3.091H8.555l-.072-.829L8.268 6.935h7.743z" fill="#EBEBEB" />
+    <path d="M16 13.191v3.091h-3.389l-.072-.829-.14-1.567-.074-.829H16z" fill="#EBEBEB" />
+  </svg>
+);
+
+const TailwindIcon = ({ height = 20 }) => (
+  <svg viewBox="0 0 32 32" height={height} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9,13.7q1.4-5.6,7-5.6c5.6,0,6.3,4.2,9.1,4.9q2.8.7,4.9-2.1-1.4,5.6-7,5.6c-5.6,0-6.3-4.2-9.1-4.9Q11.1,10.9,9,13.7ZM2,22.1q1.4-5.6,7-5.6c5.6,0,6.3,4.2,9.1,4.9q2.8.7,4.9-2.1-1.4,5.6-7,5.6c-5.6,0-6.3-4.2-9.1-4.9Q4.1,19.3,2,22.1Z" fill="#38BDF8" />
+  </svg>
+);
+
+export default function PreviewModal({ animation, onClose, previewType }) {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState('css'); // 'css' or 'tailwind'
+  const [activeTab, setActiveTab] = useState('css');
+  const [editedCode, setEditedCode] = useState('');
+
+  const displayType = animation.isCommunity ? animation.type : previewType;
+  const uniqueId = animation.id.replace(/[^a-zA-Z0-9]/g, '');
+  const modalAnimName = `modal-exec-${uniqueId}`;
+
+  useEffect(() => {
+    if (animation.isCommunity && animation.tailwind && !animation.keyframes) {
+      setActiveTab('tailwind');
+    }
+  }, [animation]);
+
+  useEffect(() => {
+    setEditedCode(activeTab === 'css' ? animation.keyframes || '' : animation.tailwind || '');
+  }, [animation, activeTab]);
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [editedCode, activeTab]);
 
   if (!animation) return null;
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(editedCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  //  scope the animation to the modal specifically
-  const styleSheet = `
-    @keyframes preview-${animation.id} {
-      ${animation.keyframes}
+  const getStyleSheet = () => {
+    if (activeTab === 'tailwind' || !editedCode) return '';
+
+    // 1. Find the actual name used after @keyframes in the code
+    const keyframeRegex = /@keyframes\s+([\w-]+)/;
+    const match = editedCode.match(keyframeRegex);
+    const actualNameInCode = match ? match[1] : null;
+
+    let processedCSS = editedCode;
+
+    if (actualNameInCode) {
+      // 2. Replace the detected name with our unique modal name
+      processedCSS = editedCode.replace(new RegExp(actualNameInCode, 'g'), modalAnimName);
+    } else if (animation.isCommunity) {
+      // Fallback for community items if regex fails
+      processedCSS = editedCode.replace(/my-anim/g, modalAnimName);
     }
-    .preview-element {
-      animation: preview-${animation.id} ${animation.duration || '1s'} infinite;
-    }
-  `;
+
+    return `
+      ${processedCSS}
+      .modal-preview-element {
+        animation: ${modalAnimName} ${animation.duration || '2s'} ease-in-out infinite !important;
+      }
+    `;
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-      <style>{styleSheet}</style>
+    <div className="w-full h-full flex flex-col gap-2 py-6 px-4 md:px-8 md:py-8 animate-in fade-in duration-300 relative top-5">
+      <style>{getStyleSheet()}</style>
 
-      <div className="bg-[#161616] border border-zinc-800 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row h-[500px]">
+      {/* Header */}
+      <div className="w-full flex items-center justify-between shrink-0 mb-2">
+        <button
+          onClick={onClose}
+          className="text-white flex items-center gap-2 cursor-pointer hover:bg-zinc-800 transition-colors h-10 rounded-lg px-4"
+        >
+          <ChevronRight className="rotate-180" size={20} />
+          <span className="text-[15px] font-medium">Go Back</span>
+        </button>
+      </div>
 
-        {/* Left Side */}
-        <div className="flex-1 bg-[#0f0f0f] flex flex-col items-center justify-center relative p-8 border-b md:border-b-0 md:border-r border-zinc-800">
-          <div className="absolute top-4 left-4 flex items-center gap-2 text-zinc-500">
-            <MonitorPlay size={16} />
-            <span className="text-xs font-medium uppercase tracking-wider">Live Preview</span>
+      {/* Main Split View */}
+      <div className="w-full rounded-[12px] border border-zinc-800 overflow-hidden shadow-2xl flex flex-col md:flex-row h-auto md:h-[520px] shrink-0 bg-[#1e1e1e]">
+
+        {/* LEFT SIDE: Visual Preview */}
+        <div className="w-full md:flex-1 min-h-[350px] md:min-h-0 bg-[#fdfdfd] relative flex flex-col items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-zinc-800">
+          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 100%' }} />
+
+          <div className="relative z-10 scale-125 md:scale-150">
+            <div className={`preview-element modal-preview-element ${activeTab === 'tailwind' ? editedCode : ''}`}>
+              {displayType === 'box' && <div className="w-16 h-16 bg-blue-600 rounded-2xl shadow-2xl" />}
+              {displayType === 'text' && <h1 className="text-6xl font-black text-zinc-900 tracking-tighter">Aa</h1>}
+              {displayType === 'circle' && <div className="w-16 h-16 bg-blue-600 rounded-full shadow-2xl" />}
+              {displayType === 'icon' && <Star className="text-blue-600 w-16 h-16 fill-current" />}
+            </div>
           </div>
 
-          {/* The Animated Object */}
-          <div className="preview-element text-5xl font-bold text-indigo-500 bg-indigo-500/10 p-8 rounded-2xl border border-indigo-500/20">
-            Aa
+          <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full border border-white/10">
+            {animation.isCommunity ? 'Community Creation' : 'Core Library'}
           </div>
-
-          <button
-            onClick={onClose}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 md:hidden bg-zinc-800 text-white px-6 py-2 rounded-full text-sm"
-          >
-            Close Preview
-          </button>
         </div>
 
-        {/* Right Side */}
-        <div className="w-full md:w-[350px] flex flex-col bg-[#161616]">
-          <div className="p-6 border-b border-zinc-800 flex justify-between items-start">
-            <div>
-              <h2 className="text-xl font-bold text-white leading-none">{animation.title}</h2>
-              <span className="inline-block mt-2 text-[10px] font-bold bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded uppercase tracking-tighter">
-                {animation.category}
-              </span>
-            </div>
-            <button onClick={onClose} className="hidden md:block p-1 hover:bg-zinc-800 rounded-lg text-zinc-500 transition-colors">
-              <X size={20} />
+        {/* RIGHT SIDE: Code Editor */}
+        <div className="w-full md:flex-1 flex flex-col">
+          <div className="h-10 flex items-center bg-[#252526] shrink-0">
+            <button
+              onClick={() => setActiveTab('css')}
+              className={`h-full px-4 flex items-center gap-2 text-[12px] transition-colors border-r border-zinc-900/50 ${activeTab === 'css' ? 'bg-[#1e1e1e] text-white border-t border-t-blue-500' : 'bg-[#2d2d2d] text-zinc-500 hover:text-zinc-300'}`}
+            >
+              <CssIcon height={14} />
+              <span>animation.css</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('tailwind')}
+              className={`h-full px-4 flex items-center gap-2 text-[12px] transition-colors border-r border-zinc-900/50 ${activeTab === 'tailwind' ? 'bg-[#1e1e1e] text-white border-t border-t-blue-500' : 'bg-[#2d2d2d] text-zinc-500 hover:text-zinc-300'}`}
+            >
+              <TailwindIcon height={16} />
+              <span>tailwind.config.js</span>
             </button>
           </div>
 
-          <div className="p-6 flex-1 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setActiveTab('css')}
-                  className={`text-xs font-bold uppercase tracking-widest ${activeTab === 'css' ? 'text-indigo-400 border-b border-indigo-400' : 'text-zinc-500'}`}
-                >
-                  CSS
-                </button>
-                <button
-                  onClick={() => setActiveTab('tailwind')}
-                  className={`text-xs font-bold uppercase tracking-widest ${activeTab === 'tailwind' ? 'text-indigo-400 border-b border-indigo-400' : 'text-zinc-500'}`}
-                >
-                  Tailwind
-                </button>
-              </div>
-            </div>
+          <div className="h-7 bg-[#1e1e1e] flex items-center px-4 gap-2 text-[11px] text-zinc-500 border-b border-black/20 shrink-0">
+            <span>src</span> <ChevronRight size={10} />
+            <span>styles</span> <ChevronRight size={10} />
+            <span className="text-zinc-300">{activeTab === 'css' ? 'animation.css' : 'tailwind.config.js'}</span>
+          </div>
 
-            {/* Code Box */}
-            <div className="relative flex-1 group">
-              <pre className="h-full bg-[#0f0f0f] p-4 rounded-xl border border-zinc-800 text-zinc-400 text-[13px] font-mono overflow-auto whitespace-pre-wrap">
-                {activeTab === 'css' ? animation.css : animation.tailwind}
-              </pre>
-
+          <div className="relative flex-1 font-mono text-[13px] leading-6 overflow-hidden">
+            <div className="absolute top-3 right-3 z-20">
               <button
-                onClick={() => handleCopy(activeTab === 'css' ? animation.css : animation.tailwind)}
-                className="absolute top-2 right-2 p-2 bg-zinc-800/80 hover:bg-indigo-600 rounded-lg text-white transition-all scale-90 group-hover:scale-100"
+                onClick={handleCopy}
+                className="text-white flex items-center gap-2 py-1.5 px-3 rounded text-xs bg-black/80 hover:bg-black border border-zinc-800 transition-all"
               >
-                {copied ? <Check size={16} /> : <Copy size={16} />}
+                {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+                <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
 
-            <p className="mt-4 text-[11px] text-zinc-600 italic">
-              {activeTab === "css" ? "*Paste the keyframes into your global styles." : "*Paste the tailwind utilities into directly html class."}
-            </p>
+            <div className="flex h-full">
+              <div className="w-12 bg-[#1e1e1e] border-r border-zinc-800/50 flex flex-col items-center pt-4 text-[12px] text-zinc-600 select-none">
+                {editedCode.split('\n').map((_, i) => (
+                  <span key={i} className="h-6">{i + 1}</span>
+                ))}
+              </div>
+
+              <div className="relative flex-1">
+                <pre className="absolute inset-0 p-4 pointer-events-none m-0 overflow-auto scrollbar-hide">
+                  <code className={`language-${activeTab === 'css' ? 'css' : 'javascript'}`}>
+                    {editedCode}
+                  </code>
+                </pre>
+                <textarea
+                  value={editedCode}
+                  onChange={e => setEditedCode(e.target.value)}
+                  spellCheck="false"
+                  className="absolute inset-0 w-full h-full p-4 bg-transparent text-transparent caret-white resize-none outline-none overflow-auto scrollbar-hide whitespace-pre"
+                />
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center gap-4 w-full bg-[#121212] rounded-[8px] px-3 py-2 border border-zinc-800/50 shrink-0 mt-2">
+        <button className="text-white flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-md h-10 px-4">
+          <BookmarkIcon size={18} />
+          <span className="font-medium text-sm">Save to favorites</span>
+        </button>
+      </div>
+
+      <div className="w-full shrink-0">
+        <DetailsSection animation={animation} />
       </div>
     </div>
   );

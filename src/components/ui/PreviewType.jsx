@@ -21,7 +21,7 @@ export default function PreviewType({ previewType, setPreviewType, previewOption
           <button
             key={opt.id}
             onClick={() => setPreviewType(opt.id)}
-            className={`flex items-center gap-1 px-3 py-1 text-[14px] font-medium font-heading transition-all cursor-pointer
+            className={`flex items-center gap-1 px-3 py-1.5 text-[14px] font-bold font-heading transition-all cursor-pointer
                      ${
                        previewType === opt.id
                          ? 'bg-indigo-800 text-white border-zinc-100 shadow-lg rounded-[5px]'
