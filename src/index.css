@@ -2,10 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Birthstone&display=swap');
 @import "tailwindcss";
-
+@utility scrollbar-hide {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
 @theme {
   --font-outfit:"Outfit" ,serif;
   --font-heading : "Montserrat";
   --font-styling : "Birthstone";
 }
+
+

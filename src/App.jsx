@@ -4,12 +4,9 @@ import GridContent from './components/ui/GridContent';
 import PreviewModal from './components/ui/PreviewModal';
 import { animations as initialAnimations } from './data/animations';
 import About from './components/tabs/About';
-import MobileNavbar from './components/ui/MobileNavbar';
+import Navbar from './components/ui/Navbar';
 import TopLoader from './components/ui/TopLoader';
-import { Plus } from 'lucide-react';
-import CommunityGrid from './components/CummunityGrid';
-
-// NEW: Import the Creation Flow Components
+import CommunityGrid from './components/ui/CummunityGrid';
 import CategorySelectModal from './components/models/CategorySelectModal';
 import CreatorModal from './components/models/CreatorModal';
 
@@ -20,41 +17,36 @@ export default function App() {
   const [activeNavigation, setActiveNavigation] = useState('Home');
   const [previewType, setPreviewType] = useState('text');
   const [isNavigating, setIsNavigating] = useState(false);
-
-  //  animations as state
   const [allAnimations, setAllAnimations] = useState(initialAnimations);
-
-const addNewAnimation = (newAnim) => {
-  const uniqueId = `anim${Date.now()}`; // Ensure it starts with a letter
-  const animationWithId = {
-    ...newAnim,
-    id: uniqueId,
-    // We force the duration here if the user didn't specify
-    duration: newAnim.duration || '2s'
-  };
-
-  setAllAnimations((prev) => [animationWithId, ...prev]);
-  setActiveNavigation('Community'); // Auto-redirect to see the result
-};
-  // NEW: Creation Flow State
   const [isCreating, setIsCreating] = useState(false);
-  const [creationStep, setCreationStep] = useState(1); // 1: Select Category, 2: Code Editor
+  const [creationStep, setCreationStep] = useState(1);
   const [newCategory, setNewCategory] = useState('box');
 
-  // Unified Handler for Navigation (Home/About)
+  const addNewAnimation = (newAnim) => {
+    const uniqueId = `anim${Date.now()}`;
+    const animationWithId = {
+      ...newAnim,
+      id: uniqueId,
+      duration: newAnim.duration || '2s',
+    };
+
+    setAllAnimations((prev) => [animationWithId, ...prev]);
+    setIsCreating(false);
+    setActiveNavigation('Community');
+  };
+
   const handleNavChange = (targetPath, category = null) => {
     setIsNavigating(true);
     setTimeout(() => {
       if (targetPath) setActiveNavigation(targetPath);
       if (category) setSelectedCategory(category);
       setActiveAnimation(null);
-      setIsCreating(false); // Close creator if navigating away
+      setIsCreating(false);
     }, 400);
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  // Specific Handler for opening a Preview
-  const handleOpenPreview = animation => {
+  const handleOpenPreview = (animation) => {
     setIsNavigating(true);
     setTimeout(() => {
       setActiveAnimation(animation);
@@ -71,18 +63,17 @@ const addNewAnimation = (newAnim) => {
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  // NEW: Creation Flow Handlers
   const handleStartCreating = () => {
     setIsNavigating(true);
     setTimeout(() => {
       setIsCreating(true);
       setCreationStep(1);
-      setActiveAnimation(null); // Clear active preview
+      setActiveAnimation(null);
     }, 400);
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  const handleCategorySelect = category => {
+  const handleCategorySelect = (category) => {
     setNewCategory(category);
     setCreationStep(2);
   };
@@ -98,81 +89,87 @@ const addNewAnimation = (newAnim) => {
 
   return (
     <>
-      <MobileNavbar activeNavigation={activeNavigation} setActiveNavigation={handleNavChange} />
-
-      <div className="overflow-hidden h-screen w-full flex flex-col md:flex-row items-start bg-[#050505]">
-        <TopLoader isLoading={isNavigating} />
-
-        <aside className="hidden md:block h-full shrink-0">
-          <Sidebar
-            selectedCategory={selectedCategory}
+      <TopLoader isLoading={isNavigating} />
+      <div className="h-screen w-full bg-[#050505] overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide">
+        {/* Navigation Bar */}
+        <div className="md:block">
+          <Navbar
             activeNavigation={activeNavigation}
-            previewType={previewType}
-            setPreviewType={setPreviewType}
-            onNavigate={handleNavChange}
-            // Pass the start creation handler to the Sidebar
-            onStartCreating={handleStartCreating}
+            setActiveNavigation={handleNavChange}
+            handleStartCreating={handleStartCreating}
+            isNavigating={isNavigating}
           />
+        </div>
 
+        <div className="flex flex-col md:flex-row w-full min-h-full">
+          {/* Persistent Sidebar */}
+          <aside className="hidden md:block sticky top-0 h-screen shrink-0 bg-[#050505] z-10">
+            <Sidebar
+              selectedCategory={selectedCategory}
+              activeNavigation={activeNavigation}
+              onNavigate={handleNavChange}
+            />
+          </aside>
 
-        </aside>
-
-        <main className="border border-zinc-900 flex-1 overflow-x-hidden overflow-y-auto scroll-smooth h-full w-full relative">
-          <div
-            key={
-              isCreating
-                ? `creator-${creationStep}`
-                : activeAnimation
-                  ? activeAnimation.id
-                  : activeNavigation
-            }
-            className="animate-in fade-in zoom-in-95 duration-500 h-full w-full"
+          {/* Main Display Area */}
+          <main
+            className="flex-1 animate-in fade-in zoom-in-95 duration-500 scrollbar-hide"
+            key={isCreating ? `creator-${creationStep}` : activeAnimation?.id || activeNavigation}
           >
-            {/* Logic Tree: Creator Mode > Preview Mode > Home/About */}
-            {isCreating ? (
-              creationStep === 1 ? (
-                <CategorySelectModal onSelect={handleCategorySelect} onClose={handleCloseCreator} />
-              ) : (
-                <CreatorModal category={newCategory} onClose={handleCloseCreator} onSave={addNewAnimation} />
-              )
-            ) : activeAnimation ? (
-              <PreviewModal
-                animation={activeAnimation}
-                onClose={handleClosePreview}
-                previewType={previewType}
-              />
-            ) : (
-              <>
-                {activeNavigation === 'Home' && (
-                  <GridContent
-                    animations={allAnimations}
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    selectedCategory={selectedCategory}
-                    onCardClick={handleOpenPreview}
-                    previewType={previewType}
-                    setPreviewType={setPreviewType}
+            <div className="py-4 md:py-8">
+              {/* CREATOR MODE LOGIC */}
+              {isCreating ? (
+                creationStep === 1 ? (
+                  <CategorySelectModal
+                    onSelect={handleCategorySelect}
+                    onClose={handleCloseCreator}
+                  />
+                ) : (
+                  <CreatorModal
+                    category={newCategory}
+                    onClose={handleCloseCreator}
+                    onSave={addNewAnimation}
                     handleStartCreating={handleStartCreating}
                   />
-                    )}
+                )
+              ) : activeAnimation ? (
+                /*  PREVIEW MODE LOGIC */
+                <PreviewModal
+                  animation={activeAnimation}
+                  onClose={handleClosePreview}
+                  previewType={previewType}
+                />
+              ) : (
+                /*  STANDARD NAVIGATION LOGIC */
+                <div className="min-h-[110vh]">
+                  {activeNavigation === 'Home' && (
+                    <GridContent
+                      animations={allAnimations}
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      selectedCategory={selectedCategory}
+                      onCardClick={handleOpenPreview}
+                      previewType={previewType}
+                      setPreviewType={setPreviewType}
+                    />
+                  )}
 
-                    {activeNavigation === 'Community' && !activeAnimation && !isCreating && (
-          <CommunityGrid
-            animations={allAnimations}
-            onCardClick={handleOpenPreview}
-            previewType={previewType}
-          />
-        )}
+                  {activeNavigation === 'Community' && (
+                    <CommunityGrid
+                      animations={allAnimations}
+                      onCardClick={handleOpenPreview}
+                      previewType={previewType}
+                      handleStartCreating={handleStartCreating}
 
-                {activeNavigation === 'About' && (
-                  <div className="h-full overflow-y-auto">
-                    <About />
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </main>
+                    />
+                  )}
+
+                  {activeNavigation === 'About' && <About />}
+                </div>
+              )}
+            </div>
+          </main>
+        </div>
       </div>
     </>
   );

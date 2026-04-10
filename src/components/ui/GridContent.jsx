@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import AnimationCard from '../layout/AnimationCard';
 import SearchNavigation from './SearchNavigation';
-import { Columns, Home, LayoutGrid, ChevronLeft, ChevronRight , Plus } from 'lucide-react';
 import PreviewType from './PreviewType';
-import FilterDropdown from '../FilterDropdown';
-
-import { Box, Type, Circle, Star } from 'lucide-react';
+import FilterDropdown from './FilterDropdown';
+import { Columns, LayoutGrid, ChevronLeft, ChevronRight, Box, Type, Circle, Star } from 'lucide-react';
 
 export default function GridContent({
   animations,
@@ -15,149 +13,138 @@ export default function GridContent({
   onCardClick,
   previewType,
   setPreviewType,
-  handleStartCreating
 }) {
-  //  for filtering
-  const filteredPlates = animations.filter(plate => {
-  const matchesSearch = plate.title.toLowerCase().includes(searchQuery.toLowerCase());
+  // memo filtering
+  const filteredPlates = useMemo(() => {
+    return animations.filter(plate => {
+      const matchesSearch = plate.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const itemCategory = plate.category || plate.type;
+      return matchesSearch && (selectedCategory === 'All' || itemCategory === selectedCategory);
+    });
+  }, [animations, searchQuery, selectedCategory]);
 
-  // Check both 'category' and 'type' fields
-  const itemCategory = plate.category || plate.type;
-
-  const matchesCategory =
-    selectedCategory === 'All' || itemCategory === selectedCategory;
-
-  return matchesSearch && matchesCategory;
-});
-
-  // for pagination State
+  // pagin state
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 10;
-
-  // Calculating Slicing
-  const indexOfLastCard = currentPage * cardsPerPage;
-  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  const currentCards = filteredPlates.slice(indexOfFirstCard, indexOfLastCard);
-  const totalPages = Math.ceil(filteredPlates.length / cardsPerPage);
-
   const [gridPattern, setGridPattern] = useState('grid');
+  const cardsPerPage = 12; // mult of 4/3/2/1
 
-  const gridPatternsBtns = [
-    { id: 'columns', icon: <Columns size={18} />, title: 'Columns View' },
-    { id: 'grid', icon: <LayoutGrid size={18} />, title: 'Grid View' },
-  ];
+  // slice calc
+  const totalPages = Math.ceil(filteredPlates.length / cardsPerPage);
+  const currentCards = filteredPlates.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
 
-  // Helper  to change page and scroll back to top of grid
-  const paginate = pageNumber => {
-    setCurrentPage(pageNumber);
+  // page helper
+  const paginate = (num) => {
+    setCurrentPage(num);
     document.getElementById('grid-top')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-
-// preview Options
-     const previewOptions = [
-       { id: 'box', label: 'Box', icon: <Box size={16} /> },
-       { id: 'text', label: 'Text', icon: <Type size={14} /> },
-       { id: 'circle', label: 'Circle', icon: <Circle size={14} /> },
-       { id: 'icon', label: 'Icon', icon: <Star size={14} /> },
-     ];
+  const previewOptions = [
+    { id: 'box', label: 'Box', icon: <Box size={16} /> },
+    { id: 'text', label: 'Text', icon: <Type size={14} /> },
+    { id: 'circle', label: 'Circle', icon: <Circle size={14} /> },
+    { id: 'icon', label: 'Icon', icon: <Star size={14} /> },
+  ];
 
   return (
-    <div className="flex-1 h-screen  bg-[#050505] font-outfit">
-      <div id="grid-top" /> {/* Scroll anchor */}
-      {/* Header  */}
-      <header className="flex items-center justify-between gap-5 py-2  border-b border-zinc-900 px-8 pb-4 mb-8 ">
-        <div className="flex items-center gap-1 text-white relative top-1">
-          <Home size={18} /> <span>Home</span>
-        </div>
-        <div className="relative top-1">
-          <button
-            onClick={handleStartCreating}
-            className="flex items-center justify-center gap-2 cursor-pointer px-4 py-2 font-outfit bg-blue-600 hover:bg-blue-700 text-white rounded-[5px] font-bold transition-colors"
-          >
-            <Plus size={18} />
-            <span className='text-[15px] font-normal'>Create</span>
-          </button>
-        </div>
+    <div className="flex-1 min-h-screen bg-[#050505] font-outfit pb-10">
+      <div id="grid-top" className="scroll-mt-24" />
+
+      {/* header */}
+      <header className="px-4 md:pl-2 pr-4 pb-4">
+        <h1 className="text-3xl md:text-[31px] text-zinc-100 font-heading font-bold tracking-tight">
+          Browse all
+        </h1>
+        <p className="text-zinc-500 text-lg mt-1">Open-Source CSS animations library</p>
       </header>
-      <div className="flex flex-col w-full items-start px-4  md:px-7 mb-5">
-        <h1 className="text-3xl text-white font-heading font-bold">Browse all</h1>
-        <p className="text-zinc-500 text-[18px] font-outfit ">Open-Source CSS animations library</p>
-      </div>
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-0 items-start justify-between w-full relative right-2 px-7 md:px-9 mb-5 ">
-        <h2 className="text-white/70 text-md font-heading font-medium">
-          Page {currentPage} of {totalPages || 1}
-        </h2>
 
-        <div className="text-white flex  items-center gap-2 flex-wrap md:flex-nowrap ">
-          <div className="h-5 w-[2px] bg-zinc-800"></div>
-          <div className="hidden md:block">
-            <PreviewType
-              previewType={previewType}
-              setPreviewType={setPreviewType}
-              previewOptions={previewOptions}
-            />
-          </div>
-          <div className="block md:hidden">
-            <FilterDropdown previewOptions={previewOptions} setPreviewType={setPreviewType} />
+      {/* toolbar */}
+      <div className="sticky top-0 z-20 bg-[#050505]/80 backdrop-blur-md px-4 md:pl-2 pr-4 py-4 mb-8 border-b border-zinc-900/50">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <h2 className="text-zinc-400 text-sm font-medium whitespace-nowrap">
+              Page {currentPage} of {totalPages || 1}
+            </h2>
+            <div className="h-4 w-px bg-zinc-800" />
+            <SearchNavigation searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
 
-          <div className="h-5 w-[2px] bg-zinc-800 "></div>
-          {/* grid pattern btns */}
-          <div className=" items-center gap-2 hidden md:flex">
-            {gridPatternsBtns.map(btn => (
-              <button
-                key={btn.id}
-                className={`${gridPattern === btn.id ? 'bg-indigo-800 text-white p-2 rounded-[5px]' : 'text-zinc-500 p-2'} cursor-pointer hover:text-white transition-colors`}
-                onClick={() => setGridPattern(btn.id)}
-              >
-                {btn.icon}
-              </button>
-            ))}
+          <div className="flex items-center gap-4 self-end lg:self-auto">
+            {/* desktop tool */}
+            <div className="hidden md:flex items-center gap-4">
+              <PreviewType
+                previewType={previewType}
+                setPreviewType={setPreviewType}
+                previewOptions={previewOptions}
+              />
+              <div className="h-4 w-px bg-[#161616]" />
+              <div className="flex bg-zinc-800/50 p-1 rounded-[5px] border-zinc-800">
+                {[
+                  { id: 'grid', icon: <LayoutGrid size={18} /> },
+                  { id: 'columns', icon: <Columns size={18} /> },
+                ].map(btn => (
+                  <button
+                    key={btn.id}
+                    onClick={() => setGridPattern(btn.id)}
+                    className={`p-1.5 rounded-[5px] transition-all cursor-pointer ${gridPattern === btn.id ? 'bg-black text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  >
+                    {btn.icon}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* mob tool */}
+            <div className="md:hidden">
+              <FilterDropdown previewOptions={previewOptions} previewType={previewType} setPreviewType={setPreviewType} />
+            </div>
           </div>
-          <SearchNavigation searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
       </div>
-      {/* Grid Layout */}
-      <div
-        className={`grid gap-6 px-4 md:px-6 mb-12 ${gridPattern === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'}`}
+
+      {/* grid main */}
+      <main
+        className={`px-4 md:pl-2 pr-4 transition-all duration-300 ${
+          gridPattern === 'grid'
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+            : 'flex flex-col gap-4 max-w-4xl mx-auto'
+        }`}
       >
         {currentCards.length > 0 ? (
-          currentCards.map(animation => (
+          currentCards.map(anim => (
             <AnimationCard
-              key={animation.id}
-              animation={animation}
+              key={anim.id}
+              animation={anim}
               onCardClick={onCardClick}
               previewType={previewType}
             />
           ))
         ) : (
-          <p className="text-zinc-500 col-span-3 text-center py-10">
-            No animations found matching "{searchQuery}"
-          </p>
+          <div className="col-span-full py-20 text-center">
+            <p className="text-zinc-600 italic">No matches found for "{searchQuery}"</p>
+          </div>
         )}
-      </div>
-      {/* Pagination Controls */}
+      </main>
+
+      {/* pagin btns */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 pb-20">
+        <nav className="flex items-center justify-center gap-2 mt-16 px-6">
           <button
             disabled={currentPage === 1}
             onClick={() => paginate(currentPage - 1)}
-            className="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-800 transition-colors"
+            className="p-2.5 rounded-[5px] bg-zinc-900 border border-zinc-800 text-zinc-400 disabled:opacity-20 hover:bg-zinc-800 transition-all"
           >
             <ChevronLeft size={20} />
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2">
             {[...Array(totalPages)].map((_, i) => (
               <button
                 key={i + 1}
                 onClick={() => paginate(i + 1)}
-                className={`w-10 h-10 rounded-xl text-sm font-medium transition-all ${
+                className={`min-w-[40px] h-10 rounded-[5px] text-sm font-semibold transition-all ${
                   currentPage === i + 1
-                    ? 'bg-white text-black'
-                    : 'bg-zinc-900 text-zinc-500 border border-zinc-800 hover:text-white'
+                    ? 'bg-white text-black scale-105 shadow-lg'
+                    : 'bg-zinc-900 text-zinc-500 border border-zinc-800 hover:border-zinc-600'
                 }`}
               >
                 {i + 1}
@@ -168,11 +155,11 @@ export default function GridContent({
           <button
             disabled={currentPage === totalPages}
             onClick={() => paginate(currentPage + 1)}
-            className="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-800 transition-colors"
+            className="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 disabled:opacity-20 hover:bg-zinc-800 transition-all"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={20} />
           </button>
-        </div>
+        </nav>
       )}
     </div>
   );

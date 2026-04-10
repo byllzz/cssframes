@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { X, Code2, MonitorPlay, ChevronRight, Star, Send } from 'lucide-react';
+import { X, Star, Moon, Sun, Monitor, Rocket  } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
-export default function CreatorModal({ category, onClose, onSave }) {
+export default function CreatorModal({ category, onClose, onSave, handleStartCreating }) {
   const [activeTab, setActiveTab] = useState('css');
-const [cssCode, setCssCode] = useState(`/* IMPORTANT: Target the class .preview-element */
-
+  const [previewBg, setPreviewBg] = useState('#e8e8e8');
+  const [tailwindCode, setTailwindCode] = useState('animate-bounce bg-blue-500 rounded-lg');
+  const [title, setTitle] = useState('My Awesome Animation');
+  const [desc, setDesc] = useState('');
+  const [cssCode, setCssCode] = useState(`/* IMPORTANT: Target the class .preview-element */
 .preview-element {
   animation: my-pulse 2s infinite;
 }
-
 @keyframes my-pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }`);
 
-  const [tailwindCode, setTailwindCode] = useState("animate-bounce bg-blue-500 rounded-lg");
-  const [title, setTitle] = useState("My Awesome Animation");
-  const [desc, setDesc] = useState('');
-
-  // Live syntax highlighting
   useEffect(() => {
     Prism.highlightAll();
   }, [cssCode, tailwindCode, activeTab]);
@@ -40,112 +37,215 @@ const [cssCode, setCssCode] = useState(`/* IMPORTANT: Target the class .preview-
     onSave(newEntry);
     onClose();
   };
-
   return (
-    <div className="absolute inset-0 z-50 bg-[#050505] w-full h-full flex flex-col gap-4 py-6 px-4 md:px-8 md:py-8 animate-in slide-in-from-bottom-8 duration-500 overflow-y-auto scrollbar-hide">
-
-      {/* Live Style Injection: Forces user to target .preview-element */}
+    <div className="bg-[#050505]  font-outfit pr-5 relative bottom-10">
       <style>{activeTab === 'css' ? cssCode : ''}</style>
-
-      {/* Header section */}
-      <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
-        <div className="flex items-center gap-4">
-          <button onClick={onClose} className="text-white flex items-center gap-2 hover:bg-zinc-800 transition-colors h-10 rounded-lg px-3">
-            <X size={20} />
-            <span className="font-medium hidden sm:inline">Cancel</span>
+      <header className="h-16 border-b border-zinc-800/50 flex items-center justify-between px-6 bg-[#050505] shrink-0">
+        <div className="flex items-center justify-between w-full gap-6">
+          <button
+            onClick={onClose}
+            className="relative right-6 flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors group"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              version="1.1"
+              height={20}
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              fill="#fff"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                {' '}
+                <title>Arrow-Right</title>{' '}
+                <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
+                  {' '}
+                  <g id="Arrow-Right">
+                    {' '}
+                    <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width={24} height={24}>
+                      {' '}
+                    </rect>{' '}
+                    <line
+                      x1="6.5"
+                      y1="12"
+                      x2="18"
+                      y2="12"
+                      id="Path"
+                      stroke="#ffffff"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      {' '}
+                    </line>{' '}
+                    <path
+                      d="M10,8 L6.70711,11.2929 C6.31658,11.6834 6.31658,12.3166 6.70711,12.7071 L10,16"
+                      id="Path"
+                      stroke="#ffffff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    >
+                      {' '}
+                    </path>{' '}
+                  </g>{' '}
+                </g>{' '}
+              </g>
+            </svg>
+            <span className="text-sm font-bold">Go back</span>
           </button>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="bg-transparent text-white font-bold text-xl border-b border-dashed border-zinc-700 outline-none focus:border-blue-500 px-2 py-1 min-w-[200px]"
-            placeholder="Animation Name..."
-          />
+          <div className="h-4 w-[1px] bg-zinc-800" />
+          <div className="flex flex-row items-center gap-3">
+            <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
+              Building
+            </span>
+            <span className="text-white font-bold text-sm">
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
         </div>
+      </header>
+      {/* main content */}
+      <div className="grid grid-cols-1 md:grid-cols-2  overflow-hidden h-[500px]">
+        {/*  PREVIEW SIDE */}
+        <section
+          className="relative flex items-center justify-center group overflow-hidden rounded-tl-[12px] rounded-bl-[12px]"
+          style={{ backgroundColor: previewBg }}
+        >
+          {/* Theme Toggles */}
+          <div className="absolute top-3 right-3 flex items-center bg-black backdrop-blur-md p-1.5 rounded-full border border-white/5 shadow-2xl">
+            {/* Color Hex Label */}
+            <div className="px-3 border-r border-white/10 mr-1.5">
+              <span className="text-[11px] font-bold font-heading text-white uppercase tracking-widest">
+                {previewBg}
+              </span>
+            </div>
 
-        <button onClick={handleSubmit} className="bg-blue-600 text-white flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors h-10 rounded-lg px-6 font-bold shadow-lg shadow-blue-900/20">
-          <Send size={16} />
-          Publish to Community
-        </button>
-      </div>
+            {/* Button Group Container */}
+            <div className="relative flex gap-1">
+              {/* Sliding Highlight */}
+              <div
+                className="absolute top-0 left-0 h-[28px] rounded-full bg-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                style={{
+                  width: '28px',
+                  transform: `translateX(${
+                    previewBg === '#e8e8e8' ? '0px' : previewBg === '#050505' ? '32px' : '64px'
+                  })`,
+                }}
+              />
 
-      {/* Description Area (Moved out of header for better layout) */}
-      <div className="flex flex-col gap-1.5 shrink-0">
-        <label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest ml-1">Short Description</label>
-        <textarea
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          className="w-full bg-[#121212] border border-zinc-800 rounded-lg p-3 text-sm text-zinc-300 outline-none focus:border-zinc-600 transition-colors h-14 resize-none"
-          placeholder="Briefly describe your animation effect..."
-        />
-      </div>
+              {/* Light Mode */}
+              <button
+                onClick={() => setPreviewBg('#e8e8e8')}
+                aria-label="Light Mode"
+                className={`relative z-10 w-7 h-7 flex  cursor-pointer items-center justify-center rounded-full transition-colors duration-300 ${
+                  previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
+                }`}
+              >
+                <Sun size={14} strokeWidth={2.5} />
+              </button>
 
-      {/* Main Split View */}
-      <div className="w-full rounded-xl border border-zinc-800 overflow-hidden shadow-2xl flex flex-col md:flex-row flex-1 min-h-[500px]">
+              {/* Dark Mode */}
+              <button
+                onClick={() => setPreviewBg('#050505')}
+                aria-label="Dark Mode"
+                className={`relative z-10 w-7 h-7  cursor-pointer flex items-center justify-center rounded-full transition-colors duration-300 ${
+                  previewBg === '#050505' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
+                }`}
+              >
+                <Moon size={14} strokeWidth={2.5} />
+              </button>
 
-        {/* LEFT SIDE: Live Preview */}
-        <div className="w-full md:w-1/2 bg-[#fdfdfd] relative flex flex-col items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-zinc-800">
-          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 100%' }} />
-
-          <div className="relative z-10 scale-125 md:scale-150">
-            {/* The 'preview-element' class is what the user should target in CSS */}
-            <div className={`preview-element ${activeTab === 'tailwind' ? tailwindCode : ''}`}>
-              {category === 'box' && <div className="w-16 h-16 bg-blue-600 rounded-2xl shadow-xl" />}
-              {category === 'text' && <h1 className="text-6xl font-black text-zinc-900 tracking-tighter">Aa</h1>}
-              {category === 'circle' && <div className="w-16 h-16 bg-blue-600 rounded-full shadow-xl" />}
-              {category === 'icon' && <Star className="text-blue-600 w-16 h-16 fill-current" />}
+              {/* System */}
+              <button
+                onClick={() => setPreviewBg('#18181b')}
+                aria-label="System Mode"
+                className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-300 ${
+                  previewBg === '#18181b' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
+                }`}
+              >
+                <Monitor size={14} strokeWidth={2.5} />
+              </button>
             </div>
           </div>
 
-          <div className="absolute bottom-4 right-4 bg-black/90 text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded-md border border-white/10">
-            Previewing: {category}
+          {/* THE ELEMENT */}
+          <style>{activeTab === 'css' ? cssCode : ''}</style>
+          <div className="scale-150 transition-transform duration-500">
+            <div className={`preview-element ${activeTab === 'tailwind' ? tailwindCode : ''}`}>
+              {category === 'box' && (
+                <div className="w-16 h-16 bg-[#1d2129] rounded-lg shadow-sm flex items-center justify-center text-white text-[10px]">
+                  Button
+                </div>
+              )}
+              {category === 'text' && <span className="text-4xl font-black text-zinc-900">Aa</span>}
+              {category === 'circle' && <div className="w-16 h-16 bg-[#1d2129] rounded-full" />}
+              {category === 'icon' && <Star size={48} className="text-[#1d2129] fill-current" />}
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* RIGHT SIDE: Code Editor */}
-        <div className="w-full md:w-1/2 flex flex-col bg-[#1e1e1e]">
-          {/* Tab Header */}
-          <div className="h-10 flex items-center bg-[#252526] shrink-0">
+        {/*editor side */}
+        <section className="w-full rounded-tr-[12px] rounded-br-[12px] bg-[#121212] flex flex-col border-l border-zinc-800/50">
+          {/* Editor Tabs */}
+          <div className="flex bg-[#0a0a0a] rounded-tr-[12px] border-b border-zinc-800/50">
             <button
               onClick={() => setActiveTab('css')}
-              className={`h-full px-6 flex items-center gap-2 text-[12px] transition-colors ${activeTab === 'css' ? 'bg-[#1e1e1e] text-white border-t-2 border-t-blue-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'css' ? 'bg-[#121212] text-white border-t-2 border-indigo-500' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              <Code2 size={14} />
-              <span>CSS Keyframes</span>
+              <span className="text-orange-500 font-bold">5</span> HTML
             </button>
             <button
               onClick={() => setActiveTab('tailwind')}
-              className={`h-full px-6 flex items-center gap-2 text-[12px] transition-colors ${activeTab === 'tailwind' ? 'bg-[#1e1e1e] text-white border-t-2 border-t-blue-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'tailwind' ? 'bg-[#121212] text-white border-t-2 border-indigo-500' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              <MonitorPlay size={14} />
-              <span>Tailwind Classes</span>
+              <span className="text-blue-500 font-bold">#</span> CSS
             </button>
           </div>
 
-          <div className="h-7 bg-[#1e1e1e] flex items-center px-4 gap-2 text-[11px] text-zinc-500 border-b border-black/20 shrink-0">
-            <span>src</span>
-            <ChevronRight size={10} />
-            <span className="text-zinc-300">{activeTab === 'css' ? 'animation.css' : 'tailwind.config.js'}</span>
-          </div>
-
-          {/* Editor Area */}
-          <div className="relative flex-1 font-mono text-[13px] leading-6 overflow-hidden">
-            <div className="absolute inset-0 p-4 overflow-auto">
-                <pre className="pointer-events-none m-0">
-                  <code className={`language-${activeTab === 'css' ? 'css' : 'javascript'}`}>
-                    {activeTab === 'css' ? cssCode : tailwindCode}
-                  </code>
-                </pre>
-                <textarea
-                  value={activeTab === 'css' ? cssCode : tailwindCode}
-                  onChange={(e) => activeTab === 'css' ? setCssCode(e.target.value) : setTailwindCode(e.target.value)}
-                  spellCheck="false"
-                  className="absolute inset-0 w-full h-full p-4 bg-transparent text-transparent caret-white resize-none outline-none whitespace-pre overflow-auto selection:bg-blue-500/30"
-                />
+          {/* Code Area */}
+          <div className="flex-1 relative font-mono text-[13px] overflow-hidden">
+            {/* Code Editor with Prism Highlighting */}
+            <div className="absolute inset-0 p-6 overflow-auto">
+              <pre className="pointer-events-none m-0">
+                <code className="language-css">{activeTab === 'css' ? cssCode : tailwindCode}</code>
+              </pre>
+              <textarea
+                value={activeTab === 'css' ? cssCode : tailwindCode}
+                onChange={e =>
+                  activeTab === 'css' ? setCssCode(e.target.value) : setTailwindCode(e.target.value)
+                }
+                spellCheck="false"
+                className="absolute inset-0 w-full h-full p-6 bg-transparent text-transparent caret-white resize-none outline-none overflow-auto"
+              />
             </div>
           </div>
-        </div>
+        </section>
       </div>
+      {/* bottom bar */}
+      <footer className="h-16 mt-5 rounded-[8px] bg-[#121212] border-t border-zinc-800/50 flex items-center justify-between pl-3 pr-2 shrink-0">
+        <button
+          onClick={handleStartCreating}
+          className="flex items-center gap-2 text-white text-[15px] cursor-pointer font-medium  transition-colors hover:bg-[#000] py-3 px-4 rounded-[5px]"
+        >
+          <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white rounded-[1px] opacity-100" />
+            ))}
+          </div>
+          Change type
+        </button>
+
+        <div className="flex items-center gap-4">
+          <button
+            // onClick={() => onSave({ title, cssCode, tailwindCode, category })}
+            onClick={handleSubmit}
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-[7px] text-[16px] font-bold font-outfit  tracking-wide transition-all active:scale-95 shadow-lg shadow-indigo-600/20 cursor-pointer"
+          >
+            <Rocket size={18} />
+            Submit for review
+          </button>
+        </div>
+      </footer>
     </div>
   );
 }
