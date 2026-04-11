@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { X, Star, Moon, Sun, Monitor, Rocket  } from 'lucide-react';
+import { X, Star, Moon, Sun, Monitor, Rocket, Clock, Tag, AlignLeft } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
-export default function CreatorModal({ category, onClose, onSave, handleStartCreating }) {
+/**
+ * @param {Object} category - This is the object passed from the previous modal: { category: 'Buttons', type: 'box' }
+ */
+export default function CreatorModal({ category: config, onClose, onSave, handleStartCreating }) {
+  // Extracting safe values from the config object
+  const animationCategory = config?.category || 'General';
+  const objectType = config?.type || 'box';
+
   const [activeTab, setActiveTab] = useState('css');
   const [previewBg, setPreviewBg] = useState('#e8e8e8');
-  const [tailwindCode, setTailwindCode] = useState('animate-bounce bg-blue-500 rounded-lg');
-  const [title, setTitle] = useState('My Awesome Animation');
+  const [tailwindCode, setTailwindCode] = useState('animate-bounce rounded-lg');
+
+  const [showDetailsPopup, setShowDetailsPopup] = useState(false);
+  const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
+  const [duration, setDuration] = useState('2s');
+  const [errors, setErrors] = useState({});
+
   const [cssCode, setCssCode] = useState(`/* IMPORTANT: Target the class .preview-element */
 .preview-element {
   animation: my-pulse 2s infinite;
@@ -23,229 +35,254 @@ export default function CreatorModal({ category, onClose, onSave, handleStartCre
     Prism.highlightAll();
   }, [cssCode, tailwindCode, activeTab]);
 
-  const handleSubmit = () => {
+  const handleTriggerPopup = () => {
+    setShowDetailsPopup(true);
+  };
+
+  const handleFinalSubmit = () => {
+    let newErrors = {};
+
+    if (!title.trim()) newErrors.title = 'Give your animation a name';
+    if (!desc.trim()) newErrors.desc = 'Tell us what this does';
+    if (!duration.trim()) newErrors.duration = 'Set a duration (e.g. 2s)';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     const newEntry = {
-      title: title || 'Untitled Animation',
-      desc: desc || 'A custom community-created animation.',
+      title: title,
+      desc: desc,
       keyframes: cssCode,
       tailwind: tailwindCode,
-      type: category, // box, text, circle, icon
-      duration: '2s',
+      category: animationCategory,
+      type: objectType,
+      duration: duration,
       isCommunity: true,
-      id: Date.now().toString(), // Ensure you have a unique ID for React keys
+      id: `community-${Date.now()}`,
     };
+
     onSave(newEntry);
     onClose();
   };
+
   return (
-    <div className="bg-[#050505]  font-outfit pr-5 relative bottom-10">
+    <div className="bg-[#050505] font-outfit pr-5 relative bottom-10 w-full">
       <style>{activeTab === 'css' ? cssCode : ''}</style>
-      <header className="h-16 border-b border-zinc-800/50 flex items-center justify-between px-6 bg-[#050505] shrink-0">
-        <div className="flex items-center justify-between w-full gap-6">
-          <button
-            onClick={onClose}
-            className="relative right-6 flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors group"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              version="1.1"
-              height={20}
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              fill="#fff"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                {' '}
-                <title>Arrow-Right</title>{' '}
-                <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
-                  {' '}
-                  <g id="Arrow-Right">
-                    {' '}
-                    <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width={24} height={24}>
-                      {' '}
-                    </rect>{' '}
-                    <line
-                      x1="6.5"
-                      y1="12"
-                      x2="18"
-                      y2="12"
-                      id="Path"
-                      stroke="#ffffff"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    >
-                      {' '}
-                    </line>{' '}
-                    <path
-                      d="M10,8 L6.70711,11.2929 C6.31658,11.6834 6.31658,12.3166 6.70711,12.7071 L10,16"
-                      id="Path"
-                      stroke="#ffffff"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    >
-                      {' '}
-                    </path>{' '}
-                  </g>{' '}
-                </g>{' '}
-              </g>
-            </svg>
-            <span className="text-sm font-bold">Go back</span>
-          </button>
-          <div className="h-4 w-[1px] bg-zinc-800" />
-          <div className="flex flex-row items-center gap-3">
-            <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-              Building
-            </span>
-            <span className="text-white font-bold text-sm">
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </span>
-          </div>
-        </div>
-      </header>
-      {/* main content */}
-      <div className="grid grid-cols-1 md:grid-cols-2  overflow-hidden h-[500px]">
-        {/*  PREVIEW SIDE */}
+
+      {/* FIXED: Passing only the string name to the Header */}
+      <Header onClose={onClose} categoryName={animationCategory} />
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 md:grid-cols-2 overflow-hidden h-[500px]">
+        {/* PREVIEW SIDE */}
         <section
           className="relative flex items-center justify-center group overflow-hidden rounded-tl-[12px] rounded-bl-[12px]"
           style={{ backgroundColor: previewBg }}
         >
           {/* Theme Toggles */}
           <div className="absolute top-3 right-3 flex items-center bg-black backdrop-blur-md p-1.5 rounded-full border border-white/5 shadow-2xl">
-            {/* Color Hex Label */}
             <div className="px-3 border-r border-white/10 mr-1.5">
               <span className="text-[11px] font-bold font-heading text-white uppercase tracking-widest">
                 {previewBg}
               </span>
             </div>
-
-            {/* Button Group Container */}
             <div className="relative flex gap-1">
-              {/* Sliding Highlight */}
-              <div
-                className="absolute top-0 left-0 h-[28px] rounded-full bg-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]"
-                style={{
-                  width: '28px',
-                  transform: `translateX(${
-                    previewBg === '#e8e8e8' ? '0px' : previewBg === '#050505' ? '32px' : '64px'
-                  })`,
-                }}
-              />
-
-              {/* Light Mode */}
               <button
                 onClick={() => setPreviewBg('#e8e8e8')}
-                aria-label="Light Mode"
-                className={`relative z-10 w-7 h-7 flex  cursor-pointer items-center justify-center rounded-full transition-colors duration-300 ${
-                  previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
-                }`}
+                className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full ${previewBg === '#e8e8e8' ? 'text-black bg-white' : 'text-zinc-500'}`}
               >
-                <Sun size={14} strokeWidth={2.5} />
+                <Sun size={14} />
               </button>
-
-              {/* Dark Mode */}
               <button
                 onClick={() => setPreviewBg('#050505')}
-                aria-label="Dark Mode"
-                className={`relative z-10 w-7 h-7  cursor-pointer flex items-center justify-center rounded-full transition-colors duration-300 ${
-                  previewBg === '#050505' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
-                }`}
+                className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full ${previewBg === '#050505' ? 'text-black bg-white' : 'text-zinc-500'}`}
               >
-                <Moon size={14} strokeWidth={2.5} />
+                <Moon size={14} />
               </button>
-
-              {/* System */}
               <button
                 onClick={() => setPreviewBg('#18181b')}
-                aria-label="System Mode"
-                className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-300 ${
-                  previewBg === '#18181b' ? 'text-black' : 'text-zinc-500 hover:text-zinc-200'
-                }`}
+                className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full ${previewBg === '#18181b' ? 'text-black bg-white' : 'text-zinc-500'}`}
               >
-                <Monitor size={14} strokeWidth={2.5} />
+                <Monitor size={14} />
               </button>
             </div>
           </div>
 
-          {/* THE ELEMENT */}
-          <style>{activeTab === 'css' ? cssCode : ''}</style>
+          {/* THE ANIMATED ELEMENT - Correctly rendering based on objectType */}
           <div className="scale-150 transition-transform duration-500">
             <div className={`preview-element ${activeTab === 'tailwind' ? tailwindCode : ''}`}>
-              {category === 'box' && (
-                <div className="w-16 h-16 bg-[#1d2129] rounded-lg shadow-sm flex items-center justify-center text-white text-[10px]">
-                  Button
-                </div>
+              {objectType === 'box' && <div className="w-16 h-16 bg-[#1d2129] rounded-[5px]" />}
+              {objectType === 'text' && (
+                <span className="text-4xl font-black text-[#1d2129]">Aa</span>
               )}
-              {category === 'text' && <span className="text-4xl font-black text-zinc-900">Aa</span>}
-              {category === 'circle' && <div className="w-16 h-16 bg-[#1d2129] rounded-full" />}
-              {category === 'icon' && <Star size={48} className="text-[#1d2129] fill-current" />}
+              {objectType === 'circle' && <div className="w-16 h-16 bg-[#1d2129] rounded-full" />}
+              {objectType === 'icon' && <Star size={48} className="text-[#1d2129] fill-current" />}
             </div>
           </div>
         </section>
 
-        {/*editor side */}
+        {/* EDITOR SIDE */}
         <section className="w-full rounded-tr-[12px] rounded-br-[12px] bg-[#121212] flex flex-col border-l border-zinc-800/50">
-          {/* Editor Tabs */}
           <div className="flex bg-[#0a0a0a] rounded-tr-[12px] border-b border-zinc-800/50">
             <button
               onClick={() => setActiveTab('css')}
-              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'css' ? 'bg-[#121212] text-white border-t-2 border-indigo-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'css' ? 'bg-[#121212] text-white border-t-2 border-orange-500' : 'text-zinc-500'}`}
             >
-              <span className="text-orange-500 font-bold">5</span> HTML
+              <span className="text-orange-500 font-bold">#</span> CSS Keyframes
             </button>
             <button
               onClick={() => setActiveTab('tailwind')}
-              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'tailwind' ? 'bg-[#121212] text-white border-t-2 border-indigo-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'tailwind' ? 'bg-[#121212] text-white border-t-2 border-blue-500' : 'text-zinc-500'}`}
             >
-              <span className="text-blue-500 font-bold">#</span> CSS
+              <span className="text-blue-500 font-bold">~</span> Tailwind
             </button>
           </div>
 
-          {/* Code Area */}
           <div className="flex-1 relative font-mono text-[13px] overflow-hidden">
-            {/* Code Editor with Prism Highlighting */}
-            <div className="absolute inset-0 p-6 overflow-auto">
-              <pre className="pointer-events-none m-0">
-                <code className="language-css">{activeTab === 'css' ? cssCode : tailwindCode}</code>
-              </pre>
-              <textarea
-                value={activeTab === 'css' ? cssCode : tailwindCode}
-                onChange={e =>
-                  activeTab === 'css' ? setCssCode(e.target.value) : setTailwindCode(e.target.value)
-                }
-                spellCheck="false"
-                className="absolute inset-0 w-full h-full p-6 bg-transparent text-transparent caret-white resize-none outline-none overflow-auto"
-              />
-            </div>
+            <textarea
+              value={activeTab === 'css' ? cssCode : tailwindCode}
+              onChange={e =>
+                activeTab === 'css' ? setCssCode(e.target.value) : setTailwindCode(e.target.value)
+              }
+              spellCheck="false"
+              className="absolute inset-0 w-full h-full p-6 bg-transparent text-white caret-white resize-none outline-none overflow-auto"
+            />
           </div>
         </section>
       </div>
-      {/* bottom bar */}
+
+      {/* FOOTER */}
       <footer className="h-16 mt-5 rounded-[8px] bg-[#121212] border-t border-zinc-800/50 flex items-center justify-between pl-3 pr-2 shrink-0">
         <button
           onClick={handleStartCreating}
-          className="flex items-center gap-2 text-white text-[15px] cursor-pointer font-medium  transition-colors hover:bg-[#000] py-3 px-4 rounded-[5px]"
+          className="flex items-center gap-2 text-white text-[15px] cursor-pointer font-medium transition-colors hover:bg-[#000] py-3 px-4 rounded-[5px]"
         >
-          <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white rounded-[1px] opacity-100" />
-            ))}
-          </div>
-          Change type
+          <AlignLeft size={18} />
+          Change Category
         </button>
 
-        <div className="flex items-center gap-4">
-          <button
-            // onClick={() => onSave({ title, cssCode, tailwindCode, category })}
-            onClick={handleSubmit}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-[7px] text-[16px] font-bold font-outfit  tracking-wide transition-all active:scale-95 shadow-lg shadow-indigo-600/20 cursor-pointer"
-          >
-            <Rocket size={18} />
-            Submit for review
-          </button>
-        </div>
+        <button
+          onClick={handleTriggerPopup}
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-[7px] text-[16px] font-bold tracking-wide transition-all active:scale-95 cursor-pointer"
+        >
+          <Rocket size={18} />
+          Submit to Community
+        </button>
       </footer>
+
+      {/* --- DETAILS VALIDATION POPUP --- */}
+      {showDetailsPopup && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={() => setShowDetailsPopup(false)}
+          />
+          <div className="relative bg-[#121212] border border-zinc-800 w-full max-w-md rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <Tag className="text-indigo-500" size={20} /> Finalize Animation
+              </h3>
+              <button
+                onClick={() => setShowDetailsPopup(false)}
+                className="text-zinc-500 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-5">
+              <div>
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
+                  Animation Name
+                </label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  placeholder="e.g. Hyper Glow Pulse"
+                  className={`w-full bg-[#090909] border ${errors.title ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 px-4 text-white text-sm outline-none focus:border-indigo-500`}
+                />
+                {errors.title && (
+                  <p className="text-red-500 text-[10px] mt-1.5 font-bold uppercase">
+                    {errors.title}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
+                  Description
+                </label>
+                <textarea
+                  value={desc}
+                  onChange={e => setDesc(e.target.value)}
+                  className={`w-full bg-[#090909] border ${errors.desc ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 px-4 text-white text-sm h-24 resize-none`}
+                />
+                {errors.desc && (
+                  <p className="text-red-500 text-[10px] mt-1.5 font-bold uppercase">
+                    {errors.desc}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
+                  Default Duration
+                </label>
+                <div className="relative">
+                  <Clock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
+                    size={16}
+                  />
+                  <input
+                    type="text"
+                    value={duration}
+                    onChange={e => setDuration(e.target.value)}
+                    className={`w-full bg-[#090909] border ${errors.duration ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 pl-10 pr-4 text-white text-sm`}
+                  />
+                </div>
+              </div>
+              <button
+                onClick={handleFinalSubmit}
+                className="w-full bg-white text-black font-black uppercase py-4 rounded-xl mt-4 hover:bg-indigo-500 hover:text-white transition-all"
+              >
+                Publish to Community
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+/**
+ * FIXED HEADER: handles categoryName as a string safely.
+ */
+function Header({ onClose, categoryName }) {
+  const safeTitle =
+    typeof categoryName === 'string'
+      ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
+      : 'Animation';
+
+  return (
+    <header className="h-16 border-b border-zinc-800/50 flex items-center justify-between px-6 bg-[#050505] shrink-0">
+      <div className="flex items-center justify-between w-full gap-6">
+        <button
+          onClick={onClose}
+          className="flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors"
+        >
+          <X size={18} />
+          <span className="text-sm font-bold">Go back</span>
+        </button>
+        <div className="h-4 w-[1px] bg-zinc-800" />
+        <div className="flex flex-row items-center gap-3">
+          <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
+            Building
+          </span>
+          <span className="text-white font-bold text-sm">{safeTitle}</span>
+        </div>
+      </div>
+    </header>
   );
 }

@@ -1,154 +1,246 @@
 export const animations = [
-  {
-    id: 'float-anim',
-    title: 'Floating',
-    category: 'Floating',
-    duration: '3s',
-    keyframes: `
-      @keyframes my-anim {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-      }
-    `,
-    css: '@keyframes float-anim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }',
-    tailwind: 'animate-[float-anim_3s_ease-in-out_infinite]',
-    desc: "A weightless vertical oscillation. Perfect for adding a premium, airy feel to icons and floating UI elements."
-  },
+  // --- BUTTONS ---
   {
     id: 'pulse-soft',
     title: 'Soft Pulse',
     category: 'Buttons',
     duration: '2s',
-    keyframes: `
-      @keyframes my-anim {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.8; }
-      }
-    `,
+    keyframes: `@keyframes my-anim { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }`,
     css: '@keyframes pulse-soft { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }',
     tailwind: 'animate-[pulse-soft_2s_ease-in-out_infinite]',
-    desc: "Subtle rhythmic expansion. Designed to draw focus to call-to-action buttons without overwhelming the user interface."
-  },
-  {
-    id: 'slide-up-fade',
-    title: 'Slide Up Reveal',
-    category: 'Entrances',
-    duration: '0.6s',
-    keyframes: `
-      @keyframes my-anim {
-        0% { transform: translateY(20px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-      }
-    `,
-    css: '@keyframes slide-up-fade { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }',
-    tailwind: 'animate-[slide-up-fade_0.6s_ease-out_forwards]',
-    desc: "Elegant vertical emergence. Combines upward motion with a smooth opacity ramp for clean and modern content entries."
-  },
-  {
-    id: 'spin-slow',
-    title: 'Gentle Spin',
-    category: 'Loaders',
-    duration: '8s',
-    keyframes: `
-      @keyframes my-anim {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-    `,
-    css: '@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }',
-    tailwind: 'animate-[spin-slow_8s_linear_infinite]',
-    desc: "A continuous, low-velocity rotation. Ideal for sophisticated background motifs or minimalist loading states."
+    desc: "Subtle rhythmic expansion for call-to-action buttons.",
+    type: 'box'
   },
   {
     id: 'shake-error',
     title: 'Error Shake',
     category: 'Buttons',
     duration: '0.4s',
-    keyframes: `
-      @keyframes my-anim {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-      }
-    `,
+    keyframes: `@keyframes my-anim { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }`,
     css: '@keyframes shake-error { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }',
     tailwind: 'animate-[shake-error_0.4s_ease-in-out]',
-    desc: "Tactile horizontal feedback. Mimics a physical head shake to communicate failed validation or restricted user actions."
+    desc: "Tactile horizontal feedback for failed validation.",
+    type: 'box'
   },
   {
-    id: 'bounce-light',
-    title: 'Light Bounce',
-    category: 'Transitions',
-    duration: '2s',
-    keyframes: `
-      @keyframes my-anim {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-10px); }
-        60% { transform: translateY(-5px); }
-      }
-    `,
-    css: '@keyframes bounce-light { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }',
-    tailwind: 'animate-[bounce-light_2s_infinite]',
-    desc: "A dynamic, gravity-inspired vertical bounce. Adds a playful yet professional personality to notifications and alerts."
+    id: 'liquid-border',
+    title: 'Liquid Morph',
+    category: 'Buttons',
+    duration: '5s',
+    keyframes: `@keyframes my-anim { 0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; } 50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; } }`,
+    css: '@keyframes liquid-morph { 0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; } 50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; } }',
+    tailwind: 'animate-[liquid-morph_5s_infinite]',
+    desc: "Organic morphing shapes for fluid, 'liquid' interaction.",
+    type: 'box'
   },
+
+  // --- LOADERS ---
   {
-    id: 'blur-in',
-    title: 'Blur Reveal',
-    category: 'Entrances',
-    duration: '1s',
-    keyframes: `
-      @keyframes my-anim {
-        0% { filter: blur(10px); opacity: 0; }
-        100% { filter: blur(0); opacity: 1; }
-      }
-    `,
-    css: '@keyframes blur-in { from { filter: blur(10px); opacity: 0; } to { filter: blur(0); opacity: 1; } }',
-    tailwind: 'animate-[blur-in_1s_ease-out_forwards]',
-    desc: "Cinematic focal transition. Shifts from a soft blur to crystal clarity for a high-end, high-impact content reveal."
+    id: 'spin-slow',
+    title: 'Gentle Spin',
+    category: 'Loaders',
+    duration: '8s',
+    keyframes: `@keyframes my-anim { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`,
+    css: '@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }',
+    tailwind: 'animate-[spin-slow_8s_linear_infinite]',
+    desc: "Continuous, low-velocity rotation for minimalist loading.",
+    type: 'icon'
   },
   {
     id: 'shimmer-effect',
     title: 'Shimmering',
     category: 'Loaders',
     duration: '2s',
-    keyframes: `
-      @keyframes my-anim {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
-      }
-    `,
+    keyframes: `@keyframes my-anim { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }`,
     css: '@keyframes shimmer-effect { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }',
     tailwind: 'bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 bg-[length:200%_100%] animate-[shimmer-effect_2s_linear_infinite]',
-    desc: "Subtle light-path movement. The industry standard for premium skeleton loading states and metallic surface highlights."
+    desc: "Premium skeleton loading states.",
+    type: 'box'
   },
   {
-    id: 'zoom-in-out',
-    title: 'Breathing Zoom',
-    category: 'Floating',
-    duration: '4s',
-    keyframes: `
-      @keyframes my-anim {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-      }
-    `,
-    css: '@keyframes zoom-in-out { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }',
-    tailwind: 'animate-[zoom-in-out_4s_ease-in-out_infinite]',
-    desc: "Slow-tempo organic scaling. Gives static images or cards a 'living' quality by mimicking a natural breathing cycle."
+    id: 'pulse-rings',
+    title: 'Pulse Rings',
+    category: 'Loaders',
+    duration: '1.5s',
+    keyframes: `@keyframes my-anim { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }`,
+    css: '@keyframes pulse-rings { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }',
+    tailwind: 'animate-[pulse-rings_1.5s_ease-out_infinite]',
+    desc: "Expanding radar-like signal for loading.",
+    type: 'circle'
+  },
+
+  // --- ENTRANCES ---
+  {
+    id: 'slide-up-fade',
+    title: 'Slide Up Reveal',
+    category: 'Entrances',
+    duration: '0.6s',
+    keyframes: `@keyframes my-anim { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }`,
+    css: '@keyframes slide-up-fade { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }',
+    tailwind: 'animate-[slide-up-fade_0.6s_ease-out_forwards]',
+    desc: "Elegant vertical emergence for modern content entries.",
+    type: 'box'
+  },
+  {
+    id: 'blur-in',
+    title: 'Blur Reveal',
+    category: 'Entrances',
+    duration: '1s',
+    keyframes: `@keyframes my-anim { 0% { filter: blur(10px); opacity: 0; } 100% { filter: blur(0); opacity: 1; } }`,
+    css: '@keyframes blur-in { from { filter: blur(10px); opacity: 0; } to { filter: blur(0); opacity: 1; } }',
+    tailwind: 'animate-[blur-in_1s_ease-out_forwards]',
+    desc: "Cinematic focal transition from blur to clarity.",
+    type: 'box'
   },
   {
     id: 'slide-right',
     title: 'Slide In Right',
     category: 'Entrances',
     duration: '0.5s',
-    keyframes: `
-      @keyframes my-anim {
-        0% { transform: translateX(50px); opacity: 0; }
-        100% { transform: translateX(0); opacity: 1; }
-      }
-    `,
+    keyframes: `@keyframes my-anim { 0% { transform: translateX(50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }`,
     css: '@keyframes slide-right { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }',
     tailwind: 'animate-[slide-right_0.5s_ease-out_forwards]',
-    desc: "Swift lateral entry from the right. A directional movement ideal for sidebars, notification toasts, or list items."
+    desc: "Swift lateral entry ideal for sidebars and toasts.",
+    type: 'box'
+  },
+
+  // --- TEXT ---
+  {
+    id: 'reveal-stagger',
+    title: 'Reveal Stagger',
+    category: 'Text',
+    duration: '1.2s',
+    keyframes: `@keyframes my-anim { 0% { transform: translateY(100%) skewY(7deg); opacity: 0; } 100% { transform: translateY(0) skewY(0deg); opacity: 1; } }`,
+    css: '@keyframes reveal-stagger { 0% { transform: translateY(100%) skewY(7deg); opacity: 0; } 100% { transform: translateY(0) skewY(0deg); opacity: 1; } }',
+    tailwind: 'animate-[reveal-stagger_1.2s_ease-out_forwards]',
+    desc: "Professional weighted text reveal with a skew.",
+    type: 'text'
+  },
+  {
+    id: 'glitch-noir',
+    title: 'Glitch Noir',
+    category: 'Text',
+    duration: '0.4s',
+    keyframes: `@keyframes my-anim { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }`,
+    css: '@keyframes glitch-noir { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }',
+    tailwind: 'animate-[glitch-noir_0.4s_infinite]',
+    desc: "Rapid micro-jitter for tech-focused interfaces.",
+    type: 'text'
+  },
+  {
+    id: 'typewriter-fade',
+    title: 'Typewriter Fade',
+    category: 'Text',
+    duration: '2s',
+    keyframes: `@keyframes my-anim { from { width: 0; opacity: 0; } to { width: 100%; opacity: 1; } }`,
+    css: '@keyframes typewriter { from { width: 0; opacity: 0; } to { width: 100%; opacity: 1; } }',
+    tailwind: 'animate-[typewriter_2s_steps(20)_forwards] overflow-hidden whitespace-nowrap',
+    desc: "Classic typewriter effect with a smooth fade-in.",
+    type: 'text'
+  },
+
+  // --- CARDS ---
+  {
+    id: 'obsidian-glow',
+    title: 'Obsidian Glow',
+    category: 'Cards',
+    duration: '4s',
+    keyframes: `@keyframes my-anim { 0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0); } 50% { box-shadow: 0 0 40px rgba(0,0,0,0.15); } }`,
+    css: '@keyframes obsidian-glow { 0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0); } 50% { box-shadow: 0 0 40px rgba(0,0,0,0.15); } }',
+    tailwind: 'animate-[obsidian-glow_4s_infinite] border border-white/5',
+    desc: "Slow-breathing shadow expansion for dark mode cards.",
+    type: 'box'
+  },
+  {
+    id: 'shimmer-sweep',
+    title: 'Shimmer Sweep',
+    category: 'Cards',
+    duration: '2.5s',
+    keyframes: `@keyframes my-anim { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }`,
+    css: '@keyframes shimmer-sweep { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }',
+    tailwind: 'bg-gradient-to-r from-transparent via-white/5 to-transparent bg-[length:200%_100%] animate-[shimmer-sweep_2.5s_linear_infinite]',
+    desc: "High-gloss light streak passing over a surface.",
+    type: 'box'
+  },
+  {
+    id: 'float-card',
+    title: 'Float & Tilt',
+    category: 'Cards',
+    duration: '5s',
+    keyframes: `@keyframes my-anim { 0%, 100% { transform: translateY(0) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(5deg); } }`,
+    css: '@keyframes float-tilt { 0%, 100% { transform: translateY(0) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(5deg); } }',
+    tailwind: 'animate-[float-tilt_5s_ease-in-out_infinite]',
+    desc: "Combines vertical drift with a 3D perspective tilt.",
+    type: 'box'
+  },
+
+  // --- ICONS ---
+  {
+    id: 'floating-minimal',
+    title: 'Floating Icon',
+    category: 'Icons',
+    duration: '6s',
+    keyframes: `@keyframes my-anim { 0%, 100% { transform: translateY(0) rotate(0deg); } 33% { transform: translateY(-10px) rotate(2deg); } 66% { transform: translateY(-5px) rotate(-2deg); } }`,
+    css: '@keyframes float-icon { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(5deg); } }',
+    tailwind: 'animate-[float-icon_6s_ease-in-out_infinite]',
+    desc: "Organic, weightless drift for product icons.",
+    type: 'icon'
+  },
+  {
+    id: 'stroke-draw',
+    title: 'Stroke Draw',
+    category: 'Icons',
+    duration: '2s',
+    keyframes: `@keyframes my-anim { 0% { stroke-dasharray: 0 100; opacity: 0; } 100% { stroke-dasharray: 100 0; opacity: 1; } }`,
+    css: '@keyframes stroke-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }',
+    tailwind: 'animate-[stroke-draw_2s_ease-in-out_forwards]',
+    desc: "Animates the drawing of an SVG outline.",
+    type: 'icon'
+  },
+  {
+    id: 'bell-ring',
+    title: 'Alert Ring',
+    category: 'Icons',
+    duration: '1s',
+    keyframes: `@keyframes my-anim { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(15deg); } 40% { transform: rotate(-15deg); } 60% { transform: rotate(10deg); } 80% { transform: rotate(-10deg); } }`,
+    css: '@keyframes bell-ring { 0%, 100% { transform: rotate(0); } 20%, 60% { transform: rotate(15deg); } 40%, 80% { transform: rotate(-15deg); } }',
+    tailwind: 'animate-[bell-ring_1s_ease-in-out_infinite] origin-top',
+    desc: "Attention-grabbing bell oscillation.",
+    type: 'icon'
+  },
+
+  // --- SHAPES ---
+  {
+    id: 'morph-circle',
+    title: 'Liquid Blob',
+    category: 'Shapes',
+    duration: '8s',
+    keyframes: `@keyframes my-anim { 0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; } 50% { border-radius: 70% 30% 46% 54% / 30% 29% 71% 70%; } }`,
+    css: '@keyframes morph-blob { 0%, 100% { border-radius: 42% 58% 70% 30%; } 50% { border-radius: 70% 30% 46% 54%; } }',
+    tailwind: 'animate-[morph-blob_8s_linear_infinite]',
+    desc: "Infinite organic shape transformation.",
+    type: 'circle'
+  },
+  {
+    id: 'square-to-round',
+    title: 'Soft Shape Shift',
+    category: 'Shapes',
+    duration: '3s',
+    keyframes: `@keyframes my-anim { 0%, 100% { border-radius: 4px; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(90deg); } }`,
+    css: '@keyframes square-round { 0%, 100% { border-radius: 4px; } 50% { border-radius: 50%; } }',
+    tailwind: 'animate-[square-round_3s_ease-in-out_infinite]',
+    desc: "Geometric transition from square to circle.",
+    type: 'box'
+  },
+  {
+    id: 'pulse-glow',
+    title: 'Inner Glow',
+    category: 'Shapes',
+    duration: '2s',
+    keyframes: `@keyframes my-anim { 0%, 100% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); } 50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.6)); } }`,
+    css: '@keyframes pulse-glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.5); } }',
+    tailwind: 'animate-[pulse-glow_2s_infinite]',
+    desc: "Ethereal brightness pulse for vector elements.",
+    type: 'icon'
   }
 ];

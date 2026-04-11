@@ -1,5 +1,18 @@
 import React from 'react';
-import { LayoutGrid, Layers, CirclePlay, Loader, SlidersVertical, Users } from 'lucide-react';
+import {
+  Users,
+  LayoutGrid,
+  MousePointer2,
+  Loader2,
+  LogIn,
+  Move3d,
+  Type,
+  CreditCard,
+  Shapes,
+  Zap,
+  Monitor,
+  Box,
+  Sparkles } from 'lucide-react';
 
 /* navs: secondary menu items */
 const navigations = [
@@ -8,11 +21,25 @@ const navigations = [
 
 /* cats: 'All' functions as Home/Reset */
 const categories = [
-  { name: 'All', icon: <LayoutGrid size={20} /> },
-  { name: 'Buttons', icon: <CirclePlay size={20} /> },
-  { name: 'Loaders', icon: <Loader size={20} className="animate-spin" /> },
-  { name: 'Entrances', icon: <Layers size={20} /> },
-  { name: 'Transitions', icon: <SlidersVertical size={20} /> },
+  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} />, label: 'All Animations' },
+  {
+    name: 'Buttons',
+    icon: <MousePointer2 size={18} strokeWidth={2.5} />,
+    label: 'Buttons Animations',
+  },
+  {
+    name: 'Loaders',
+    icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
+    label: 'Loading States',
+  },
+  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} />, label: 'Arrival Effects' },
+  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} />, label: 'Transitions Flows' },
+  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} />, label: 'Cards Animations' },
+  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} />, label: 'Typography Motion' },
+  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} />, label: 'Icons Animations' },
+  { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} />, label: 'Shapes Motion' },
+  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} />, label: 'Scroll Reveals' },
+  { name: 'Components', icon: <Box size={18} strokeWidth={2.5} />, label: 'UI Element Kits' },
 ];
 
 export default function Sidebar({ selectedCategory, activeNavigation, onNavigate }) {
@@ -44,7 +71,7 @@ export default function Sidebar({ selectedCategory, activeNavigation, onNavigate
                     {item.icon}
                   </span>
                   <span className="text-[14px] font-semibold ml-3 tracking-tight">
-                    {item.name}
+                    {item.label}
                   </span>
                 </button>
               );
