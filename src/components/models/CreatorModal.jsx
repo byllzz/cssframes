@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { X, Star, Moon, Sun, Monitor, Rocket, Clock, Tag, AlignLeft } from 'lucide-react';
+import {
+  X,
+  Star,
+  Moon,
+  Sun,
+  Monitor,
+  Rocket,
+  Clock,
+  Tag,
+  AlignLeft,
+  ArrowLeft,
+} from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
@@ -272,7 +283,7 @@ function Header({ onClose, categoryName }) {
           onClick={onClose}
           className="flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors"
         >
-          <X size={18} />
+          <ArrowLeft size={18} />
           <span className="text-sm font-bold">Go back</span>
         </button>
         <div className="h-4 w-[1px] bg-zinc-800" />

@@ -163,11 +163,13 @@ export default function App() {
                       onCardClick={handleOpenPreview}
                       previewType={previewType}
                       handleStartCreating={handleStartCreating}
-                      onShareClick={anim => setSelectedShare(anim)}
+                          onShareClick={anim => setSelectedShare(anim)}
+                          onBack={() => handleNavChange('Home')} // For go back to main
                     />
                   )}
 
-                  {activeNavigation === 'About' && <About />}
+                  {activeNavigation === 'About' &&
+                  <About onBack={() => handleNavChange('Home')} animations={animations} />}
                 </div>
               )}
             </div>

@@ -44,7 +44,7 @@ export default function CategorySelectModal({ onSelect, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 h-screen w-full flex items-center justify-center animate-in fade-in duration-300 z-[100] font-outfit px-4 backdrop-blur-sm bg-black/60">
+    <div className="fixed inset-0 min-h-screen w-full flex items-center justify-center animate-in fade-in duration-300 z-[100] font-outfit px-4 backdrop-blur-sm bg-black/60">
       <div className="bg-[#121212] border border-white/5 rounded-[12px] w-full max-w-[950px] relative overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)]">
 
         {/* Progress Bar */}

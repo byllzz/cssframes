@@ -3,7 +3,7 @@ import {
   Copy,
   Check,
   BookmarkIcon,
-  Code2,
+  ArrowLeft ,
   Star,
   Moon,
   Sun,
@@ -174,7 +174,7 @@ function Header({ onClose }) {
         onClick={onClose}
         className="flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-all group"
       >
-        <X size={18} />
+        <ArrowLeft size={18} />
         <span className="text-sm font-bold">Go back</span>
       </button>
       <div className="flex items-center gap-4">
