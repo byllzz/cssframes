@@ -5,73 +5,104 @@ import {
   MousePointer2,
   Loader2,
   LogIn,
-  Move3d,
   Type,
   CreditCard,
   Shapes,
   Zap,
   Monitor,
   Box,
-  Sparkles } from 'lucide-react';
+  Sparkles,
+} from 'lucide-react';
 
-/* navs: secondary menu items */
-const navigations = [
-  { name: 'Community', icon: <Users size={20} /> },
-];
+const navigations = [{ name: 'Community', icon: <Users size={20} /> }];
 
-/* cats: 'All' functions as Home/Reset */
 const categories = [
-  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} />, label: 'All Animations' },
-  {
-    name: 'Buttons',
-    icon: <MousePointer2 size={18} strokeWidth={2.5} />,
-    label: 'Buttons Animations',
-  },
+  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} />,  },
+  { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} />,  },
   {
     name: 'Loaders',
     icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
-    label: 'Loading States',
+
   },
-  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} />, label: 'Arrival Effects' },
-  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} />, label: 'Transitions Flows' },
-  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} />, label: 'Cards Animations' },
-  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} />, label: 'Typography Motion' },
-  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} />, label: 'Icons Animations' },
-  { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} />, label: 'Shapes Motion' },
-  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} />, label: 'Scroll Reveals' },
-  { name: 'Components', icon: <Box size={18} strokeWidth={2.5} />, label: 'UI Element Kits' },
+  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} />, },
+  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} />, },
+  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} />, },
+  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} />, },
+  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} />, },
+  { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} />,  },
+  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} />,   },
+  { name: 'Components', icon: <Box size={18} strokeWidth={2.5} />,   },
 ];
 
-export default function Sidebar({ selectedCategory, activeNavigation, onNavigate }) {
-  // active check for social section
+export default function Sidebar({
+  selectedCategory,
+  activeNavigation,
+  onNavigate,
+  animations = [],
+}) {
   const isNavActive = (name) => activeNavigation === name;
 
+  // total animations count
+  const totalAnimations = animations.length;
+  const totalCommunityAnimations = animations.filter(item => item.isCommunity).length;
+
+  // get count per category
+  const getCategoryCount = (categoryName) => {
+    if (categoryName === 'All') return totalAnimations;
+    return animations.filter((item) => item.category === categoryName).length;
+  };
+
   return (
-    <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0">
+    <div className="h-full w-[250px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
       <nav className="flex-1 px-4 space-y-8 overflow-y-auto no-scrollbar pt-2">
         {/* library section */}
-        <section className="animate-in slide-in-from-left-2 duration-300">
+        <section>
+          {/* Heading with total */}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 className="text-sm font-semibold text-white tracking-tight">Animations</h2>
+            <span className="text-xs font-semibold text-zinc-500">{totalAnimations}</span>
+          </div>
+
           <div className="space-y-1.5">
             {categories.map(item => {
-              // CHANGE: Only active if navigation is 'Home' AND (it's 'All' or matches selection)
-              const isActive = activeNavigation === 'Home' &&
-                ((item.name === 'All' && selectedCategory === 'All') || selectedCategory === item.name);
+              const isActive =
+                activeNavigation === 'Home' &&
+                ((item.name === 'All' && selectedCategory === 'All') ||
+                  selectedCategory === item.name);
+
+              const count = getCategoryCount(item.name);
 
               return (
                 <button
                   key={item.name}
                   onClick={() => onNavigate('Home', item.name)}
-                  className={`w-full flex items-center px-3 py-[9px] rounded-[8px] transition-all group cursor-pointer ${
+                  className={`w-full flex items-center cursor-pointer justify-between px-3 py-[9px] rounded-[8px] transition-all group ${
                     isActive
-                      ? 'bg-[#161616] text-white shadow-sm'
+                      ? 'bg-[#161616] text-white'
                       : 'text-zinc-400 hover:bg-[#161616] hover:text-white'
                   }`}
                 >
-                  <span className={`transition-colors ${isActive ? 'text-white' : 'text-zinc-500 group-hover:text-white'}`}>
-                    {item.icon}
-                  </span>
-                  <span className="text-[14px] font-semibold ml-3 tracking-tight">
-                    {item.label}
+                  {/* Left */}
+                  <div className="flex items-center min-w-0">
+                    <span
+                      className={isActive ? 'text-white' : 'text-zinc-500 group-hover:text-white'}
+                    >
+                      {item.icon}
+                    </span>
+                    <span className="text-[14px] font-semibold ml-3 tracking-tight truncate">
+                      {item.name}
+                    </span>
+                  </div>
+
+                  {/* Right count */}
+                  <span
+                    className={`text-[16px] font-semibold  rounded-full ${
+                      isActive
+                        ? 'text-white'
+                        : 'bg-zinc-900 text-zinc-500 group-hover:text-white'
+                    }`}
+                  >
+                    {count}
                   </span>
                 </button>
               );
@@ -79,24 +110,37 @@ export default function Sidebar({ selectedCategory, activeNavigation, onNavigate
           </div>
         </section>
 
-        {/* social creation */}
+        {/* community */}
         <section>
           <div className="space-y-1.5">
             {navigations.map(item => (
               <button
                 key={item.name}
                 onClick={() => onNavigate(item.name, 'All')}
-                className={`w-full flex items-center px-3 py-2.5 rounded-[8px] transition-all group cursor-pointer ${
+                className={`w-full flex items-center cursor-pointer justify-between px-3 py-2.5 rounded-[8px] transition-all group ${
                   isNavActive(item.name)
                     ? 'bg-white text-black'
                     : 'text-zinc-400 hover:bg-[#161616] hover:text-white'
                 }`}
               >
-                <span className={isNavActive(item.name) ? 'text-black' : 'group-hover:text-white'}>
-                  {item.icon}
-                </span>
-                <span className="text-[14px] font-semibold ml-3 tracking-tight">
-                  {item.name}
+                <div className="flex items-center">
+                  <span
+                    className={isNavActive(item.name) ? 'text-black' : 'group-hover:text-white'}
+                  >
+                    {item.icon}
+                  </span>
+
+                  <span className="text-[17px] font-semibold ml-3 tracking-tight">{item.name}</span>
+                </div>
+
+                <span
+                  className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                    isNavActive(item.name)
+                      ? 'bg-black text-white'
+                      : 'bg-zinc-900 text-zinc-500 group-hover:text-white'
+                  }`}
+                >
+                  {totalCommunityAnimations}
                 </span>
               </button>
             ))}

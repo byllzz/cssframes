@@ -165,7 +165,7 @@ export default function CreatorModal({ category: config, onClose, onSave, handle
       </div>
 
       {/* FOOTER */}
-      <footer className="h-16 mt-5 rounded-[8px] bg-[#121212] border-t border-zinc-800/50 flex items-center justify-between pl-3 pr-2 shrink-0">
+      <duv className="h-16 mt-5 rounded-[8px] bg-[#121212] border-t border-zinc-800/50 flex items-center justify-between pl-3 pr-2 shrink-0">
         <button
           onClick={handleStartCreating}
           className="flex items-center gap-2 text-white text-[15px] cursor-pointer font-medium transition-colors hover:bg-[#000] py-3 px-4 rounded-[5px]"
@@ -181,7 +181,7 @@ export default function CreatorModal({ category: config, onClose, onSave, handle
           <Rocket size={18} />
           Submit to Community
         </button>
-      </footer>
+      </duv>
 
       {/* --- DETAILS VALIDATION POPUP --- */}
       {showDetailsPopup && (
@@ -281,7 +281,7 @@ function Header({ onClose, categoryName }) {
       <div className="flex items-center justify-between w-full gap-6">
         <button
           onClick={onClose}
-          className="flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors"
+          className="flex cursor-pointer items-center relative right-9 gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-colors"
         >
           <ArrowLeft size={18} />
           <span className="text-sm font-bold">Go back</span>

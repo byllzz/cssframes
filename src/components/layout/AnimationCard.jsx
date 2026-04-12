@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
-import { Star, Zap, Heart, Share2, User, Code2, ArrowUpRight } from 'lucide-react';
+import {
+  Star,
+  Zap,
+  Heart,
+  Share2,
+  User,
+  Code2,
+  ArrowUpRight,
+  Eye,
+  Bookmark,
+} from 'lucide-react';
 
-export default function AnimationCard({ animation, onCardClick, previewType, onShareClick }) {
+export default function AnimationCard({
+  animation,
+  onCardClick,
+  previewType,
+  onShareClick,
+}) {
   const [liked, setLiked] = useState(false);
   const displayType = animation.isCommunity ? animation.type : previewType;
-  const uniqueId = animation.id.replace(/[^a-zA-Z0-9]/g, '');
+
+  const uniqueId = String(animation.id).replace(/[^a-zA-Z0-9]/g, '');
   const activeClass = `active-${uniqueId}`;
   const keyframeName = `kb-${uniqueId}`;
 
@@ -13,136 +29,120 @@ export default function AnimationCard({ animation, onCardClick, previewType, onS
     .replace(/my-anim/g, keyframeName);
 
   return (
-    <div className="group relative w-full bg-[#050505] rounded-[8px] p-3 transition-all duration-300 hover:bg-[#080808] cursor-pointer border border-white/5 hover:border-white/20 shadow-2xl overflow-hidden font-outfit">
+    <div className="group relative w-full rounded-[18px] bg-[#070707] p-3 shadow-2xl border border-white/5 hover:border-white/10 transition-all duration-300 overflow-hidden">
       <style>{`
         ${processedKeyframes}
         .${activeClass} {
-            animation: ${keyframeName} ${animation.duration || '2s'} cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+          animation: ${keyframeName} ${animation.duration || '2s'} cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
         }
       `}</style>
 
-      {/* 1. TOP NAV: USER DATA (Sharp Styling) */}
-      <div className="flex items-center justify-between mb-3 px-1">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-[5px] bg-zinc-800 border border-white/10 flex items-center justify-center overflow-hidden">
-            <User size={14} className="text-zinc-400" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-white uppercase tracking-tight leading-none">
-              {animation.author || 'User_772'}
-            </span>
-            <span className="text-[8px] font-medium text-zinc-600 uppercase tracking-[0.1em]">
-              Contributor
-            </span>
-          </div>
-        </div>
-
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            setLiked(!liked);
-          }}
-          className={`h-7 w-7 flex items-center justify-center rounded-[5px] transition-all ${liked ? 'bg-red-500 text-white' : 'bg-white/5 text-zinc-500 hover:text-white'}`}
-        >
-          <Heart size={12} fill={liked ? 'currentColor' : 'none'} />
-        </button>
-      </div>
-
-      {/* 2. THE PREVIEW STAGE (High Contrast) */}
+      {/* Preview */}
       <div
         onClick={() => onCardClick(animation)}
-        className="relative aspect-video bg-white rounded-[5px] overflow-hidden flex items-center justify-center transition-all duration-500 group-hover:scale-[0.98]"
+        className="relative aspect-[1/1] rounded-[16px] bg-[#e9e9e9] overflow-hidden flex items-center justify-center cursor-pointer transition-transform duration-300 group-hover:scale-[0.99]"
       >
-        {/* Engineering Crosshair Grid */}
-        <div
-          className="absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-            backgroundSize: '24px 24px',
-          }}
-        />
+        {/* Soft background shading */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.9),rgba(233,233,233,1))]" />
 
-        {/* Engine Badge */}
-        <div className="absolute top-2 left-2 px-2 py-0.5 bg-black text-white rounded-[3px] flex items-center gap-1.5 z-20">
-          <Code2 size={10} strokeWidth={3} />
-          <span className="text-[8px] font-black uppercase tracking-widest">
-            {animation.tailwind ? 'TW_ENGINE' : 'CSS_RAW'}
-          </span>
+        {/* tiny top-left badge */}
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/80 px-2 py-1 text-[9px] font-semibold text-white">
+          <Code2 size={10} strokeWidth={2.5} />
+          {animation.css ? 'CSS' : 'Tailwind'}
         </div>
 
-        {/* The Asset */}
+        {/* Asset */}
         <div className={`relative z-10 ${activeClass} ${animation.tailwind || ''}`}>
-          {displayType === 'box' && <div className="w-12 h-12 bg-black rounded-[4px] shadow-xl" />}
+          {displayType === 'box' && (
+            <div className="w-14 h-14 rounded-[10px] bg-black shadow-[0_12px_30px_rgba(0,0,0,0.25)]" />
+          )}
           {displayType === 'text' && (
-            <h1 className="text-6xl font-black text-black tracking-tighter italic">Aa</h1>
+            <h1 className="text-7xl font-black text-black tracking-tighter italic">Aa</h1>
           )}
           {displayType === 'circle' && (
-            <div className="w-12 h-12 bg-black rounded-full shadow-xl" />
+            <div className="w-14 h-14 rounded-full bg-black shadow-[0_12px_30px_rgba(0,0,0,0.25)]" />
           )}
-          {displayType === 'icon' && <Star size={45} className="fill-black text-black" />}
+          {displayType === 'icon' && (
+            <Star size={56} className="fill-black text-black drop-shadow-lg" />
+          )}
         </div>
 
-        {/* Sharp Hover Overlay */}
-        <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-30">
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black">
-              <ArrowUpRight size={20} />
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center z-30">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-2">
+            <div className="w-15 h-15 rounded-full bg-white flex items-center justify-center text-black shadow-lg">
+              <ArrowUpRight size={28} />
             </div>
-            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-              Open Source
-            </span>
           </div>
         </div>
       </div>
 
-      {/* 3. INFO & STATS */}
-      <div className="mt-4 px-1">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-white tracking-tight leading-none group-hover:italic">
-              {animation.title}
-            </h2>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest py-0.5 px-1.5 bg-zinc-900 border border-white/5 rounded-[3px]">
-                ID: {String(animation.id).split('-')[0]}
-              </span>
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest py-0.5 px-1.5 bg-zinc-900 border border-white/5 rounded-[3px]">
-                {animation.duration}
-              </span>
-            </div>
-          </div>
-          <div className="p-2 bg-white text-black rounded-[5px]">
-            <Zap size={14} fill="currentColor" />
-          </div>
-        </div>
+      {/* Bottom row */}
+      <div className="mt-3 flex items-end justify-between gap-3 px-1">
+        <div className="min-w-full">
+          <div className="flex flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <h2 className="text-[18px] font-semibold text-white leading-none truncate">
+                {animation.title}
+              </h2>
 
-        {/* Brutalist Interaction Footer */}
-        <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">
-                Usage
-              </span>
-              <span className="text-[12px] font-bold text-zinc-300 tracking-tight">1.8k</span>
+              {animation.isCommunity && (
+                <span className="px-2 py-1 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/20 text-[10px] font-bold uppercase tracking-wide shrink-0">
+                  Community
+                </span>
+              )}
             </div>
-            <div className="flex flex-col">
-              <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">
-                Verified
-              </span>
-              <div className="w-3 h-3 bg-white mt-1 rounded-[2px]" />
+
+            <div className="flex items-center gap-1.5 shrink-0 text-zinc-400">
+              <Eye size={13} />
+              <span className="text-[13px] font-medium">{animation.views || '98K'} views</span>
             </div>
           </div>
 
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              onShareClick(animation);
-            }}
-            className="h-8 px-4 flex items-center gap-2 bg-zinc-900 hover:bg-white hover:text-black rounded-[5px] transition-all duration-200 border border-white/5"
-          >
-            <span className="text-[9px] font-black uppercase tracking-[0.1em]">Share Asset</span>
-            <Share2 size={12} />
-          </button>
+          <div className="mt-2 flex items-center gap-3 justify-between text-zinc-500">
+            <div className="flex items-center gap-1.5">
+              <User size={13} />
+              <span className="text-[13px] font-medium truncate max-w-[110px]">
+                {animation.author || 'Galahhad'}
+              </span>
+            </div>
+            {/* Right bottom icon buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  setLiked(!liked);
+                }}
+                className={`h-9 w-9 rounded-full flex items-center justify-center transition-all border ${
+                  liked
+                    ? 'bg-white text-black border-white'
+                    : 'bg-transparent text-zinc-400 border-white/10 hover:border-white/25 hover:text-white'
+                }`}
+                aria-label="Like"
+              >
+                <Heart size={15} fill={liked ? 'currentColor' : 'none'} />
+              </button>
+
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  onShareClick(animation);
+                }}
+                className="h-9 w-9 rounded-full flex items-center justify-center bg-transparent text-zinc-400 border border-white/10 hover:border-white/25 hover:text-white transition-all"
+                aria-label="Share"
+              >
+                <Share2 size={15} />
+              </button>
+
+              <button
+                onClick={e => e.stopPropagation()}
+                className="h-9 w-9 rounded-full flex items-center justify-center bg-transparent text-zinc-400 border border-white/10 hover:border-white/25 hover:text-white transition-all"
+                aria-label="Save"
+              >
+                <Bookmark size={15} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

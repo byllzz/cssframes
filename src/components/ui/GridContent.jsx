@@ -6,8 +6,8 @@ import FilterDropdown from './FilterDropdown';
 import {
   Columns,
   LayoutGrid,
-  ChevronLeft,
-  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
   Box,
   Type,
   Circle,
@@ -69,7 +69,7 @@ export default function GridContent({
       <div id="grid-top" className="scroll-mt-32" />
 
       {/* header */}
-      <header className="px-6 md:px-10 pt-12 pb-8">
+      <header className="px-6 md:px-2 pt-12 pb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none mb-4">
           {selectedCategory === 'All' ? 'Curated' : selectedCategory}{' '}
           <span className="text-zinc-700 italic font-light">Library</span>
@@ -80,7 +80,7 @@ export default function GridContent({
       </header>
 
       {/* toolbar */}
-      <div className="sticky top-0 z-30 bg-[#050505]/60 backdrop-blur-xl border-b border-white/[0.05] px-6 md:px-10 py-5 mb-12">
+      <div className="sticky top-0 z-30 bg-[#050505]/60 backdrop-blur-xl border-b border-white/[0.05] px-6 md:px-2 py-5 mb-12">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           {/* Search */}
           <div className="flex items-center gap-6">
@@ -142,7 +142,7 @@ export default function GridContent({
 
       {/* grid content */}
       <main
-        className={`px-6 md:px-10 transition-all duration-500 ${
+        className={`px-6 md:px-2 transition-all duration-500 ${
           gridPattern === 'grid'
             ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'
             : 'flex flex-col gap-6 max-w-5xl mx-auto'
@@ -181,41 +181,45 @@ export default function GridContent({
 
       {/* pagination */}
       {totalPages > 1 && (
-        <nav className="flex items-center justify-center gap-8 mt-24 px-6">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => paginate(currentPage - 1)}
-            className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white disabled:opacity-10 cursor-pointer transition-all"
-          >
-            <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            Prev
-          </button>
+        <nav className="mt-8 px-6">
+          <div className="mx-auto flex max-w-full flex items-center justify-between">
+            {/* PREV */}
+            <div className="w-[45%] flex justify-start">
+              {currentPage > 1 && (
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  className="group  flex w-full items-center cursor-pointer justify-start gap-3 rounded-[8px] px-6 py-6 text-white bg-[#161616] transition-all"
+                >
+                  <ArrowLeft
+                    size={22}
+                    className="group-hover:-translate-x-1 transition-transform"
+                  />
+                  <span className="text-lg font-semibold">Prev page</span>
+                </button>
+              )}
+            </div>
 
-          {/* Page Numbers */}
-          <div className="flex items-center gap-3 px-6 py-3 bg-zinc-900/30 rounded-full border border-white/[0.05] backdrop-blur-sm">
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => paginate(i + 1)}
-                className={`w-8 h-8 rounded-full text-[10px] font-bold transition-all cursor-pointer flex items-center justify-center ${
-                  currentPage === i + 1
-                    ? 'bg-white text-black scale-110 shadow-[0_0_20px_rgba(255,255,255,0.2)]'
-                    : 'text-zinc-600 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
+            {/* PAGE INDICATOR */}
+            <div className="text-center">
+              <p className="text-sm font-medium text-zinc-500">Page</p>
+              <p className="text-2xl font-bold text-white font-heading">
+                {currentPage} / {totalPages}
+              </p>
+            </div>
+
+            {/* NEXT */}
+            <div className="w-[45%] flex justify-end">
+              {currentPage < totalPages && (
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  className="group  flex w-full items-center cursor-pointer justify-end gap-3 rounded-[8px] px-6 py-6 text-white bg-[#161616] transition-all"
+                >
+                  <span className="text-lg font-semibold">Next page</span>
+                  <ArrowRight size={22} />
+                </button>
+              )}
+            </div>
           </div>
-
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => paginate(currentPage + 1)}
-            className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white disabled:opacity-10 cursor-pointer transition-all"
-          >
-            Next
-            <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </button>
         </nav>
       )}
     </div>

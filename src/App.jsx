@@ -27,17 +27,15 @@ export default function App() {
 
   // --- ACTIONS ---
 
-  const addNewAnimation = (newAnim) => {
-    const uniqueId = `anim-${Date.now()}`;
+  const addNewAnimation = newAnim => {
     const animationWithId = {
       ...newAnim,
-      id: uniqueId,
       isCommunity: true,
-      author: "Local User", // Or handle auth here
+      author: 'Local User',
       duration: newAnim.duration || '2s',
     };
 
-    setAllAnimations((prev) => [animationWithId, ...prev]);
+    setAllAnimations(prev => [animationWithId, ...prev]);
     setIsCreating(false);
     setActiveNavigation('Community');
   };
@@ -103,6 +101,7 @@ export default function App() {
               selectedCategory={selectedCategory}
               activeNavigation={activeNavigation}
               onNavigate={handleNavChange}
+              animations={allAnimations}
             />
           </aside>
 
@@ -163,13 +162,14 @@ export default function App() {
                       onCardClick={handleOpenPreview}
                       previewType={previewType}
                       handleStartCreating={handleStartCreating}
-                          onShareClick={anim => setSelectedShare(anim)}
-                          onBack={() => handleNavChange('Home')} // For go back to main
+                      onShareClick={anim => setSelectedShare(anim)}
+                      onBack={() => handleNavChange('Home')} // For go back to main
                     />
                   )}
 
-                  {activeNavigation === 'About' &&
-                  <About onBack={() => handleNavChange('Home')} animations={animations} />}
+                  {activeNavigation === 'About' && (
+                    <About onBack={() => handleNavChange('Home')} animations={allAnimations} />
+                  )}
                 </div>
               )}
             </div>
