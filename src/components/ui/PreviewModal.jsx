@@ -1,31 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Editor from '@monaco-editor/react';
+import prettier from 'prettier/standalone';
+import parserPostcss from 'prettier/parser-postcss';
+import { FaCss3 } from 'react-icons/fa6';
 import {
   Copy,
   Check,
   BookmarkIcon,
-  ArrowLeft ,
+  ArrowLeft,
   Star,
   Moon,
   Sun,
   Monitor,
-  X
+  Wand2,
 } from 'lucide-react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
 
 export default function PreviewModal({ animation, onClose, previewType }) {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState('css');
   const [editedCode, setEditedCode] = useState('');
   const [previewBg, setPreviewBg] = useState('#e8e8e8');
+
+  const formatTimer = useRef(null);
 
   const uniqueId = animation?.id?.replace(/[^a-zA-Z0-9]/g, '') || 'default';
   const modalAnimName = `exec-${uniqueId}`;
 
-  // Sync edited code when animation or tab changes
+  // initial load + format once
   useEffect(() => {
-    setEditedCode(activeTab === 'css' ? animation?.keyframes || '' : animation?.tailwind || '');
-  }, [animation, activeTab]);
+    const formatInitial = async () => {
+      const raw = animation?.keyframes || '';
+
+      try {
+        const formatted = await prettier.format(raw, {
+          parser: 'css',
+          plugins: [parserPostcss],
+        });
+
+        setEditedCode(formatted);
+      } catch {
+        setEditedCode(raw);
+      }
+    };
+
+    formatInitial();
+  }, [animation]);
 
   if (!animation) return null;
 
@@ -35,15 +53,52 @@ export default function PreviewModal({ animation, onClose, previewType }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleFormat = async () => {
+    try {
+      const formatted = await prettier.format(editedCode, {
+        parser: 'css',
+        plugins: [parserPostcss],
+      });
+      setEditedCode(formatted);
+    } catch (error) {
+      console.error('Prettier format failed:', error);
+    }
+  };
+
+  // ✅ ALWAYS PRETTY (debounced)
+  const handleEditorChange = (value) => {
+    const raw = value || '';
+    setEditedCode(raw);
+
+    if (formatTimer.current) clearTimeout(formatTimer.current);
+
+    formatTimer.current = setTimeout(async () => {
+      try {
+        const formatted = await prettier.format(raw, {
+          parser: 'css',
+          plugins: [parserPostcss],
+        });
+
+        setEditedCode(formatted);
+      } catch {
+        // if prettier breaks, we keep raw
+      }
+    }, 600);
+  };
+
   const getStyleSheet = () => {
-    if (activeTab === 'tailwind' || !editedCode) return '';
+    if (!editedCode) return '';
+
     const keyframeRegex = /@keyframes\s+([\w-]+)/;
     const match = editedCode.match(keyframeRegex);
     const actualNameInCode = match ? match[1] : null;
 
     let processedCSS = editedCode;
     if (actualNameInCode) {
-      processedCSS = editedCode.replace(new RegExp(actualNameInCode, 'g'), modalAnimName);
+      processedCSS = editedCode.replace(
+        new RegExp(actualNameInCode, 'g'),
+        modalAnimName
+      );
     }
 
     return `
@@ -54,114 +109,148 @@ export default function PreviewModal({ animation, onClose, previewType }) {
     `;
   };
 
-  const displayType = animation.isCommunity ? animation.type : previewType;
+  const displayType = animation.isCommunity
+    ? animation.type
+    : previewType;
 
   return (
-    <div className="w-full h-full flex flex-col text-zinc-300 font-outfit overflow-y-auto rounded-[12px] relative bottom-7 pr-5">
+    <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative bottom-10">
       <style>{getStyleSheet()}</style>
 
       <Header onClose={onClose} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-[500px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 flex-1 min-h-[510px] w-full">
         {/* PREVIEW SIDE */}
         <section
-          className="relative flex items-center justify-center group overflow-hidden rounded-tl-[12px] rounded-bl-[12px]"
+          className="relative flex items-center justify-center overflow-hidden rounded-tl-[12px] rounded-bl-[12px] min-h-[500px] md:min-h-0"
           style={{ backgroundColor: previewBg }}
         >
-          {/* Theme Toggles */}
-          <div className="absolute top-3 right-3 flex items-center bg-black backdrop-blur-md p-1.5 rounded-full border border-white/5 shadow-2xl">
-            <div className="px-3 border-r border-white/10 mr-1.5">
-              <span className="text-[11px] font-bold font-heading text-white uppercase tracking-widest">
+          <div className="absolute top-3 right-3 flex items-center  z-20">
+            <div
+              className={`px-3 mr-1.5`}
+            >
+              <span
+                className={`text-[18px] font-outfit font-normal ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} lowercase`}
+              >
                 {previewBg}
               </span>
             </div>
 
-            <div className="relative flex gap-1">
-              <div
-                className="absolute top-0 left-0 h-[28px] rounded-full bg-white transition-all duration-300"
+            <div
+              className={`relative flex items-center gap-1 ${
+                previewBg === '#e8e8e8' ? 'bg-zinc-300' : 'bg-[#050505]'
+              } p-1 rounded-full w-[64px] h-8`}
+            >
+              {/* sliding indicator */}
+              <label
+                htmlFor="themeToggle"
+                className="absolute cursor-pointer top-1 left-1 h-[24px] w-[24px] rounded-full bg-white transition-all duration-300"
                 style={{
-                  width: '28px',
-                  transform: `translateX(${
-                    previewBg === '#e8e8e8' ? '0px' : previewBg === '#050505' ? '32px' : '64px'
-                  })`,
+                  transform: previewBg === '#e8e8e8' ? 'translateX(0px)' : 'translateX(32px)',
                 }}
               />
-              <button onClick={() => setPreviewBg('#e8e8e8')} className={`relative z-10 w-7 h-7 flex cursor-pointer items-center justify-center rounded-full transition-colors ${previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-500'}`}>
-                <Sun size={14} strokeWidth={2.5} />
-              </button>
-              <button onClick={() => setPreviewBg('#050505')} className={`relative z-10 w-7 h-7 flex cursor-pointer items-center justify-center rounded-full transition-colors ${previewBg === '#050505' ? 'text-black' : 'text-zinc-500'}`}>
-                <Moon size={14} strokeWidth={2.5} />
-              </button>
-              <button onClick={() => setPreviewBg('#18181b')} className={`relative z-10 w-7 h-7 flex cursor-pointer items-center justify-center rounded-full transition-colors ${previewBg === '#18181b' ? 'text-black' : 'text-zinc-500'}`}>
-                <Monitor size={14} strokeWidth={2.5} />
-              </button>
+
+              {/* hidden input toggle (actual state driver) */}
+              <input
+                id="themeToggle"
+                type="checkbox"
+                className="absolute opacity-0 w-[64px] z-12 h-full cursor-pointer "
+                checked={previewBg !== '#e8e8e8'}
+                onChange={e => setPreviewBg(e.target.checked ? '#161616' : '#e8e8e8')}
+              />
+
+              {/* icons */}
+              <div className="relative z-10 flex w-full justify-between px-1">
+                <Sun
+                  size={14}
+                  className={previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-400'}
+                />
+                <Moon
+                  size={14}
+                  className={previewBg !== '#e8e8e8' ? 'text-black' : 'text-zinc-400'}
+                />
+              </div>
             </div>
           </div>
 
-          {/* Actual Animated Element */}
-          <div className={`modal-preview-target ${activeTab === 'tailwind' ? editedCode : ''}`}>
+          <div className="modal-preview-target">
             <div className="flex items-center justify-center scale-150">
-              {displayType === 'text' && <h1 className="text-4xl font-black text-black tracking-tighter italic">Aa</h1>}
-              {displayType === 'box' && <div className="w-16 h-16 bg-black rounded-[5px] shadow-2xl" />}
-              {displayType === 'circle' && <div className="w-16 h-16 bg-black rounded-full shadow-xl" />}
-              {displayType === 'icon' && <Star size={48} className="fill-black text-black" />}
+              {displayType === 'text' && (
+                <h1
+                  className={`text-4xl font-black ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} tracking-tighter italic`}
+                >
+                  Aa
+                </h1>
+              )}
+              {displayType === 'box' && (
+                <div
+                  className={`w-16 h-16 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-[5px] shadow-2xl`}
+                />
+              )}
+              {displayType === 'circle' && (
+                <div
+                  className={`w-16 h-16 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-full shadow-xl`}
+                />
+              )}
+              {displayType === 'icon' && (
+                <Star
+                  size={48}
+                  className={`${previewBg === '#e8e8e8' ? 'text-black fill-black' : 'text-white fill-white'}`}
+                />
+              )}
             </div>
           </div>
         </section>
 
-        {/* EDITOR SIDE - Matching CreatorModal exactly */}
-        <section className="w-full rounded-tr-[12px] rounded-br-[12px] bg-[#121212] flex flex-col border-l border-zinc-800/50 relative">
+        {/* EDITOR */}
+        <section className="w-full h-full min-h-[500px] md:min-h-0 rounded-tr-[12px] rounded-br-[12px] bg-[#000] flex flex-col border-l border-zinc-800/50 relative overflow-hidden">
+          <div className="flex items-center justify-between bg-[#161616] px-4 py-1.5 border-b border-zinc-800/50">
+            <div className="flex items-center justify-start gap-4 px-8 py-1 rounded-[5px] bg-[#000]">
+              <span className="text-blue-500 relative right-4">
+                <FaCss3 size={18} />
+              </span>
+              <h3 className="uppercase tracking-wide relative right-6"> CSS</h3>
+            </div>
+          </div>
 
-          {/* Tabs */}
-          <div className="flex bg-[#0a0a0a] rounded-tr-[12px] border-b border-zinc-800/50">
+          <div className="absolute top-12 right-3 z-30">
             <button
-              onClick={() => setActiveTab('css')}
-              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'css' ? 'bg-[#121212] text-white border-t-2 border-orange-500' : 'text-zinc-500'}`}
+              onClick={handleCopy}
+              className="flex items-center gap-2 py-2 px-4 rounded-[5px] text-[13px] font-bold text-white bg-[#161616] cursor-pointer"
             >
-              <span className="text-orange-500 font-bold">#</span> CSS Keyframes
-            </button>
-            <button
-              onClick={() => setActiveTab('tailwind')}
-              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'tailwind' ? 'bg-[#121212] text-white border-t-2 border-blue-500' : 'text-zinc-500'}`}
-            >
-              <span className="text-blue-500 font-bold">~</span> Tailwind
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
 
-          {/* Copy Button Overlay */}
-          <button
-            onClick={handleCopy}
-            className="absolute top-3 right-3 z-20 flex items-center gap-2 py-1.5 px-4 rounded-[5px] text-[11px] font-bold text-white border border-white/5 bg-[#0a0a0a] hover:bg-zinc-800 transition-colors shadow-xl"
-          >
-            {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
-            {copied ? 'Copied' : 'Copy'}
-          </button>
-
-          {/* Textarea Area */}
-          <div className="flex-1 relative font-mono text-[13px] overflow-hidden">
-            <textarea
+          <div className="flex-1 min-h-0">
+            <Editor
+              height="100%"
+              language="css"
+              theme="vs-dark"
               value={editedCode}
-              onChange={(e) => setEditedCode(e.target.value)}
-              spellCheck="false"
-              className="absolute inset-0 w-full h-full p-6 bg-transparent text-white caret-white resize-none outline-none overflow-auto font-mono leading-relaxed"
-              style={{
-                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+              onChange={handleEditorChange}
+              options={{
+                minimap: { enabled: true },
+                fontSize: 16,
+                wordWrap: 'on',
+                automaticLayout: true,
+                formatOnPaste: true,
+                formatOnType: false,
+                padding: {
+                  top: 15,
+                },
               }}
             />
           </div>
         </section>
       </div>
 
-      {/* FOOTER */}
-      <div className="px-4 py-2 bg-[#0c0c0c] border-t mt-3 border-zinc-900 flex items-center justify-between rounded-[12px]">
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 cursor-pointer px-4 py-3 text-white hover:bg-[#161616] rounded-[5px] text-[15px] transition-colors">
-            <BookmarkIcon size={20} /> Save to favorites
-          </button>
-        </div>
-        <div className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest px-4">
-          ID: {uniqueId}
-        </div>
+      <div className="px-4 bg-[#161616] py-[6px] border-t mt-3 border-zinc-900 flex items-center justify-between rounded-[12px]">
+        <button className="flex items-center gap-2 px-4 py-2.5 hover:bg-[#121212] rounded-[8px] cursor-pointer">
+          <BookmarkIcon size={20} /> Save to favorites
+        </button>
+        {/* <div className="text-[10px] text-zinc-600 font-bold uppercase">ID: {uniqueId}</div> */}
       </div>
     </div>
   );
@@ -169,19 +258,14 @@ export default function PreviewModal({ animation, onClose, previewType }) {
 
 function Header({ onClose }) {
   return (
-    <div className="flex items-center justify-between h-13 mb-2">
+    <div className="flex items-center justify-between h-13 shrink-0">
       <button
         onClick={onClose}
-        className="flex cursor-pointer items-center gap-2 text-sm font-medium text-white hover:bg-[#161616] rounded-[7px] px-4 py-2.5 transition-all group"
+        className="flex items-center cursor-pointer gap-2 px-4 py-2.5 rounded-[8px] hover:bg-[#161616]"
       >
         <ArrowLeft size={18} />
-        <span className="text-sm font-bold">Go back</span>
+        Go back
       </button>
-      <div className="flex items-center gap-4">
-        <span className="text-xs text-zinc-500 font-black uppercase tracking-[0.2em]">
-          Preview <span className="text-zinc-200">Animation</span>
-        </span>
-      </div>
     </div>
   );
 }

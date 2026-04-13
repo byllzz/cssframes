@@ -69,28 +69,27 @@ export default function GridContent({
       <div id="grid-top" className="scroll-mt-32" />
 
       {/* header */}
-      <header className="px-6 md:px-2 pt-12 pb-8">
-        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none mb-4">
-          {selectedCategory === 'All' ? 'Curated' : selectedCategory}{' '}
-          <span className="text-zinc-700 italic font-light">Library</span>
+      <header className="px-6 md:px-2 pt-13">
+        <h1 className="text-4xl md:text-4xl font-bold text-white/90 tracking-normal leading-none mb-2">
+          {selectedCategory === 'All' ? 'Browse all' : selectedCategory}{' '}
         </h1>
-        <p className="text-zinc-500 text-lg max-w-xl leading-relaxed">
+        <p className="text-zinc-500 text-md max-w-[400px] leading-tight">
           High-end CSS keyframes and Tailwind animations designed for ultra-sleek interfaces.
         </p>
       </header>
 
       {/* toolbar */}
-      <div className="sticky top-0 z-30 bg-[#050505]/60 backdrop-blur-xl border-b border-white/[0.05] px-6 md:px-2 py-5 mb-12">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-[#050505]/60 backdrop-blur-xl px-6 md:px-2 py-5 relative z-50">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           {/* Search */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 w-[50%]">
             <SearchNavigation searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <div className="hidden sm:block h-6 w-px bg-zinc-800" />
             <div className="hidden sm:flex flex-col">
               <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1">
                 Results
               </span>
-              <p className="text-[11px] font-bold text-zinc-400">
+              <p className="text-[12px] font-bold text-zinc-400">
                 {currentCards.length} of {filteredPlates.length} Units
               </p>
             </div>
@@ -98,7 +97,7 @@ export default function GridContent({
 
           {/* View & Preview Controls */}
           <div className="flex items-center gap-5 self-end lg:self-auto">
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-6 ">
               <PreviewType
                 previewType={previewType}
                 setPreviewType={setPreviewType}
@@ -108,7 +107,7 @@ export default function GridContent({
               <div className="h-4 w-px bg-zinc-800" />
 
               {/* Grid Pattern Toggle */}
-              <div className="flex bg-zinc-900/50 p-1 rounded-xl border border-white/[0.05]">
+              <div className="flex bg-zinc-900/50 p-1 rounded-[5px] border border-white/[0.05]">
                 {[
                   { id: 'grid', icon: <LayoutGrid size={16} /> },
                   { id: 'columns', icon: <Columns size={16} /> },
@@ -116,7 +115,7 @@ export default function GridContent({
                   <button
                     key={btn.id}
                     onClick={() => setGridPattern(btn.id)}
-                    className={`p-2 rounded-lg transition-all cursor-pointer ${
+                    className={`p-2 rounded-[5px] transition-all cursor-pointer ${
                       gridPattern === btn.id
                         ? 'bg-white text-black shadow-xl'
                         : 'text-zinc-500 hover:text-white'
@@ -129,7 +128,7 @@ export default function GridContent({
             </div>
 
             {/* Mobile Filter */}
-            <div className="md:hidden">
+            <div className="block md:hidden z-9999 relative top-5">
               <FilterDropdown
                 previewOptions={previewOptions}
                 previewType={previewType}
@@ -142,9 +141,9 @@ export default function GridContent({
 
       {/* grid content */}
       <main
-        className={`px-6 md:px-2 transition-all duration-500 ${
+        className={`px-3 md:px-2 transition-all duration-500 ${
           gridPattern === 'grid'
-            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3'
             : 'flex flex-col gap-6 max-w-5xl mx-auto'
         }`}
       >

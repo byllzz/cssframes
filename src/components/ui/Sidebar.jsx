@@ -53,7 +53,7 @@ export default function Sidebar({
   };
 
   return (
-    <div className="h-full w-[250px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
+    <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
       <nav className="flex-1 px-4 space-y-8 overflow-y-auto no-scrollbar pt-2">
         {/* library section */}
         <section>
@@ -63,7 +63,7 @@ export default function Sidebar({
             <span className="text-xs font-semibold text-zinc-500">{totalAnimations}</span>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-[2px]">
             {categories.map(item => {
               const isActive =
                 activeNavigation === 'Home' &&
@@ -79,7 +79,7 @@ export default function Sidebar({
                   className={`w-full flex items-center cursor-pointer justify-between px-3 py-[9px] rounded-[8px] transition-all group ${
                     isActive
                       ? 'bg-[#161616] text-white'
-                      : 'text-zinc-400 hover:bg-[#161616] hover:text-white'
+                      : 'text-white hover:bg-[#161616] hover:text-white'
                   }`}
                 >
                   {/* Left */}
@@ -96,10 +96,8 @@ export default function Sidebar({
 
                   {/* Right count */}
                   <span
-                    className={`text-[16px] font-semibold  rounded-full ${
-                      isActive
-                        ? 'text-white'
-                        : 'bg-zinc-900 text-zinc-500 group-hover:text-white'
+                    className={`text-[11px] font-semibold ${
+                      isActive ? 'text-white' : 'text-white'
                     }`}
                   >
                     {count}
@@ -120,7 +118,7 @@ export default function Sidebar({
                 className={`w-full flex items-center cursor-pointer justify-between px-3 py-2.5 rounded-[8px] transition-all group ${
                   isNavActive(item.name)
                     ? 'bg-white text-black'
-                    : 'text-zinc-400 hover:bg-[#161616] hover:text-white'
+                    : 'text-white hover:bg-[#161616] hover:text-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -134,10 +132,10 @@ export default function Sidebar({
                 </div>
 
                 <span
-                  className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                  className={`text-[11px] font-semibold  ${
                     isNavActive(item.name)
-                      ? 'bg-black text-white'
-                      : 'bg-zinc-900 text-zinc-500 group-hover:text-white'
+                      ? 'text-black'
+                      : 'text-white'
                   }`}
                 >
                   {totalCommunityAnimations}

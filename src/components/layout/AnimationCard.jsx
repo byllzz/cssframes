@@ -29,7 +29,7 @@ export default function AnimationCard({
     .replace(/my-anim/g, keyframeName);
 
   return (
-    <div className="group relative w-full rounded-[18px] bg-[#070707] p-3 shadow-2xl border border-white/5 hover:border-white/10 transition-all duration-300 overflow-hidden">
+    <div className="group relative w-full rounded-[5px] bg-[#070707] p-3 shadow-2xl border border-white/5 hover:border-white/10 transition-all duration-300 overflow-hidden">
       <style>{`
         ${processedKeyframes}
         .${activeClass} {
@@ -40,7 +40,7 @@ export default function AnimationCard({
       {/* Preview */}
       <div
         onClick={() => onCardClick(animation)}
-        className="relative aspect-[1/1] rounded-[16px] bg-[#e9e9e9] overflow-hidden flex items-center justify-center cursor-pointer transition-transform duration-300 group-hover:scale-[0.99]"
+        className="relative aspect-[1/1] rounded-[5px] bg-[#e9e9e9] overflow-hidden flex items-center justify-center cursor-pointer transition-transform duration-300 group-hover:scale-[0.99]"
       >
         {/* Soft background shading */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.9),rgba(233,233,233,1))]" />

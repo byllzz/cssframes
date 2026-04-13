@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import Sidebar from './components/ui/Sidebar';
 import GridContent from './components/ui/GridContent';
 import PreviewModal from './components/ui/PreviewModal';
-import { animations, animations as initialAnimations } from './data/animations';
+import { animations as initialAnimations } from './data/animations';
 import About from './components/tabs/About';
 import Navbar from './components/ui/Navbar';
 import TopLoader from './components/ui/TopLoader';
 import CommunityGrid from './components/ui/CummunityGrid';
 import CategorySelectModal from './components/models/CategorySelectModal';
 import CreatorModal from './components/models/CreatorModal';
-import SharePanel from './components/models/SharePanel'; // New Import
+import SharePanel from './components/models/SharePanel';
 import Footer from './components/layout/Footer';
 
 export default function App() {
@@ -17,16 +17,15 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeAnimation, setActiveAnimation] = useState(null);
   const [activeNavigation, setActiveNavigation] = useState('Home');
-  const [previewType, setPreviewType] = useState('text');
+const [previewType, setPreviewType] = useState('text');
   const [isNavigating, setIsNavigating] = useState(false);
   const [allAnimations, setAllAnimations] = useState(initialAnimations);
   const [isCreating, setIsCreating] = useState(false);
   const [creationStep, setCreationStep] = useState(1);
   const [newCategory, setNewCategory] = useState('box');
-  const [selectedShare, setSelectedShare] = useState(null); // Share State
+  const [selectedShare, setSelectedShare] = useState(null);
 
   // --- ACTIONS ---
-
   const addNewAnimation = newAnim => {
     const animationWithId = {
       ...newAnim,
@@ -42,37 +41,42 @@ export default function App() {
 
   const handleNavChange = (targetPath, category = null) => {
     setIsNavigating(true);
-    // Smooth transition delay
+
     setTimeout(() => {
       if (targetPath) setActiveNavigation(targetPath);
       if (category) setSelectedCategory(category);
+
       setActiveAnimation(null);
       setIsCreating(false);
       setSelectedShare(null);
     }, 400);
+
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  const handleOpenPreview = (animation) => {
+  const handleOpenPreview = animation => {
     setIsNavigating(true);
+
     setTimeout(() => {
       setActiveAnimation(animation);
       setIsCreating(false);
     }, 400);
+
     setTimeout(() => setIsNavigating(false), 800);
   };
 
   const handleStartCreating = () => {
     setIsNavigating(true);
+
     setTimeout(() => {
       setIsCreating(true);
       setCreationStep(1);
       setActiveAnimation(null);
+      setSelectedShare(null);
     }, 400);
+
     setTimeout(() => setIsNavigating(false), 800);
   };
-
-  // --- RENDER HELPERS ---
 
   return (
     <>
@@ -95,23 +99,31 @@ export default function App() {
         />
 
         <div className="flex flex-col md:flex-row w-full min-h-full">
-          {/* Persistent Sidebar */}
-          <aside className="hidden md:block sticky top-0 h-screen shrink-0 bg-[#050505] border-r border-white/[0.02] z-10">
-            <Sidebar
-              selectedCategory={selectedCategory}
-              activeNavigation={activeNavigation}
-              onNavigate={handleNavChange}
-              animations={allAnimations}
-            />
-          </aside>
+          {/* Sidebar only when NOT creating */}
+          {!isCreating && (
+            <aside className="hidden md:block sticky top-0 h-screen shrink-0 bg-[#050505] border-r border-white/[0.02] z-10">
+              <Sidebar
+                selectedCategory={selectedCategory}
+                activeNavigation={activeNavigation}
+                onNavigate={handleNavChange}
+                animations={allAnimations}
+              />
+            </aside>
+          )}
 
           {/* Main Display Area */}
           <main
-            className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-700 scrollbar-hide"
-            key={isCreating ? `creator-${creationStep}` : activeAnimation?.id || activeNavigation}
+            className={`flex-1 animate-in fade-in slide-in-from-bottom-2 duration-700 scrollbar-hide ${
+              isCreating ? 'w-full' : ''
+            }`}
+            key={
+              isCreating
+                ? `creator-${creationStep}`
+                : activeAnimation?.id || activeNavigation
+            }
           >
             <div className="py-4 md:py-0">
-              {/* 1. CREATOR MODE */}
+              {/*  CREATOR MODE */}
               {isCreating ? (
                 <div className="min-h-screen flex items-center justify-center p-6">
                   {creationStep === 1 ? (
@@ -132,8 +144,8 @@ export default function App() {
                   )}
                 </div>
               ) : activeAnimation ? (
-                /* 2. PREVIEW MODE */
-                <div className="p-4 md:p-10">
+                /*  PREVIEW MODE */
+                <div className="p-4 md:pl-2 md:pr-3 md:py-9">
                   <PreviewModal
                     animation={activeAnimation}
                     onClose={() => setActiveAnimation(null)}
@@ -141,7 +153,7 @@ export default function App() {
                   />
                 </div>
               ) : (
-                /* 3. STANDARD NAVIGATION */
+                /*  STANDARD NAVIGATION */
                 <div className="min-h-screen">
                   {activeNavigation === 'Home' && (
                     <GridContent
@@ -152,7 +164,7 @@ export default function App() {
                       onCardClick={handleOpenPreview}
                       previewType={previewType}
                       setPreviewType={setPreviewType}
-                      onShareClick={anim => setSelectedShare(anim)} // Passed down to cards
+                      onShareClick={anim => setSelectedShare(anim)}
                     />
                   )}
 
@@ -163,18 +175,22 @@ export default function App() {
                       previewType={previewType}
                       handleStartCreating={handleStartCreating}
                       onShareClick={anim => setSelectedShare(anim)}
-                      onBack={() => handleNavChange('Home')} // For go back to main
+                      onBack={() => handleNavChange('Home')}
                     />
                   )}
 
                   {activeNavigation === 'About' && (
-                    <About onBack={() => handleNavChange('Home')} animations={allAnimations} />
+                    <About
+                      onBack={() => handleNavChange('Home')}
+                      animations={allAnimations}
+                    />
                   )}
                 </div>
               )}
             </div>
           </main>
         </div>
+
         <Footer />
       </div>
     </>
