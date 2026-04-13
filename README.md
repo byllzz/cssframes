@@ -291,11 +291,11 @@ Free for personal and commercial use.
 No restrictions. No royalties. No limits.
 ```
 
-##  Contact
+<!-- ##  Contact
 
 - Project Lead: your-handle
 - Email: your-email@domain.com
-- Website: cssframes.io (optional placeholder)
+- Website: cssframes.io (optional placeholder) -->
 
 
 ##  Closing Statement
