@@ -101,7 +101,7 @@ export default function CreatorModal({
   };
 
   return (
-    <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative md:bottom-20  bg-[#050505]">
+    <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative md:bottom-10  bg-[#050505]">
       <style>{activeTab === 'css' ? getStyleSheet() : ''}</style>
 
       {/* HEADER */}
