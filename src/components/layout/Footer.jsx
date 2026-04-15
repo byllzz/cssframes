@@ -9,7 +9,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#050505] text-zinc-400 pt-36 pb-60 px-6 md:px-10 border-t border-zinc-600 font-outfit">
+    <footer className="w-full bg-[#050505] text-zinc-400 pt-36 pb-30 md:pb-60 px-6 md:px-10 border-t border-zinc-600 font-outfit">
       <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 lg:gap-8">
 
         {/* Brand Section */}
@@ -78,7 +78,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-full mx-auto mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="flex items-center gap-1 text-[16px] font-nomral tracking-wide text-zinc-500">
+        <div className="flex items-center gap-1 text-[11px] md:text-[16px] font-nomral tracking-wide text-zinc-500">
           <span>2026</span>
           <Copyright size={12} className="mx-0.5" />
           <span>All rights reserved — CSSFrames.io</span>

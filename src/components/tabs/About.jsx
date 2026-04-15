@@ -51,11 +51,6 @@ export default function About({ onBack , animations }) {
             title="Zero Runtime"
             desc="No JavaScript dependencies. No massive bundles. Just raw, purified CSS keyframes."
           />
-          <FeatureRow
-            number="03"
-            title="Tailwind Ready"
-            desc="Designed to fit into your existing workflow with arbitrary value support and native presets."
-          />
         </section>
 
         {/* VISION GRID */}

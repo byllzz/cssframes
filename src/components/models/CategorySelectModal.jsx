@@ -61,8 +61,8 @@ export default function CategorySelectModal({ onSelect, onClose }) {
   }, [selectedId, objectType]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-md px-4 font-outfit">
-      <div className="relative w-full max-w-[1000px] rounded-[22px] border border-white/10 bg-[#0b0b0c] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md px-4 font-outfit">
+      <div className="relative w-full max-w-[1000px] rounded-[12px]  bg-[#0b0b0c] overflow-hidden ">
         {/* top subtle line */}
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -74,9 +74,9 @@ export default function CategorySelectModal({ onSelect, onClose }) {
           <X size={24} />
         </button>
 
-        <div className="p-8 md:p-10">
+        <div className="p-8 md:p-7">
           {showGuide && (
-            <div className="absolute right-10 top-18 max-w-md mb-6 rounded-[8px] border border-white/10 bg-white/[0.03] p-4 flex items-start gap-3">
+            <div className="absolute right-10 top-14 max-w-md mb-6 rounded-[8px] border border-white/10 bg-white/[0.03] p-4 flex items-start gap-3">
               <div className="mt-0.5">
                 <div className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-white text-[11px] font-semibold">
                   i
@@ -94,12 +94,12 @@ export default function CategorySelectModal({ onSelect, onClose }) {
                 </p>
               </div>
 
-              <button
+              {/* <button
                 onClick={() => setShowGuide(false)}
                 className="text-zinc-500 hover:text-white transition-colors"
               >
                 <X size={16} />
-              </button>
+              </button> */}
             </div>
           )}
           {/* Header */}

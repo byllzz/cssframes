@@ -1,25 +1,6 @@
 export const animations = [
 
   // BUTTONS
-
-  {
-    id: 'magnetic-pulse',
-    title: 'Magnetic Pulse',
-    category: 'Buttons',
-    duration: '1.8s',
-    keyframes: `@keyframes magnetic-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.0); }
-  40% { transform: scale(1.03); box-shadow: 0 0 0 14px rgba(99, 102, 241, 0.12); }
-  70% { transform: scale(1.01); box-shadow: 0 0 0 22px rgba(99, 102, 241, 0.0); }
-}`,
-    css: `@keyframes magnetic-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.0); }
-  40% { transform: scale(1.03); box-shadow: 0 0 0 14px rgba(99, 102, 241, 0.12); }
-  70% { transform: scale(1.01); box-shadow: 0 0 0 22px rgba(99, 102, 241, 0.0); }
-}`,
-    desc: 'A subtle attraction pulse that feels premium on primary actions.',
-    type: 'box',
-  },
   {
     id: 'split-sheen',
     title: 'Split Sheen',

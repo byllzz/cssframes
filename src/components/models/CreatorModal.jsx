@@ -108,7 +108,7 @@ export default function CreatorModal({
       {/* <Header onClose={onClose} categoryName={animationCategory} /> */}
 
       {/* GRID */}
-      <div className="flex h-full flex-col md:grid  md:grid-cols-2 flex-1 md:min-h-[480px]">
+      <div className="flex h-full flex-col md:grid  md:grid-cols-2 flex-1 md:min-h-[500px]">
         {/* PREVIEW */}
         <section
           className="relative flex items-center rounded-tl-[12px] rounded-bl-[12px] justify-center overflow-hidden h-[400px] md:h-full"

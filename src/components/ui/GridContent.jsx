@@ -3,11 +3,11 @@ import AnimationCard from '../layout/AnimationCard';
 import SearchNavigation from './SearchNavigation';
 import PreviewType from './PreviewType';
 import FilterDropdown from './FilterDropdown';
+import Pagination from './Pagination'
 import {
   Columns,
   LayoutGrid,
-  ArrowLeft,
-  ArrowRight,
+
   Box,
   Type,
   Circle,
@@ -25,10 +25,10 @@ export default function GridContent({
   setPreviewType,
   onShareClick,
 }) {
-  // 1state mangament
+  // state mangament
   const [currentPage, setCurrentPage] = useState(1);
   const [gridPattern, setGridPattern] = useState('grid');
-  const cardsPerPage = 12;
+  const cardsPerPage = 25;
 
   // filter logic
   const filteredPlates = useMemo(() => {
@@ -74,7 +74,7 @@ export default function GridContent({
           {selectedCategory === 'All' ? 'Browse all' : selectedCategory}{' '}
         </h1>
         <p className="text-zinc-500 text-md max-w-[400px] leading-tight">
-          High-end CSS keyframes and Tailwind animations designed for ultra-sleek interfaces.
+          CSS animations designed for ultra-sleek interfaces.
         </p>
       </header>
 
@@ -128,7 +128,7 @@ export default function GridContent({
             </div>
 
             {/* Mobile Filter */}
-            <div className="block md:hidden z-9999 relative top-5">
+            <div className="block md:hidden z-9999 relative top-3">
               <FilterDropdown
                 previewOptions={previewOptions}
                 previewType={previewType}
@@ -179,48 +179,7 @@ export default function GridContent({
       </main>
 
       {/* pagination */}
-      {totalPages > 1 && (
-        <nav className="mt-8 px-6">
-          <div className="mx-auto flex max-w-full flex items-center justify-between">
-            {/* PREV */}
-            <div className="w-[45%] flex justify-start">
-              {currentPage > 1 && (
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  className="group  flex w-full items-center cursor-pointer justify-start gap-3 rounded-[8px] px-6 py-6 text-white bg-[#161616] transition-all"
-                >
-                  <ArrowLeft
-                    size={22}
-                    className="group-hover:-translate-x-1 transition-transform"
-                  />
-                  <span className="text-lg font-semibold">Prev page</span>
-                </button>
-              )}
-            </div>
-
-            {/* PAGE INDICATOR */}
-            <div className="text-center">
-              <p className="text-sm font-medium text-zinc-500">Page</p>
-              <p className="text-2xl font-bold text-white font-heading">
-                {currentPage} / {totalPages}
-              </p>
-            </div>
-
-            {/* NEXT */}
-            <div className="w-[45%] flex justify-end">
-              {currentPage < totalPages && (
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  className="group  flex w-full items-center cursor-pointer justify-end gap-3 rounded-[8px] px-6 py-6 text-white bg-[#161616] transition-all"
-                >
-                  <span className="text-lg font-semibold">Next page</span>
-                  <ArrowRight size={22} />
-                </button>
-              )}
-            </div>
-          </div>
-        </nav>
-      )}
+      <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
     </div>
   );
 }

@@ -11,21 +11,23 @@ import CategorySelectModal from './components/models/CategorySelectModal';
 import CreatorModal from './components/models/CreatorModal';
 import SharePanel from './components/models/SharePanel';
 import Footer from './components/layout/Footer';
+import DevelopmentPopup from './components/alerts/DevelopmentPopup'; //  Import
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeAnimation, setActiveAnimation] = useState(null);
   const [activeNavigation, setActiveNavigation] = useState('Home');
-const [previewType, setPreviewType] = useState('text');
+  const [previewType, setPreviewType] = useState('text');
   const [isNavigating, setIsNavigating] = useState(false);
   const [allAnimations, setAllAnimations] = useState(initialAnimations);
   const [isCreating, setIsCreating] = useState(false);
   const [creationStep, setCreationStep] = useState(1);
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
+  const [showDevPopup, setShowDevPopup] = useState(true); //  State
 
-  // --- ACTIONS ---
+  // ALl Actions here of cssFrames...
   const addNewAnimation = newAnim => {
     const animationWithId = {
       ...newAnim,
@@ -82,6 +84,11 @@ const [previewType, setPreviewType] = useState('text');
     <>
       <TopLoader isLoading={isNavigating} />
 
+      {/* Development Information Popup */}
+      {showDevPopup && (
+        <DevelopmentPopup onClose={() => setShowDevPopup(false)} />
+      )}
+
       {/* Global Share Panel Overlay */}
       <SharePanel
         animation={selectedShare}
@@ -89,7 +96,9 @@ const [previewType, setPreviewType] = useState('text');
         onClose={() => setSelectedShare(null)}
       />
 
-      <div className="h-screen w-full bg-[#050505] overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide text-zinc-200 selection:bg-white selection:text-black">
+      {/*  overflow-hidden logic when popup is active */}
+      <div className={`h-screen w-full bg-[#050505] scroll-smooth scrollbar-hide text-zinc-200 selection:bg-white selection:text-black ${showDevPopup ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'}`}>
+
         {/* Sticky Navbar */}
         <Navbar
           activeNavigation={activeNavigation}
@@ -123,7 +132,7 @@ const [previewType, setPreviewType] = useState('text');
             }
           >
             <div className="py-4 md:py-0">
-              {/*  CREATOR MODE */}
+              {/* CREATOR MODE */}
               {isCreating ? (
                 <div className="min-h-screen flex items-center justify-center p-6">
                   {creationStep === 1 ? (
@@ -144,7 +153,7 @@ const [previewType, setPreviewType] = useState('text');
                   )}
                 </div>
               ) : activeAnimation ? (
-                /*  PREVIEW MODE */
+                /* PREVIEW MODE */
                 <div className="p-4 md:pl-2 md:pr-3 md:py-9">
                   <PreviewModal
                     animation={activeAnimation}
@@ -153,7 +162,7 @@ const [previewType, setPreviewType] = useState('text');
                   />
                 </div>
               ) : (
-                /*  STANDARD NAVIGATION */
+                /* STANDARD NAVIGATION */
                 <div className="min-h-screen">
                   {activeNavigation === 'Home' && (
                     <GridContent

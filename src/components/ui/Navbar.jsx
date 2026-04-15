@@ -10,7 +10,8 @@ export default function Navbar({ activeNavigation, setActiveNavigation, handleSt
     <nav className="bg-[#050505] w-full font-outfit relative z-50 px-4 lg:px-4">
       <div className="max-w-full mx-auto flex items-center justify-between h-16">
         {/* left: brand & nav */}
-        <div className="flex items-center gap-6 relative left-[5px]">
+        <div
+        onClick={() => window.location.href ="https://cssframes.vercel.app"} className="flex items-center gap-6 relative left-[5px]">
           <div className="flex items-center gap-0.5 group cursor-pointer">
             <span className="text-purple-500 font-black text-2xl tracking-tighter transition-transform group-hover:-rotate-6">
               CSS
