@@ -58,6 +58,10 @@ export default function AnimationCard({
             <Code2 size={18} /> <span>Get Code</span>
           </button>
         )}
+
+        {
+          animation.isCommunity && <p className='absolute top-2 right-2 text-[11px] text-black'>Cummunity based </p>
+        }
       </div>
 
       {/* Bottom bar */}

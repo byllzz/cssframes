@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import {
   Users,
   LayoutGrid,
@@ -40,7 +40,10 @@ export default function Sidebar({
   onNavigate,
   animations = [],
 }) {
-  const isNavActive = (name) => activeNavigation === name;
+
+  const isNavActive = (name) => {
+    activeNavigation === name;
+  };
 
   // total animations count
   const totalAnimations = animations.length;
@@ -52,9 +55,11 @@ export default function Sidebar({
     return animations.filter((item) => item.category === categoryName).length;
   };
 
+
+
   return (
     <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
-      <nav className="flex-1 px-4 space-y-8 overflow-y-auto no-scrollbar pt-2">
+      <nav className="flex-1 px-4  overflow-y-auto no-scrollbar pt-2">
         {/* library section */}
         <section>
           {/* Heading with total */}

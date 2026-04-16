@@ -12,8 +12,7 @@ import {
   Shapes,
   Monitor,
   Box,
-  LayoutGrid,
-  ArrowRight,
+
   Square,
   Circle,
   Star,
@@ -127,17 +126,17 @@ export default function CategorySelectModal({ onSelect, onClose }) {
                   onClick={() => setSelectedId(cat.id)}
                   className={`rounded-[5px] border p-5 text-left cursor-pointer transition-all duration-200 ${
                     isActive
-                      ? 'bg-white/[0.04] border-purple-500 scale-98'
-                      : 'bg-white/[0.02] border-white/5 hover:border-white/10'
+                      ? 'bg-white/[0.04] border-indigo-600 bg-indigo-600 scale-98'
+                      : 'bg-white/[0.02] border-white/30 hover:border-white/10'
                   }`}
                 >
-                  <div className={`mb-4 ${isActive ? 'text-purple-500' : 'text-zinc-500'}`}>
+                  <div className={`mb-4 ${isActive ? 'text-indigo-600' : 'text-zinc-500'}`}>
                     {cat.icon}
                   </div>
 
                   <p
                     className={`text-[13px] font-medium leading-5 ${
-                      isActive ? 'text-purple-500' : 'text-zinc-400'
+                      isActive ? 'text-indigo-600' : 'text-zinc-400'
                     }`}
                   >
                     {cat.name}
@@ -165,7 +164,7 @@ export default function CategorySelectModal({ onSelect, onClose }) {
                       onClick={() => setObjectType(obj.id)}
                       className={`h-11 px-6 rounded-[5px] cursor-pointer border flex items-center gap-2 transition-all ${
                         isObjActive
-                          ? 'border-white/20 bg-purple-500 text-white'
+                          ? 'border-white/20 bg-indigo-600 text-white'
                           : 'border-white/5 bg-white/[0.02] text-zinc-500 hover:text-zinc-300'
                       }`}
                     >
@@ -181,9 +180,9 @@ export default function CategorySelectModal({ onSelect, onClose }) {
             <button
               disabled={!isReady}
               onClick={handleContinue}
-              className={`h-12 px-8 rounded-[5px] flex cursor-pointer items-center gap-2 text-[15px] font-medium transition-all ${
+              className={`h-11 px-8 rounded-[5px] flex cursor-pointer items-center gap-2 text-[15px] font-medium transition-all ${
                 isReady
-                  ? 'bg-purple-500 text-white hover:opacity-90'
+                  ? 'bg-indigo-600 text-white hover:opacity-90'
                   : 'bg-white/[0.04] text-zinc-600 cursor-not-allowed'
               }`}
             >

@@ -37,13 +37,13 @@ export default function CreatorModal({
 
   const [cssCode, setCssCode] = useState(`/* Note: Please always target the class .preview-element */
 .preview-element {
-  animation: my-pulse 2s infinite;
+  animation: name ;
 }
 
-@keyframes my-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+@keyframes name {
+  0% { }
+  50% {  }
+  100% {  }
 }`);
 
   const formatTimer = useRef(null);
@@ -104,9 +104,6 @@ export default function CreatorModal({
     <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative md:bottom-10  bg-[#050505]">
       <style>{activeTab === 'css' ? getStyleSheet() : ''}</style>
 
-      {/* HEADER */}
-      {/* <Header onClose={onClose} categoryName={animationCategory} /> */}
-
       {/* GRID */}
       <div className="flex h-full flex-col md:grid  md:grid-cols-2 flex-1 md:min-h-[500px]">
         {/* PREVIEW */}
@@ -158,6 +155,13 @@ export default function CreatorModal({
                 />
               </div>
             </div>
+             {/* for whole bg changer input (type :color) */}
+            <input
+              type='color'
+              value={previewBg}
+              onChange={e => setPreviewBg(e.target.value)}
+              className="h-[29px] w-7.5 ml-4 cursor-pointer rounded-[5px] border bg-transparent p-0 overflow-hidden [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-2 [&::-webkit-color-swatch]:rounded-[5px] [&::-moz-color-swatch]:border-2 [&::-moz-color-swatch]:rounded-[5px]"
+            />
           </div>
 
           <div className="modal-preview-target scale-150">
@@ -338,19 +342,3 @@ export default function CreatorModal({
   );
 }
 
-/* HEADER */
-function Header({ onClose, categoryName }) {
-  return (
-    <div className="h-14 flex items-center justify-between px-4 border-b border-zinc-800/50 ">
-      <button
-        onClick={onClose}
-        className="flex items-center cursor-pointer gap-2 px-4 py-2.5 rounded-[8px] hover:bg-[#161616] relative right-3.5"
-      >
-        <ArrowLeft size={18} />
-        Go back
-      </button>
-
-      <div className="text-sm font-bold">{categoryName}</div>
-    </div>
-  );
-}

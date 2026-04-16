@@ -20,6 +20,7 @@ export default function PreviewModal({ animation, onClose, previewType }) {
   const [editedCode, setEditedCode] = useState('');
   const [previewBg, setPreviewBg] = useState('#e8e8e8');
 
+
   const formatTimer = useRef(null);
 
   const uniqueId = animation?.id?.replace(/[^a-zA-Z0-9]/g, '') || 'default';
@@ -53,19 +54,20 @@ export default function PreviewModal({ animation, onClose, previewType }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleFormat = async () => {
-    try {
-      const formatted = await prettier.format(editedCode, {
-        parser: 'css',
-        plugins: [parserPostcss],
-      });
-      setEditedCode(formatted);
-    } catch (error) {
-      console.error('Prettier format failed:', error);
-    }
-  };
+  // can be used this in future - if we add a custom btn to format the code..
+  // const handleFormat = async () => {
+  //   try {
+  //     const formatted = await prettier.format(editedCode, {
+  //       parser: 'css',
+  //       plugins: [parserPostcss],
+  //     });
+  //     setEditedCode(formatted);
+  //   } catch (error) {
+  //     console.error('Prettier format failed:', error);
+  //   }
+  // };
 
-  // ✅ ALWAYS PRETTY (debounced)
+  //   (debounced)
   const handleEditorChange = (value) => {
     const raw = value || '';
     setEditedCode(raw);
@@ -126,9 +128,7 @@ export default function PreviewModal({ animation, onClose, previewType }) {
           style={{ backgroundColor: previewBg }}
         >
           <div className="absolute top-3 right-3 flex items-center  z-20">
-            <div
-              className={`px-3 mr-1.5`}
-            >
+            <div className={`px-3 mr-1.5`}>
               <span
                 className={`text-[18px] font-outfit font-normal ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} lowercase`}
               >
@@ -171,6 +171,13 @@ export default function PreviewModal({ animation, onClose, previewType }) {
                 />
               </div>
             </div>
+            {/* for whole bg changer input (type :color) */}
+            <input
+              type='color'
+              value={previewBg}
+              onChange={e => setPreviewBg(e.target.value)}
+              className="h-[29px] w-7.5 ml-4 cursor-pointer rounded-[5px] border bg-transparent p-0 overflow-hidden [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-2 [&::-webkit-color-swatch]:rounded-[5px] [&::-moz-color-swatch]:border-2 [&::-moz-color-swatch]:rounded-[5px]"
+            />
           </div>
 
           <div className="modal-preview-target">
@@ -205,7 +212,7 @@ export default function PreviewModal({ animation, onClose, previewType }) {
         {/* EDITOR */}
         <section className="w-full h-full min-h-[500px] md:min-h-0 rounded-tr-[12px] rounded-br-[12px] bg-[#000] flex flex-col border-l border-zinc-800/50 relative overflow-hidden">
           <div className="flex items-center justify-between bg-[#161616] px-4 py-1.5 border-b border-zinc-800/50">
-            <div className="flex items-center justify-start gap-4 px-8 py-1 rounded-[5px] bg-[#000]">
+            <div className="flex items-center justify-start gap-4 px-8 py-[6px] rounded-[5px] bg-[#121212]">
               <span className="text-blue-500 relative right-4">
                 <FaCss3 size={18} />
               </span>
