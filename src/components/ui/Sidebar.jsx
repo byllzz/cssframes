@@ -42,7 +42,7 @@ export default function Sidebar({
 }) {
 
   const isNavActive = (name) => {
-    activeNavigation === name;
+   return activeNavigation === name;
   };
 
   // total animations count
@@ -54,6 +54,7 @@ export default function Sidebar({
     if (categoryName === 'All') return totalAnimations;
     return animations.filter((item) => item.category === categoryName).length;
   };
+
 
 
 
