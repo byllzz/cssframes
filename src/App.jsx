@@ -271,7 +271,7 @@ const handleNavChange = (targetPath, category = null) => {
         onClose={() => setSelectedShare(null)}
       />
 
-      <div className="min-h-screen w-full bg-[#050505] text-zinc-200 selection:bg-white selection:text-black">
+      <div className="h-screen w-full bg-[#050505] text-zinc-200 selection:bg-white selection:text-black">
         <div
           className={`h-screen overflow-y-auto scroll-smooth ${showDevPopup ? 'overflow-hidden' : ''}`}
         >
