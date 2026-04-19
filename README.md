@@ -1,133 +1,95 @@
-## <a href="https://cssframes.vercel.app" target="_blank"> CSSFrames - Animations using pure CSS keyframes </a>
+# <a href="https://cssframes.vercel.app" target="_blank">CSSFrames - Animations using Pure CSS Keyframes</a>
 
-<!-- ![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Stars](https://img.shields.io/badge/stars-⭐_open_source-yellow)
-![Tailwind](https://img.shields.io/badge/tailwind-compatible-38bdf8)
-![Performance](https://img.shields.io/badge/60FPS-optimized-blue)
-![GPU](https://img.shields.io/badge/GPU-accelerated-purple) -->
+**CSSFrames** is an open-source motion system for building high-performance UI animations using pure CSS keyframes.
 
+It provides a curated library of **pre-engineered motion presets** designed to replace inconsistent, ad-hoc animation usage across modern web apps.
 
-##  Overview
+Built for **performance, consistency, and developer speed** — with no JavaScript animation runtime, no animation libraries, and no layout thrashing.
 
-CSSFrames is an **open-source motion standard** for building high-performance UI animations using pure CSS keyframes.
+<p align="left">
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-9B72FF.svg?style=flat" />
+  </a>
+  <img src="https://img.shields.io/badge/Repository%20Status-Active-9B72FF.svg?style=flat" />
+  <img src="https://img.shields.io/badge/Website%20Status-Online-9B72FF.svg?style=flat" />
+  <a href="https://github.com/byllzz">
+    <img src="https://img.shields.io/badge/Author-Bilal%20Malik-9B72FF.svg?style=flat" />
+  </a>
+    <a href="https://github.com/byllzz/cssframes/releases">
+     <img src="https://img.shields.io/badge/Latest%20Release-19%20April%202026-9B72FF.svg" />
+  </a>
+</p>
 
-It provides a curated system of **pre-engineered motion presets** designed to replace inconsistent, ad-hoc animation usage across modern web apps.
+<br />
 
-No JavaScript runtime. No animation libraries. No layout thrashing.
-Just **GPU-optimized, compositor-friendly motion primitives**.
+[![Visit CSSFrames](https://img.shields.io/badge/View-CSSFrames-9B72FF?style=flat)](https://cssframes.vercel.app)
 
----
+<!-- Optional preview image -->
+<img width="100%" alt="CSSFrames Preview" src="./src/assets/preview.png" />
 
-##  Vision
-
-The web lacks a unified motion standard.
-
-Every product reinvents:
-- easing curves
-- animation timing
-- micro-interactions
-- loading states
-
-CSSFrames exists to solve this fragmentation by providing a **shared motion language for developers and designers**.
+⭐ **Star the repo if you like it — it helps the project grow.**
 
 ---
 
-##  Core Philosophy
+# Features
 
-###  Motion is Functional
-Animations are not decoration—they communicate system state.
+<p align="left">
+✔️ Pure CSS Keyframe Animations<br>
+✔️ GPU-Friendly Motion Primitives<br>
+✔️ Zero JavaScript Animation Runtime<br>
+✔️ Tailwind-Compatible Animation System<br>
+✔️ Curated Motion Presets<br>
+✔️ Live Interactive Preview Grid<br>
+✔️ Creator Suite for Building Custom Presets<br>
+✔️ Instant Export to CSS @keyframes<br>
+✔️ Tailwind Animation Class Output<br>
+✔️ Theater Mode for Focused Previewing<br>
+✔️ Community Motion Ecosystem<br>
+✔️ Performance-First Architecture<br>
+✔️ Open Source MIT License<br>
+✔️ Designed for Production UI Work
+</p>
 
-###  Performance First
-Every animation is designed to:
+---
+
+## How It Works
+
+- Choose a motion preset from the library or community collection.
+- Preview the animation instantly on different UI elements.
+- Export production-ready output as:
+  - CSS `@keyframes`
+  - Tailwind animation classes
+  - duration and easing metadata
+- Use the generated motion in your app with minimal setup.
+- All animations rely on compositor-friendly properties like `transform` and `opacity`.
+
+---
+
+## Core Philosophy
+
+### Motion is Functional
+Animations are not decoration. They communicate state, hierarchy, and feedback.
+
+### Performance First
+Every animation is built to:
 - avoid layout shifts
 - avoid paint recalculations
 - stay GPU composited
 
-###  Composable System
+### Composable System
 Animations are modular building blocks, not one-off effects.
 
-###  Design Consistency
-All motion follows a unified visual rhythm system.
+### Design Consistency
+All motion follows a unified rhythm and timing system.
 
 ---
 
-##  Core Principles
-
-### GPU-First Architecture
-Animations rely on:
-- `transform`
-- `opacity`
-- compositor-friendly properties only
-
-### Zero Runtime Cost
-No JS animation engines. No requestAnimationFrame loops.
-
-### Tailwind Native
-Works via:
-- arbitrary values
-- plugin extensions
-- direct class injection
-
-### Developer-Centric
-Built for real production apps, not demo sandboxes.
-
----
-
-##  Features
-
-###  Live Interactive Preview Grid
-Test animations in real-time on:
-- Text
-- Boxes
-- Circles
-- Icons
-- UI cards
-
-###  Community Motion Ecosystem
-Developers can:
-- create presets
-- fork existing motion styles
-- publish community animations
-
-###  Instant Export System
-Each animation provides:
-- CSS `@keyframes`
-- Tailwind animation class
-- duration + easing metadata
-
-###  Theater Mode
-Focused preview environment with:
-- adjustable speed
-- background switching
-- element switching
-
-###  Creator Suite
-Built-in editor for:
-- creating keyframes
-- testing motion live
-- publishing to community library
-
-###  Smart Preview Engine
-Automatically maps animation type to:
-- icon motion
-- text motion
-- UI element motion
-
-###  Open Source
-Fully MIT licensed for:
-- commercial apps
-- SaaS products
-- personal projects
-
----
-
-##  System Architecture
+## System Architecture
 
 CSSFrames is structured into three layers:
 
 ### 1. Motion Presets Layer
-Predefined animation objects:
+Predefined animation objects for:
 - buttons
 - loaders
 - entrances
@@ -136,7 +98,7 @@ Predefined animation objects:
 - shapes
 
 ### 2. Rendering Engine
-React-based preview system:
+React-based preview system with:
 - live CSS injection
 - dynamic keyframe binding
 - preview type mapping
@@ -149,59 +111,13 @@ Generates production-ready output:
 
 ---
 
-##  How It Works
-
-### Step 1 — Select Motion
-Browse curated or community animations.
-
-### Step 2 — Preview
-Test motion on real UI elements instantly.
-
-### Step 3 — Export
-
-You receive:
-
-```css
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-```
-
-##  Tech Stack
-
-### Frontend
-- React.js (Vite)
-- Tailwind CSS
-- JavaScript (ES6+)
-
-### UI & Icons
-- Lucide React
-- Custom UI components
-- Monaco Editor (code editing experience)
-
-### Animation System
-- Native CSS3 Keyframes
-- GPU-composited transforms
-- Dynamic style injection
-
-### Code Tools
-- Prettier (formatting)
-- Prism.js (syntax highlighting)
-
-### Deployment
-- Vercel
-- Static-first architecture
-
-
-##  Animation Categories
+## Animation Categories
 
 CSSFrames includes curated motion presets across:
 
 ### Buttons
 - micro-interaction feedback
-- hover + click states
+- hover and click states
 - error responses
 
 ### Loaders
@@ -210,7 +126,7 @@ CSSFrames includes curated motion presets across:
 - spin systems
 
 ### Entrances
-- slide, fade, blur reveals
+- slide, fade, and blur reveals
 - staggered motion
 
 ### Text
@@ -225,7 +141,7 @@ CSSFrames includes curated motion presets across:
 
 ### Icons
 - float dynamics
-- stroke draw animations
+- stroke-draw animations
 - alert motion
 
 ### Shapes
@@ -233,74 +149,79 @@ CSSFrames includes curated motion presets across:
 - geometric transitions
 - pulse glow systems
 
+---
+
+## Tech Stack
+
+### Frontend
+- React.js (Vite)
+- Tailwind CSS
+- JavaScript (ES6+)
+
+### UI & Icons
+- Lucide React
+- Custom UI components
+- Monaco Editor
+
+### Animation System
+- Native CSS3 keyframes
+- GPU-composited transforms
+- Dynamic style injection
+
+### Code Tools
+- Prettier
+- Prism.js
+
+### Deployment
+- Vercel
+- Static-first architecture
+
+---
+
+## Installation & Setup
+
+### Requirements
+- Node.js
+- Browser (Chrome / Edge / Firefox)
+- Tailwind CSS knowledge
+- A basic understanding of CSS keyframes
+
+### Clone the Repository
+```bash
+git clone https://github.com/byllzz/cssframes.git
+cd cssframes
+npm install
+npm run dev
+```
+
+## Guidelines
+
+- Keep animations GPU-friendly
+- Avoid layout-triggering properties
+- Ensure Tailwind compatibility
+- Provide both CSS and metadata
+- Include preview examples when possible
+
+<br>
 
 
-##  Roadmap
-
-### Phase 1 — Core System
-- Preview engine
-- Animation presets
-- Creator mode
-
-### Phase 2 — Ecosystem
-- Local favorites storage
-- User accounts
-- Community submissions approval system
-
-### Phase 3 — Developer Tools
-- Framer Motion export
-- Figma plugin
-- VS Code extension
-
-### Phase 4 — Platform
-- Public API
-- CDN delivery of presets
-- Marketplace for motion packs
-
-
-## 🤝 Contributing
+# Contributing
 
 We welcome contributions from developers and motion designers.
 
-### Workflow
+## Workflow
+
 ```bash
-git checkout -b motion/add-new-animation
-
-Guidelines
-Keep animations GPU-friendly
-Avoid layout-triggering properties
-Ensure Tailwind compatibility
-Provide both CSS + metadata
-Pull Requests
-
-Include:
-
-animation preview
-performance notes
-category classification
+git checkout -b motion/style-redefined-UI
 ```
+<br>
 
+# License 📄
 
+This project is licensed under the MIT License - see the [LICENSE.md](./LICENSE) file for details.
 
-```md id="license-section"
-## 📜 License
+# Feedback
 
-MIT License
-Free for personal and commercial use.
+Reach out at **bilalmlkdev@gmail.com**.
 
-No restrictions. No royalties. No limits.
-```
-
-<!-- ##  Contact
-
-- Project Lead: your-handle
-- Email: your-email@domain.com
-- Website: cssframes.io (optional placeholder) -->
-
-
-##  Closing Statement
-
-> “Standardizing the way the web moves.”
-
-CSSFrames is not a library.
-It is an attempt to define a **shared motion language for the web**.
+If you like this project, please ⭐ star the repo. It helps the project keep moving instead of politely dying in a corner.
