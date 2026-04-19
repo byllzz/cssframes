@@ -42,12 +42,13 @@ export default function Footer() {
           <div className="flex items-center gap-4 relative right-2 top-3">
             {[
               { icon: <FaXTwitter size={25} />, href: "#" },
-              { icon: <FaGithub size={25} />, href: "#" },
+              { icon: <FaGithub size={25} />, href: "https://github.com/byllzz/cssframes.git" },
 
             ].map((social, i) => (
               <a
                 key={i}
                 href={social.href}
+                target='_blank'
                 className="w-9 h-9 flex items-center justify-center"
               >
                 {social.icon}

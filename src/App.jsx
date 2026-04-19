@@ -1,6 +1,17 @@
  import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation  , useParams , Navigate} from 'react-router-dom';
-
+import { Users,
+  LayoutGrid,
+  MousePointer2,
+  Loader2,
+  LogIn,
+  Type,
+  CreditCard,
+  Shapes,
+  Zap,
+  Monitor,
+  Box,
+  Sparkles,} from 'lucide-react'
 // UI Components
 import Sidebar from './components/ui/Sidebar';
 import GridContent from './components/ui/GridContent';
@@ -22,7 +33,7 @@ import CommunityGrid from './components/ui/CommunityGrid';
 // Data
 import { animations as initialAnimations } from './data/animations';
 
-
+// import Elements from './components/ui/Elements';
 
 export default function App() {
 
@@ -116,6 +127,8 @@ const handleNavChange = (targetPath, category = null) => {
   setTimeout(() => setIsNavigating(false), 800);
 };
 
+
+
   const handleOpenPreview = animation => {
     setIsNavigating(true);
     setTimeout(() => {
@@ -179,6 +192,23 @@ const handleNavChange = (targetPath, category = null) => {
     document.title = newTitle;
   }, [activeNavigation, selectedCategory, activeAnimation]);
 
+  // this should be latter global array for cats
+  const categories = [
+    { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
+    { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
+    {
+      name: 'Loaders',
+      icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
+    },
+    { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
+    { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
+    { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} /> },
+    { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
+    { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
+    { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} /> },
+    { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
+    { name: 'Components', icon: <Box size={18} strokeWidth={2.5} /> },
+  ];
 
    const DynamicRouteRenderer = () => {
      const { id } = useParams();
@@ -277,9 +307,11 @@ const handleNavChange = (targetPath, category = null) => {
         >
           <Navbar
             activeNavigation={activeNavigation}
-            setActiveNavigation={handleNavChange}
+            onNavigate={handleNavChange}
             handleStartCreating={handleStartCreating}
             isNavigating={isNavigating}
+            animations={allAnimations}
+            categories={categories}
           />
 
           <div className="flex flex-col md:flex-row w-full">
@@ -367,6 +399,7 @@ const handleNavChange = (targetPath, category = null) => {
             </main>
           </div>
           <Footer />
+          {/* <Elements /> */}
         </div>
       </div>
     </>

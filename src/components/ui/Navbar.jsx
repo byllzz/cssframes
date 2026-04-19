@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Menu, X, ChevronDown, Rocket, Plus } from 'lucide-react';
+import Elements from './Elements';
 
 export default function Navbar({
   activeNavigation,
-  setActiveNavigation,
+  onNavigate,
   handleStartCreating,
+  animations,
+  categories = [],
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const navLinks = ['About'];
+
+  const [showElements, setShowElements] = useState(false);
+  // const [hideTimeout, setHideTimeout] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(true);
+
+  const timeoutRef = useRef(null);
 
   return (
     <>
       <nav className="bg-[#050505] w-full font-outfit px-4 lg:px-4 border-b border-zinc-900/50">
         <div className="max-w-full mx-auto flex items-center justify-between h-16">
 
-          {/* Logo + Desktop Links */}
+          {/* LOGO */}
           <div className="flex items-center gap-8">
-
-            {/* LOGO - Wrapped in its own div to prevent overlap */}
             <div
-              onClick={() => setActiveNavigation('Home')}
+              onClick={() => onNavigate('Home')}
               className="flex items-center gap-0.5 group cursor-pointer select-none"
             >
               <span className="text-purple-500 font-black text-2xl tracking-tighter transition-transform group-hover:-rotate-6">
@@ -30,22 +37,58 @@ export default function Navbar({
               </span>
             </div>
 
-            {/* DESKTOP NAV LINKS */}
-            <div className="hidden lg:flex items-center gap-2">
-              <button className="flex items-center gap-1.5 text-white group cursor-pointer bg-[#161616] px-4 py-[7.5px] rounded-[5px] transition-all text-[15px] font-medium tracking-wider hover:bg-zinc-800">
-                Elements <ChevronDown size={14} className="text-white transition-transform group-hover:rotate-180" />
-              </button>
+            {/* DESKTOP NAV */}
+            <div className="hidden lg:flex items-center gap-2 relative">
+
+              {/* ELEMENTS */}
+              <div
+                className="relative"
+                onMouseEnter={() => {
+                  if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                  setShowElements(true);
+                }}
+                onMouseLeave={() => {
+                  timeoutRef.current = setTimeout(() => {
+                    setShowElements(false);
+                  }, 120);
+                }}
+              >
+                <button className="flex items-center gap-1.5 text-white bg-[#161616] px-4 py-[7.5px] rounded-[5px] text-[15px] font-medium tracking-wider hover:bg-zinc-800">
+                  Elements
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${
+                      showElements ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                <div
+                  className={`absolute left-0 top-full mt-2 z-50 transition-all duration-150 ${
+                    showElements
+                      ? 'opacity-100 visible translate-y-0'
+                      : 'opacity-0 invisible -translate-y-1'
+                  }`}
+                >
+                  <div className="w-max">
+                    <Elements
+                      animations={animations}
+                      onNavigate={cat => {
+                        onNavigate('Home', cat);
+                        setShowElements(false);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
               {navLinks.map(item => (
                 <button
                   key={item}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevents logo click trigger
-                    setActiveNavigation(item);
-                  }}
-                  className={`text-[15px] tracking-wider font-medium px-4 py-[7.5px] rounded-[5px] cursor-pointer transition-all ${
+                  onClick={() => onNavigate(item)}
+                  className={`text-[15px] tracking-wider font-medium px-4 py-[7.5px] rounded-[5px] transition-all ${
                     activeNavigation === item
-                      ? ' bg-[#161616] text-white shadow-sm'
+                      ? 'bg-[#161616] text-white'
                       : 'text-zinc-400 hover:text-white hover:bg-[#161616]'
                   }`}
                 >
@@ -55,26 +98,28 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* RIGHT SECTION: Actions */}
+          {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
+
               <button
-                onClick={() => handleStartCreating()}
-                className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 hover:brightness-110 text-white px-4 py-2.5 rounded-[5px] text-[14px] font-normal cursor-pointer transition-all shadow-lg shadow-purple-500/10"
+                onClick={handleStartCreating}
+                className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-2.5 rounded-[5px] text-[14px]"
               >
                 <Plus size={18} /> Create
               </button>
 
-              <button className="flex items-center gap-2 bg-[#161616] text-white px-5 py-2.5 rounded-[5px] text-[15px] tracking-wide font-medium hover:bg-zinc-800 transition-all cursor-pointer">
-                <Rocket size={18} className="text-white" />
+              <button className="flex items-center gap-2 bg-[#161616] text-white px-5 py-2.5 rounded-[5px] text-[15px]">
+                <Rocket size={18} />
                 <span className="hidden lg:inline">Join the Community</span>
               </button>
+
             </div>
 
-            {/* MOBILE TOGGLE */}
+            {/* MOBILE */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden text-white p-2 hover:bg-zinc-900 rounded-lg transition-all"
+              className="lg:hidden text-white p-2 hover:bg-zinc-900 rounded-lg"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -82,48 +127,83 @@ export default function Navbar({
         </div>
       </nav>
 
-      {/* MOBILE MENU OVERLAY */}
+      {/* MOBILE MENU */}
       {isOpen && (
-        <div className="lg:hidden fixed top-16 left-0 w-full bg-[#050505] border-b border-zinc-800 p-5 animate-in fade-in slide-in-from-top-4 z-[250] shadow-2xl">
-          <div className="flex flex-col gap-3">
-            <button className="w-full flex justify-between items-center p-4 rounded-[8px] bg-zinc-900 text-white font-medium">
-              Elements <ChevronDown size={20} />
+        <div className="lg:hidden fixed top-16 left-0 w-full bg-[#050505] p-5 z-[250] overflow-y-auto h-screen scrollbar-hide">
+
+          {/* Categories */}
+          <div className="flex flex-col">
+
+            <button
+              className="flex justify-between items-center py-2 px-4 rounded bg-zinc-900 text-white"
+              onClick={() => setShowDropdown(prev => !prev)}
+            >
+              Categories
+              <ChevronDown
+                size={20}
+                className={`transition-transform ${
+                  showDropdown ? 'rotate-180' : ''
+                }`}
+              />
             </button>
 
-            {navLinks.map(item => (
-              <button
-                key={item}
-                onClick={() => {
-                  setActiveNavigation(item);
-                  setIsOpen(false);
-                }}
-                className={`w-full text-left p-4 font-semibold rounded-xl transition-all ${
-                    activeNavigation === item
-                    ? 'bg-zinc-900 text-white'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
-                }`}
-              >
-                {item}
-              </button>
-            ))}
+            {showDropdown && (
+              <div className="mt-2 flex flex-col">
+                {categories.map(item => (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      onNavigate('Home', item.name);
+                      setTimeout(() => {
+                        setIsOpen(false);
+                      } , 500)
+                    }}
+                    className="py-2 px-4 text-left text-zinc-300 hover:text-white"
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-            <div className="h-px bg-zinc-900 my-2" />
+          {/* NAV LINKS */}
+          {navLinks.map(item => (
+            <button
+              key={item}
+              onClick={() => {
+                onNavigate(item);
+                setIsOpen(false);
+              }}
+              className={`w-full text-left p-4 rounded-xl ${
+                activeNavigation === item
+                  ? 'bg-zinc-900 text-white'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              {item}
+            </button>
+          ))}
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => {
-                  handleStartCreating();
-                  setIsOpen(false);
-                }}
-                className="flex items-center justify-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-3 rounded-[5px] text-[14px] font-medium"
-              >
-                <Plus size={20} /> Create
-              </button>
+          <div className="h-px bg-zinc-900 my-2" />
 
-              <button className="flex items-center justify-center gap-2 bg-[#161616] text-white px-5 py-3 rounded-[5px] text-[15px] font-medium">
-                <Rocket size={18} /> Join
-              </button>
-            </div>
+          {/* ACTIONS */}
+          <div className="grid grid-cols-2 gap-3">
+
+            <button
+              onClick={() => {
+                handleStartCreating();
+                setIsOpen(false);
+              }}
+              className="flex items-center justify-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-3 rounded"
+            >
+              <Plus size={20} /> Create
+            </button>
+
+            <button className="flex items-center justify-center gap-2 bg-[#161616] text-white px-5 py-3 rounded">
+              <Rocket size={18} /> Join
+            </button>
+
           </div>
         </div>
       )}

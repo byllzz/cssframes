@@ -214,7 +214,6 @@ We welcome contributions from developers and motion designers.
 ```bash
 git checkout -b motion/style-redefined-UI
 ```
-<br>
 
 # License 📄
 

@@ -79,7 +79,7 @@ export default function GridContent({
         </header>
 
         {/* toolbar */}
-        <div className="bg-[#050505]/60 backdrop-blur-xl px-6 md:px-2 py-5 relative z-50">
+        <div className="bg-[#050505]/60 backdrop-blur-xl px-6 md:px-2 py-5 relative">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between">
             {/* Search */}
             <div className="flex items-center gap-6 w-[50%]">

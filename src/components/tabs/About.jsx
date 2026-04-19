@@ -7,7 +7,7 @@ export default function About({ onBack , animations }) {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-outfit select-none selection:bg-indigo-500 selection:text-white">
       {/* STICKY TOP NAVIGATION */}
-      <nav className="sticky top-0 z-50 w-full bg-[#050505]/80 backdrop-blur-md border-b border-white/5 px-6 md:px-12 py-6">
+      <nav className="sticky top-0  w-full bg-[#050505]/80 backdrop-blur-md border-b border-white/5 px-6 md:px-12 py-6">
         <button
           onClick={onBack}
           className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-all cursor-pointer group"
