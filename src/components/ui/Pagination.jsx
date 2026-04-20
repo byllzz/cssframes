@@ -3,99 +3,55 @@ import React from 'react';
 const Pagination = ({ currentPage, totalPages, paginate }) => {
   if (totalPages <= 1) return null;
 
-  const getPages = () => {
-    const pages = [];
-    const delta = 2;
+  const goPrev = () => paginate(currentPage - 1);
+  const goNext = () => paginate(currentPage + 1);
 
-    const start = Math.max(2, currentPage - delta);
-    const end = Math.min(totalPages - 1, currentPage + delta);
-
-    pages.push(1);
-
-    if (start > 2) pages.push('...');
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
-    if (end < totalPages - 1) pages.push('...');
-
-    if (totalPages > 1) pages.push(totalPages);
-
-    return pages;
-  };
-
-  const pages = getPages();
+  const isFirst = currentPage === 1;
+  const isLast = currentPage === totalPages;
 
   return (
     <div className="mt-20 px-4 font-outfit">
       <div className="max-w-xl mx-auto flex flex-col items-center gap-6">
 
-        {/* Main Bar */}
-        <div className="flex items-center gap-3 bg-[#0c0c0c] border border-white/[0.06] rounded-full px-4 py-2 shadow-lg">
+        {/* Button Container */}
+        <div
+          className={`
+            flex items-center gap-3 transition-all duration-300
+            ${isFirst || isLast ? 'w-1/2 justify-center' : 'w-full justify-between'}
+          `}
+        >
 
-          {/* Prev */}
-          <button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-1.5 text-sm text-zinc-500 hover:text-white transition disabled:opacity-20"
-          >
-            Prev
-          </button>
+          {/* Prev (only show if not first page) */}
+          {!isFirst && (
+            <button
+              onClick={goPrev}
+              className="
+                flex-1 py-3 rounded-full text-sm font-semibold
+                bg-zinc-900 text-white border border-white/10
+                hover:bg-zinc-800 transition
+              "
+            >
+              Previous
+            </button>
+          )}
 
-          {/* Page Pills */}
-          <div className="flex items-center gap-1 relative">
+          {/* Next (only show if not last page) */}
+          {!isLast && (
+            <button
+              onClick={goNext}
+              className="
+                flex-1 py-3 rounded-full text-sm font-semibold
+                bg-white text-black hover:scale-[1.02] active:scale-[0.98]
+                transition
+              "
+            >
+              Next
+            </button>
+          )}
 
-            {/* Active background slider */}
-            <div
-              className="absolute h-8 bg-white rounded-full transition-all duration-300 ease-out"
-              style={{
-                width: '40px',
-                transform: `translateX(${(pages.indexOf(currentPage)) * 44}px)`
-              }}
-            />
-
-            {pages.map((p, index) => {
-              if (p === '...') {
-                return (
-                  <span key={index} className="w-10 text-center text-zinc-600 text-sm">
-                    ...
-                  </span>
-                );
-              }
-
-              const isActive = currentPage === p;
-
-              return (
-                <button
-                  key={p}
-                  onClick={() => paginate(p)}
-                  className={`
-                    relative z-10 w-10 h-8 text-sm font-medium rounded-full transition
-                    ${
-                      isActive
-                        ? 'text-black'
-                        : 'text-zinc-500 hover:text-white'
-                    }
-                  `}
-                >
-                  {p}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Next */}
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-1.5 text-sm text-zinc-500 hover:text-white transition disabled:opacity-20"
-          >
-            Next
-          </button>
         </div>
 
-        {/* Footer */}
+        {/* Page indicator */}
         <p className="text-xs text-zinc-500">
           Page <span className="text-white font-medium">{currentPage}</span> of{' '}
           <span className="text-zinc-400">{totalPages}</span>

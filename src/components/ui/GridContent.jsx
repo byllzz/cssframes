@@ -3,6 +3,16 @@ import AnimationCard from '../layout/AnimationCard';
 import Toolbar from './Toolbar';
 import Pagination from './Pagination';
 import { Box, Type, Circle, Star, SearchX } from 'lucide-react';
+import EmptyState from './EmptyState';
+
+
+ // Configuration
+ const previewOptions = [
+   { id: 'box', label: 'Box', icon: <Box size={16} /> },
+   { id: 'text', label: 'Text', icon: <Type size={14} /> },
+   { id: 'circle', label: 'Circle', icon: <Circle size={14} /> },
+   { id: 'icon', label: 'Icon', icon: <Star size={14} /> },
+ ];
 
 export default function GridContent({
   animations,
@@ -44,28 +54,16 @@ export default function GridContent({
     return filteredPlates.slice(start, start + cardsPerPage);
   }, [filteredPlates, currentPage]);
 
-  // const paginate = (num) => {
-  //   setCurrentPage(num);
-  //   gridTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  // };
-  const paginate = num => {
-    if (num < 1 || num > totalPages) return;
-    setCurrentPage(num);
-  };
-useEffect(() => {
+  const paginate = (num) => {
+  if (num < 1 || num > totalPages) return;
+  setCurrentPage(num);
   gridTopRef.current?.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
   });
-}, [currentPage]);
+};
 
-  // Configuration
-  const previewOptions = [
-    { id: 'box', label: 'Box', icon: <Box size={16} /> },
-    { id: 'text', label: 'Text', icon: <Type size={14} /> },
-    { id: 'circle', label: 'Circle', icon: <Circle size={14} /> },
-    { id: 'icon', label: 'Icon', icon: <Star size={14} /> },
-  ];
+
 
   return (
     <div className="flex-1 min-h-screen font-outfit pb-20">
@@ -114,25 +112,7 @@ useEffect(() => {
               />
             ))
           ) : (
-            /* Empty Search Results State */
-            <div className="col-span-full py-32 flex flex-col items-center justify-center border border-dashed border-zinc-800 rounded-[40px] bg-zinc-900/10">
-              <div className="p-5 bg-zinc-900/50 rounded-full mb-4">
-                <SearchX size={40} className="text-zinc-700" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">No animations found</h3>
-              <p className="text-zinc-500 text-sm italic max-w-xs text-center leading-relaxed">
-                We couldn't find anything matching "{searchQuery}" in {selectedCategory}.
-              </p>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setCurrentPage(1);
-                }}
-                className="mt-8 px-8 py-3 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-full hover:scale-105 transition-all active:scale-95"
-              >
-                Reset Search
-              </button>
-            </div>
+           <EmptyState searchQuery={searchQuery} selectedCategory={selectedCategory} setSearchQuery={setSearchQuery} setCurrentPage={setCurrentPage}  />
           )}
         </main>
       </div>

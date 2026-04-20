@@ -16,23 +16,19 @@ import {
 
 const navigations = [{ name: 'Community', icon: <Users size={20} /> }];
 
-const categories = [
-  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} />,  },
-  { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} />,  },
-  {
-    name: 'Loaders',
-    icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
 
-  },
-  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} />, },
-  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} />, },
-  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} />, },
-  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} />, },
-  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} />, },
-  { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} />,  },
-  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} />,   },
-  { name: 'Components', icon: <Box size={18} strokeWidth={2.5} />,   },
+const categories = [
+  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
+  { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
+  { name: 'Loaders', icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" /> },
+  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
+  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
+  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} /> },
+  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
+  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
+  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
 ];
+
 
 export default function Sidebar({
   selectedCategory,

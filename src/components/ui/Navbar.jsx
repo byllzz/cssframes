@@ -13,7 +13,6 @@ export default function Navbar({
   const navLinks = ['About'];
 
   const [showElements, setShowElements] = useState(false);
-  // const [hideTimeout, setHideTimeout] = useState(null);
   const [showDropdown, setShowDropdown] = useState(true);
 
   const timeoutRef = useRef(null);
@@ -41,19 +40,20 @@ export default function Navbar({
             <div className="hidden lg:flex items-center gap-2 relative">
 
               {/* ELEMENTS */}
-              <div
-                className="relative"
-                onMouseEnter={() => {
-                  if (timeoutRef.current) clearTimeout(timeoutRef.current);
-                  setShowElements(true);
-                }}
-                onMouseLeave={() => {
-                  timeoutRef.current = setTimeout(() => {
-                    setShowElements(false);
-                  }, 120);
-                }}
-              >
-                <button className="flex items-center gap-1.5 text-white bg-[#161616] px-4 py-[7.5px] rounded-[5px] text-[15px] font-medium tracking-wider hover:bg-zinc-800">
+              <div className="relative">
+
+                <button
+                  className="flex items-center gap-1.5 text-white bg-[#161616] px-4 py-[7.5px] rounded-[5px] text-[15px] font-medium tracking-tight hover:bg-zinc-800"
+                  onMouseEnter={() => {
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                    setShowElements(true);
+                  }}
+                  onMouseLeave={() => {
+                    timeoutRef.current = setTimeout(() => {
+                      setShowElements(false);
+                    }, 120);
+                  }}
+                >
                   Elements
                   <ChevronDown
                     size={14}
@@ -69,6 +69,15 @@ export default function Navbar({
                       ? 'opacity-100 visible translate-y-0'
                       : 'opacity-0 invisible -translate-y-1'
                   }`}
+                  onMouseEnter={() => {
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                    setShowElements(true);
+                  }}
+                  onMouseLeave={() => {
+                    timeoutRef.current = setTimeout(() => {
+                      setShowElements(false);
+                    }, 120);
+                  }}
                 >
                   <div className="w-max">
                     <Elements
@@ -86,7 +95,7 @@ export default function Navbar({
                 <button
                   key={item}
                   onClick={() => onNavigate(item)}
-                  className={`text-[15px] tracking-wider font-medium px-4 py-[7.5px] rounded-[5px] transition-all ${
+                  className={`text-[15px] tracking-tight font-medium px-4 py-[7.5px] rounded-[5px] transition-all ${
                     activeNavigation === item
                       ? 'bg-[#161616] text-white'
                       : 'text-zinc-400 hover:text-white hover:bg-[#161616]'
@@ -109,14 +118,13 @@ export default function Navbar({
                 <Plus size={18} /> Create
               </button>
 
-              <button className="flex items-center gap-2 bg-[#161616] text-white px-5 py-2.5 rounded-[5px] text-[15px]">
+              {/* <button className="flex items-center gap-2 bg-[#161616] text-white px-5 py-2.5 rounded-[5px] text-[15px]">
                 <Rocket size={18} />
                 <span className="hidden lg:inline">Join the Community</span>
-              </button>
+              </button> */}
 
             </div>
 
-            {/* MOBILE */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="lg:hidden text-white/90 p-2 hover:bg-zinc-900 rounded-lg"
@@ -131,7 +139,6 @@ export default function Navbar({
       {isOpen && (
         <div className="lg:hidden fixed top-16 left-0 w-full bg-[#050505] p-5 z-[250] overflow-y-auto h-screen scrollbar-hide">
 
-          {/* Categories */}
           <div className="flex flex-col">
 
             <button
@@ -154,9 +161,7 @@ export default function Navbar({
                     key={item.name}
                     onClick={() => {
                       onNavigate('Home', item.name);
-                      setTimeout(() => {
-                        setIsOpen(false);
-                      } , 500)
+                      setTimeout(() => setIsOpen(false), 500);
                     }}
                     className="py-2 px-4 text-left text-zinc-300 hover:text-white"
                   >
@@ -167,7 +172,6 @@ export default function Navbar({
             )}
           </div>
 
-          {/* NAV LINKS */}
           {navLinks.map(item => (
             <button
               key={item}
@@ -187,7 +191,6 @@ export default function Navbar({
 
           <div className="h-px bg-zinc-900 my-2" />
 
-          {/* ACTIONS */}
           <div className="grid grid-cols-2 gap-3">
 
             <button
@@ -199,10 +202,10 @@ export default function Navbar({
             >
               <Plus size={20} /> Create
             </button>
-
+{/*
             <button className="flex items-center justify-center gap-2 bg-[#161616] text-white px-5 py-3 rounded">
               <Rocket size={18} /> Join
-            </button>
+            </button> */}
 
           </div>
         </div>

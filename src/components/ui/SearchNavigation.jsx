@@ -1,12 +1,13 @@
 import { Command, Search } from 'lucide-react';
-import React , {useEffect} from 'react';
+import React , {useEffect, useRef} from 'react';
 
 export default function SearchNavigation({ searchQuery, setSearchQuery }) {
+  const inputRef = useRef(null);
   useEffect(() => {
     const down = e => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        document.getElementById('searchInput')?.focus();
+        inputRef.current?.focus();
       }
     };
     document.addEventListener('keydown', down);
@@ -24,6 +25,7 @@ export default function SearchNavigation({ searchQuery, setSearchQuery }) {
       </div>
 
       <input
+        ref={inputRef}
         type="text"
         id="searchInput"
         placeholder="Find an animation..."

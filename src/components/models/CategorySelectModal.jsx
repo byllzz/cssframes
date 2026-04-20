@@ -29,9 +29,8 @@ export default function CategorySelectModal({ onSelect, onClose }) {
     { id: 'Cards', name: 'Card Animation', icon: <CreditCard size={22} /> },
     { id: 'Text', name: 'Text Animation', icon: <Type size={22} /> },
     { id: 'Icons', name: 'Icon Animation', icon: <Sparkles size={22} /> },
-    { id: 'Shapes', name: 'Shape Animation', icon: <Shapes size={22} /> },
     { id: 'Scroll', name: 'Scroll Animation', icon: <Monitor size={22} /> },
-    { id: 'Components', name: 'Component Animation', icon: <Box size={22} /> },
+
   ];
 
   const objectTypes = [

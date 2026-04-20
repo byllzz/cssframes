@@ -1,5 +1,4 @@
 export const animations = [
-
   // BUTTONS
   {
     id: 'split-sheen',
@@ -461,7 +460,6 @@ export const animations = [
     type: 'box',
   },
 
-
   // ICONS
 
   {
@@ -557,7 +555,6 @@ export const animations = [
     type: 'icon',
   },
 
-
   // SHAPES
 
   {
@@ -646,4 +643,7 @@ export const animations = [
     desc: 'A core pulse for abstract components and UI emblems.',
     type: 'circle',
   },
+
+  // demo
+ 
 ];
