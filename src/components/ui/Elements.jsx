@@ -44,7 +44,7 @@ export default function Elements({ animations = [] , onNavigate }) {
 
 
   return (
-    <div className="w-[800px] h-[380px] bg-[#0f0f10] text-white p-5 rounded-[12px]">
+    <div className="w-[800px] h-[402px] bg-[#0f0f10] text-white p-5 rounded-[12px]">
       <div className="max-w-full grid grid-cols-1 lg:grid-cols-3 gap-2">
 
         {/* LEFT GRID */}

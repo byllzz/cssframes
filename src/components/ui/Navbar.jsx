@@ -119,7 +119,7 @@ export default function Navbar({
             {/* MOBILE */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden text-white p-2 hover:bg-zinc-900 rounded-lg"
+              className="lg:hidden text-white/90 p-2 hover:bg-zinc-900 rounded-lg"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
