@@ -23,7 +23,6 @@ const categories = [
   { name: 'Loaders', icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" /> },
   { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
   { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} /> },
   { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
   { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
   { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },

@@ -16,7 +16,7 @@ import {
 
 
 
-export default function Elements({ animations = [] , onNavigate }) {
+export default function Elements({ animations = [] , onNavigate  }) {
   const categories = [
     { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
     { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
@@ -25,13 +25,10 @@ export default function Elements({ animations = [] , onNavigate }) {
       icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
     },
     { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
+    { name: 'Text', icon: <Type size={22} strokeWidth={2.5} /> },
     { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-    { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} /> },
-    { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
     { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
-    { name: 'Shapes', icon: <Shapes size={18} strokeWidth={2.5} /> },
     { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
-    { name: 'Components', icon: <Box size={18} strokeWidth={2.5} /> },
   ];
 
   // get count per category
@@ -54,8 +51,7 @@ export default function Elements({ animations = [] , onNavigate }) {
             return (
               <button
                 onClick={() => {
-                  console.log('CLICKED:', item.name);
-                  onNavigate(item.name);
+                  onNavigate( item.name);
                 }}
                 key={item.name}
                 className="bg-[#1a1a1c] hover:bg-[#222225] transition-all duration-200 rounded-[5px] px-2 py-1.5 flex items-center justify-between cursor-pointer border border-transparent hover:border-[#2a2a2d]"

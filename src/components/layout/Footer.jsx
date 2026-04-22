@@ -14,14 +14,14 @@ export default function Footer() {
 
         {/* Brand Section */}
         <div className="lg:col-span-2 space-y-2">
-          <div className="flex items-center gap-2 relative bottom-1">
+          <div className="flex items-center gap-2 relative bottom-1 left-[3px]" >
             <span className="text-2xl font-black text-white tracking-tighter italic relative right-1">
               <span className="text-indigo-500 ">CSS</span>Frames
             </span>
           </div>
 
           <div className="space-y-4">
-            <p className="text-[17px] font-medium leading-tight max-w-[350px]">
+            <p className="text-[15px] font-medium leading-tight max-w-[350px]">
               CSSFrames | The open-source universe of high-performance CSS animations.
             </p>
 
@@ -31,7 +31,7 @@ export default function Footer() {
                 <Scale size={22} /></span>
                 <span className=" font-heading text-[16px] tracking-wide">MIT License</span>
               </div>
-              <p className="text-[17px] leading-tight max-w-[400px] text-zinc-400">
+              <p className="text-[16px] leading-tight max-w-[400px] text-zinc-400">
                 All elements on this site are open-source and published under the
                 <a href="#" className="text-zinc-300 hover:text-white underline underline-offset-4 ml-1 transition-colors">MIT License</a>.
               </p>

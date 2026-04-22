@@ -26,7 +26,6 @@ export default function CategorySelectModal({ onSelect, onClose }) {
     { id: 'Loaders', name: 'Loader Animation', icon: <Loader2 size={22} /> },
     { id: 'Arrival', name: 'Entrance Animation', icon: <LogIn size={22} /> },
     { id: 'Transitions', name: 'Transition Animation', icon: <Zap size={22} /> },
-    { id: 'Cards', name: 'Card Animation', icon: <CreditCard size={22} /> },
     { id: 'Text', name: 'Text Animation', icon: <Type size={22} /> },
     { id: 'Icons', name: 'Icon Animation', icon: <Sparkles size={22} /> },
     { id: 'Scroll', name: 'Scroll Animation', icon: <Monitor size={22} /> },
@@ -52,7 +51,7 @@ export default function CategorySelectModal({ onSelect, onClose }) {
   }, [selectedId, objectType]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md px-3 sm:px-4 font-outfit ">
+    <div className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/70 backdrop-blur-md px-3 sm:px-4 font-outfit ">
       <div className="relative w-full max-w-[1000px] max-h-[95vh] overflow-y-auto rounded-[12px] bg-[#0b0b0c] scrollbar-hide">
         {/* top line */}
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />

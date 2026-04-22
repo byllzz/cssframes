@@ -10,7 +10,10 @@ export default function Navbar({
   categories = [],
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const navLinks = ['About'];
+  const navLinks = ['About' , "Docs" ,
+"Library" ,
+"Playground" ,
+"Blog"];
 
   const [showElements, setShowElements] = useState(false);
   const [showDropdown, setShowDropdown] = useState(true);
@@ -19,13 +22,15 @@ export default function Navbar({
 
   return (
     <>
-      <nav className="bg-[#050505] w-full font-outfit px-4 lg:px-4 border-b border-zinc-900/50">
+      <nav className="bg-[#050505] w-full font-grotesk px-4 lg:px-4 border-b border-zinc-900/50">
         <div className="max-w-full mx-auto flex items-center justify-between h-16">
-
           {/* LOGO */}
           <div className="flex items-center gap-8">
             <div
-              onClick={() => onNavigate('Home')}
+             onClick={() => {
+  onNavigate('Home' ,null);
+
+}}
               className="flex items-center gap-0.5 group cursor-pointer select-none"
             >
               <span className="text-purple-500 font-black text-2xl tracking-tighter transition-transform group-hover:-rotate-6">
@@ -38,10 +43,8 @@ export default function Navbar({
 
             {/* DESKTOP NAV */}
             <div className="hidden lg:flex items-center gap-2 relative">
-
               {/* ELEMENTS */}
               <div className="relative">
-
                 <button
                   className="flex items-center gap-1.5 text-white bg-[#161616] px-4 py-[7.5px] rounded-[5px] text-[15px] font-medium tracking-tight hover:bg-zinc-800"
                   onMouseEnter={() => {
@@ -85,6 +88,7 @@ export default function Navbar({
                       onNavigate={cat => {
                         onNavigate('Home', cat);
                         setShowElements(false);
+
                       }}
                     />
                   </div>
@@ -110,7 +114,6 @@ export default function Navbar({
           {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
-
               <button
                 onClick={handleStartCreating}
                 className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-2.5 rounded-[5px] text-[14px]"
@@ -122,7 +125,6 @@ export default function Navbar({
                 <Rocket size={18} />
                 <span className="hidden lg:inline">Join the Community</span>
               </button> */}
-
             </div>
 
             <button
@@ -138,9 +140,7 @@ export default function Navbar({
       {/* MOBILE MENU */}
       {isOpen && (
         <div className="lg:hidden fixed top-16 left-0 w-full bg-[#050505] p-5 z-[250] overflow-y-auto h-screen scrollbar-hide">
-
           <div className="flex flex-col">
-
             <button
               className="flex justify-between items-center py-2 px-4 rounded bg-zinc-900 text-white"
               onClick={() => setShowDropdown(prev => !prev)}
@@ -148,9 +148,7 @@ export default function Navbar({
               Categories
               <ChevronDown
                 size={20}
-                className={`transition-transform ${
-                  showDropdown ? 'rotate-180' : ''
-                }`}
+                className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`}
               />
             </button>
 
@@ -192,7 +190,6 @@ export default function Navbar({
           <div className="h-px bg-zinc-900 my-2" />
 
           <div className="grid grid-cols-2 gap-3">
-
             <button
               onClick={() => {
                 handleStartCreating();
@@ -202,11 +199,10 @@ export default function Navbar({
             >
               <Plus size={20} /> Create
             </button>
-{/*
+            {/*
             <button className="flex items-center justify-center gap-2 bg-[#161616] text-white px-5 py-3 rounded">
               <Rocket size={18} /> Join
             </button> */}
-
           </div>
         </div>
       )}

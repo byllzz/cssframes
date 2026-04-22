@@ -28,6 +28,7 @@ import DevelopmentPopup from './components/alerts/DevelopmentPopup';
 import About from './components/tabs/About';
 import CommunityGrid from './components/ui/CommunityGrid';
 import { animations as initialAnimations } from './data/animations';
+import Home from './components/pages/Home';
 
 // GLOBAL DATA
 const categories = [
@@ -36,7 +37,6 @@ const categories = [
   { name: 'Loaders', icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" /> },
   { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
   { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-  { name: 'Cards', icon: <CreditCard size={18} strokeWidth={2.5} /> },
   { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
   { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
   { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
@@ -63,9 +63,8 @@ const DynamicRouteRenderer = ({
     'animations',
     'buttons',
     'loaders',
-    'arrivals',
+    'arrival',
     'transitions',
-    'cards',
     'text',
     'icons',
     'scroll',
@@ -77,9 +76,6 @@ const DynamicRouteRenderer = ({
   if (categoryList.includes(lowerId)) {
     const formattedCategory =
       lowerId === 'animations' ? 'All' : id.charAt(0).toUpperCase() + id.slice(1);
-
-    // const formattedCategory = categories.find(c => c.name.toLowerCase() === lowerId)?.name;
-
     return (
       <GridContent
         animations={allAnimations}
@@ -96,9 +92,6 @@ const DynamicRouteRenderer = ({
 
   // Animation Logic
   const currentAnim = activeAnimation || allAnimations.find(a => a.id === id);
-
-  // const currentAnim = allAnimations.find(a => a.id.toLowerCase() === id.toLowerCase());
-
   if (currentAnim) {
     return (
       <div className="p-4 md:pl-2 md:pr-3 md:py-9">
@@ -112,14 +105,31 @@ const DynamicRouteRenderer = ({
   }
 
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-      <h2 className="text-xl font-semibold text-white mb-2">Animation not found</h2>
-      <button
-        onClick={() => navigate('/')}
-        className="px-6 py-2 bg-white text-black rounded-full font-medium"
-      >
-        Back to Library
-      </button>
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6">
+      {/* Subtle background element for depth */}
+      <div className="absolute size-64 bg-zinc-500/5 blur-[120px] pointer-events-none" />
+
+      <div className="relative space-y-8 flex flex-col items-center">
+        <div className="space-y-2 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-medium">Error 404</p>
+          <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white">
+            Animation not found
+          </h2>
+          <p className="text-zinc-400 max-w-[280px] text-sm leading-relaxed mx-auto">
+            The piece you're looking for might have been moved or doesn't exist yet.
+          </p>
+        </div>
+
+        <button
+          onClick={() => navigate('/')}
+          className="group relative px-8 py-3 bg-white text-black rounded-full font-medium text-sm transition-all duration-300 hover:bg-zinc-200 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+        >
+          <span className="flex items-center gap-2">
+            Back to Library
+            <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+          </span>
+        </button>
+      </div>
     </div>
   );
 };
@@ -140,7 +150,6 @@ export default function App() {
   const [creationStep, setCreationStep] = useState(1);
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
-  const [showDevPopup, setShowDevPopup] = useState(false);
 
   // all useEffects
   useEffect(() => {
@@ -151,8 +160,6 @@ export default function App() {
 
     if (path && !['about', 'community'].includes(path)) {
       const found = allAnimations.find(a => a.id === path);
-      // const normalize = str => str.toLowerCase();
-      // const found = allAnimations.find(a => normalize(a.id) === normalize(id));
       if (found) setActiveAnimation(found);
     } else {
       setActiveAnimation(null);
@@ -175,7 +182,7 @@ export default function App() {
       }
       setActiveAnimation(null);
       setIsCreating(false);
-    }, 400);
+    }, 1000);
     setTimeout(() => setIsNavigating(false), 800);
   };
 
@@ -183,7 +190,6 @@ export default function App() {
     setIsNavigating(true);
     setTimeout(() => {
       setActiveAnimation(animation);
-      // navigate(`/${animation.id}`);
       navigate(`/${animation.id.toLowerCase().trim()}`);
     }, 400);
     setTimeout(() => setIsNavigating(false), 800);
@@ -207,134 +213,221 @@ export default function App() {
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  return (
-    <>
-      <TopLoader isLoading={isNavigating} />
-      {showDevPopup && <DevelopmentPopup onClose={() => setShowDevPopup(false)} />}
-      <SharePanel
-        animation={selectedShare}
-        isOpen={!!selectedShare}
-        onClose={() => setSelectedShare(null)}
-      />
 
-      <div className="h-screen w-full bg-[#050505] text-zinc-200">
-        <div
-          className={`h-screen overflow-y-auto scroll-smooth ${showDevPopup ? 'overflow-hidden' : ''}`}
-        >
-          <Navbar
-            activeNavigation={activeNavigation}
-            onNavigate={handleNavChange}
-            handleStartCreating={handleStartCreating}
-            isNavigating={isNavigating}
-            animations={allAnimations}
-            categories={categories}
+  // for home Page
+ const handleEnter = () => {
+  if (!searchQuery.trim()) {
+    setIsNavigating(true);
+
+    setTimeout(() => {
+      navigate('/animations');
+      setIsNavigating(false);
+    }, 400);
+
+    return;
+  }
+
+  setIsNavigating(true);
+
+  setTimeout(() => {
+    navigate('/animations');
+    setIsNavigating(false);
+  }, 400);
+};
+
+  useEffect(() => {
+  const baseName = "CSSFrames";
+  let title = baseName;
+
+  // 1. Specific Animation Preview
+  if (activeAnimation) {
+    title = `${activeAnimation.name} — ${baseName}`;
+  }
+  else if (activeNavigation === 'Community') {
+    const communityCount = allAnimations.filter(item => item.isCommunity).length;
+    title = `${communityCount} Community Creations | CSSFrames Open-source Library of Pure CSS Animations`;
+  }
+  else if (activeNavigation === 'About') {
+    title = `Our Story | CSSFrames Open-source Library of Pure CSS Animations`;
+  }
+  else if (activeNavigation === 'Home') {
+    const displayCategory = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+
+    if (selectedCategory === 'All') {
+      title = `${allAnimations.length} CSS Animations: ${baseName}`;
+    } else {
+      const categoryCount = allAnimations.filter(
+        (item) => item.category?.toLowerCase() === selectedCategory.toLowerCase()
+      ).length;
+
+      title = `${categoryCount} ${displayCategory} Animations: ${baseName}`;
+    }
+  }
+  if (location.pathname === '/') {
+    title = `${baseName} | Open-source Library of Pure CSS Animations`;
+  }
+
+  document.title = title;
+}, [activeNavigation, selectedCategory, activeAnimation, allAnimations, location.pathname]);
+
+  return (
+   <>
+  {/* Global Overlays */}
+  <div className="fixed top-0 left-0 w-full z-[20000] pointer-events-none">
+    <TopLoader isLoading={isNavigating} />
+  </div>
+
+  <SharePanel
+    animation={selectedShare}
+    isOpen={!!selectedShare}
+    onClose={() => setSelectedShare(null)}
+  />
+
+  <div className="h-screen w-full bg-[#050505] text-zinc-200 overflow-hidden">
+    <div className="h-full overflow-y-auto scroll-smooth flex flex-col">
+
+      {/* Persistent Navbar */}
+      <nav className="sticky top-0 z-[10000]">
+        <Navbar
+          activeNavigation={activeNavigation}
+          onNavigate={handleNavChange}
+          handleStartCreating={handleStartCreating}
+          isNavigating={isNavigating}
+          animations={allAnimations}
+          categories={categories}
+        />
+      </nav>
+
+      <main className="flex-1 flex flex-col md:flex-row">
+        <Routes>
+          {/* 1. HOME ROUTE: No Sidebar, full width */}
+          <Route
+            path="/"
+            element={
+              <div className="w-full">
+                <Home
+                  onEnter={handleEnter}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                />
+              </div>
+            }
           />
 
-          <div className="flex flex-col md:flex-row w-full">
-            {!isCreating && (
-              <aside className="hidden md:block sticky top-0 self-start h-screen shrink-0 bg-[#050505] z-10">
-                <Sidebar
-                  selectedCategory={selectedCategory}
-                  activeNavigation={activeNavigation}
-                  onNavigate={handleNavChange}
-                  animations={allAnimations}
-                />
-              </aside>
-            )}
-
-            <main className="flex-1">
-              <div className="py-4 md:py-0">
-                {isCreating ? (
-                  <div className="min-h-screen flex items-center justify-center p-6">
-                    {creationStep === 1 ? (
-                      <CategorySelectModal
-                        onSelect={cat => {
-                          setNewCategory(cat);
-                          setCreationStep(2);
-                        }}
-                        onClose={() => setIsCreating(false)}
-                      />
-                    ) : (
-                      <CreatorModal
-                        category={newCategory}
-                        onClose={() => setIsCreating(false)}
-                        // onSave={anim => setAllAnimations([anim, ...allAnimations])}
-                        onSave={anim => {
-                          setIsNavigating(true);
-
-                          setTimeout(() => {
-                            setAllAnimations(prev => [anim, ...prev]);
-                            setIsCreating(false);
-                            navigate('/community');
-                            setIsNavigating(false);
-                          }, 100);
-                        }}
-                        handleStartCreating={handleStartCreating}
-                      />
-                    )}
-                  </div>
-                ) : (
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        <GridContent
-                          animations={allAnimations}
-                          searchQuery={searchQuery}
-                          setSearchQuery={setSearchQuery}
-                          selectedCategory="All"
-                          onCardClick={handleOpenPreview}
-                          previewType={previewType}
-                          setPreviewType={setPreviewType}
-                          onShareClick={setSelectedShare}
-                        />
-                      }
+          {/* 2. APP ROUTES: Wrapped with Sidebar logic */}
+          <Route
+            path="*"
+            element={
+              <div className="flex flex-1 w-full">
+                {/* Sidebar logic: Only show if not in creation mode */}
+                {!isCreating && (
+                  <aside className="hidden md:block sticky top-[64px] self-start h-[calc(100vh-64px)] shrink-0 bg-[#050505] z-10">
+                    <Sidebar
+                      selectedCategory={selectedCategory}
+                      activeNavigation={activeNavigation}
+                      onNavigate={handleNavChange}
+                      animations={allAnimations}
                     />
-                    <Route
-                      path="/community"
-                      element={
-                        <CommunityGrid
-                          animations={allAnimations}
-                          onCardClick={handleOpenPreview}
-                          previewType={previewType}
-                          handleStartCreating={handleStartCreating}
-                          onShareClick={setSelectedShare}
-                          onBack={() => handleNavChange('Home')}
-                        />
-                      }
-                    />
-                    <Route
-                      path="/about"
-                      element={
-                        <About onBack={() => handleNavChange('Home')} animations={allAnimations} />
-                      }
-                    />
-
-                    {/* 3. UPDATED ROUTE PASSING ALL PROPS */}
-                    <Route
-                      path="/:id"
-                      element={
-                        <DynamicRouteRenderer
-                          allAnimations={allAnimations}
-                          searchQuery={searchQuery}
-                          setSearchQuery={setSearchQuery}
-                          handleOpenPreview={handleOpenPreview}
-                          previewType={previewType}
-                          setPreviewType={setPreviewType}
-                          setSelectedShare={setSelectedShare}
-                          activeAnimation={activeAnimation}
-                          handleClosePreview={handleClosePreview}
-                        />
-                      }
-                    />
-                  </Routes>
+                  </aside>
                 )}
+
+                <section className="flex-1">
+                  {isCreating ? (
+                    <div className="min-h-screen flex items-center justify-center p-6">
+                      {creationStep === 1 ? (
+                        <CategorySelectModal
+                          onSelect={(cat) => {
+                            setNewCategory(cat);
+                            setCreationStep(2);
+                          }}
+                          onClose={() => setIsCreating(false)}
+                        />
+                      ) : (
+                        <CreatorModal
+                          category={newCategory}
+                          onClose={() => setIsCreating(false)}
+                          onSave={(anim) => {
+                            setIsNavigating(true);
+                            setTimeout(() => {
+                              setAllAnimations((prev) => [anim, ...prev]);
+                              setIsCreating(false);
+                              navigate("/community");
+                              setIsNavigating(false);
+                            }, 100);
+                          }}
+                          handleStartCreating={handleStartCreating}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="py-4 md:py-0">
+                      <Routes>
+                        <Route
+                          path="/animations"
+                          element={
+                            <GridContent
+                              animations={allAnimations}
+                              searchQuery={searchQuery}
+                              setSearchQuery={setSearchQuery}
+                              selectedCategory="All"
+                              onCardClick={handleOpenPreview}
+                              previewType={previewType}
+                              setPreviewType={setPreviewType}
+                              onShareClick={setSelectedShare}
+                            />
+                          }
+                        />
+                        <Route
+                          path="/community"
+                          element={
+                            <CommunityGrid
+                              animations={allAnimations}
+                              onCardClick={handleOpenPreview}
+                              previewType={previewType}
+                              handleStartCreating={handleStartCreating}
+                              onShareClick={setSelectedShare}
+                              onBack={() => handleNavChange("Home")}
+                            />
+                          }
+                        />
+                        <Route
+                          path="/about"
+                          element={
+                            <About
+                              onBack={() => handleNavChange("Home")}
+                              animations={allAnimations}
+                            />
+                          }
+                        />
+                        <Route
+                          path="/:id"
+                          element={
+                            <DynamicRouteRenderer
+                              allAnimations={allAnimations}
+                              searchQuery={searchQuery}
+                              setSearchQuery={setSearchQuery}
+                              handleOpenPreview={handleOpenPreview}
+                              previewType={previewType}
+                              setPreviewType={setPreviewType}
+                              setSelectedShare={setSelectedShare}
+                              activeAnimation={activeAnimation}
+                              handleClosePreview={handleClosePreview}
+                            />
+                          }
+                        />
+                      </Routes>
+                    </div>
+                  )}
+                </section>
               </div>
-            </main>
-          </div>
-          <Footer />
-        </div>
-      </div>
-    </>
+            }
+          />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  </div>
+</>
   );
 }
