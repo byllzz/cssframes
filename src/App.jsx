@@ -19,8 +19,6 @@ import CommunityGrid from './components/ui/CommunityGrid';
 import { animations as initialAnimations } from './data/animations';
 import Home from './components/pages/Home';
 
-
-
 //  COMPONENT WITH PROPS
 const DynamicRouteRenderer = ({
   allAnimations,
@@ -182,62 +180,167 @@ export default function App() {
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-
   // for home Page
- const handleEnter = () => {
-  if (!searchQuery.trim()) {
-    setIsNavigating(true);
+  const handleEnter = () => {
+    if (!searchQuery.trim()) {
+      setIsNavigating(true);
 
+      setTimeout(() => {
+        navigate('/animations');
+        setIsNavigating(false);
+      }, 400);
+
+      return;
+    }
+
+    setIsNavigating(true);
     setTimeout(() => {
       navigate('/animations');
       setIsNavigating(false);
     }, 400);
+  };
 
-    return;
-  }
-
-  setIsNavigating(true);
-
-  setTimeout(() => {
-    navigate('/animations');
-    setIsNavigating(false);
-  }, 400);
-};
-
+  // for title previews
   useEffect(() => {
-  const baseName = "CSSFrames";
-  let title = baseName;
+    const baseName = 'CSSFrames';
+    const path = location.pathname.substring(1).toLowerCase();
 
-  // 1. Specific Animation Preview
-  if (activeAnimation) {
-    title = `${activeAnimation.name} — ${baseName}`;
-  }
-  else if (activeNavigation === 'Community') {
-    const communityCount = allAnimations.filter(item => item.isCommunity).length;
-    title = `${communityCount} Community Creations | CSSFrames Open-source Library of Pure CSS Animations`;
-  }
-  else if (activeNavigation === 'About') {
-    title = `Our Story | CSSFrames Open-source Library of Pure CSS Animations`;
-  }
-  else if (activeNavigation === 'Home') {
-    const displayCategory = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+    const currentAnim = allAnimations.find(a => a.id.toLowerCase() === path);
+    console.log('PATH:', path);
+    console.log('FOUND ANIM:', currentAnim);
+    console.log(
+      'ALL IDS:',
+      allAnimations.map(a => a.id),
+    );
+    let title = baseName;
 
-    if (selectedCategory === 'All') {
-      title = `${allAnimations.length} CSS Animations: ${baseName}`;
+    if (currentAnim) {
+      title = `${currentAnim.title} made with CSS Keyframes | ${baseName}`;
+    } else if (path === 'community') {
+      const communityCount = allAnimations.filter(item => item.isCommunity).length;
+      title = `${communityCount} Community Creations | CSSFrames Open-source Library of Pure CSS Animations`;
+    } else if (path === 'about') {
+      title = `Our Story | CSSFrames Open-source Library of Pure CSS Animations`;
+    } else if (path === '') {
+      title = `${baseName} | Open-source Library of Pure CSS Animations`;
     } else {
-      const categoryCount = allAnimations.filter(
-        (item) => item.category?.toLowerCase() === selectedCategory.toLowerCase()
-      ).length;
+      // Category or /animations route
+      const displayCategory = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
 
-      title = `${categoryCount} ${displayCategory} Animations: ${baseName}`;
+      if (selectedCategory === 'All') {
+        title = `${allAnimations.length} CSS Animations: ${baseName}`;
+      } else {
+        const categoryCount = allAnimations.filter(
+          item => item.category?.toLowerCase() === selectedCategory.toLowerCase(),
+        ).length;
+        title = `${categoryCount} ${displayCategory} Animations: ${baseName}`;
+      }
     }
-  }
-  if (location.pathname === '/') {
-    title = `${baseName} | Open-source Library of Pure CSS Animations`;
-  }
 
-  document.title = title;
-}, [activeNavigation, selectedCategory, activeAnimation, allAnimations, location.pathname]);
+    document.title = title;
+  }, [location.pathname, selectedCategory, allAnimations]);
+
+  // for sidebar option store in localStorage
+  useEffect(() => {
+    const path = location.pathname.substring(1);
+    if (path === 'about') setActiveNavigation('About');
+    else if (path === 'community') setActiveNavigation('Community');
+    else if (path === '') setActiveNavigation('Home');
+    else {
+      setActiveNavigation('Home');
+      if (path === 'animations') {
+        setSelectedCategory('All');
+      } else {
+        const matchedCategory = categories.find(
+          cat => cat.name.toLowerCase() === path.toLowerCase(),
+        );
+        if (matchedCategory) {
+          setSelectedCategory(matchedCategory.name);
+        }
+      }
+    }
+
+    if (path && !['about', 'community'].includes(path)) {
+      const found = allAnimations.find(a => a.id === path);
+      if (found) setActiveAnimation(found);
+    } else {
+      setActiveAnimation(null);
+    }
+  }, [location.pathname, allAnimations]);
+
+  // saving the community card in localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('cssframes_animations');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const communityAnims = parsed.filter(a => a && a.isCommunity && a.id && a.title);
+          if (communityAnims.length > 0) {
+            setAllAnimations([...communityAnims, ...initialAnimations]);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Corrupted localStorage, clearing:', e);
+      localStorage.removeItem('cssframes_animations');
+    }
+  }, []);
+
+  //  save community only
+  useEffect(() => {
+    try {
+      const communityOnly = allAnimations.filter(a => a.isCommunity);
+      localStorage.setItem('cssframes_animations', JSON.stringify(communityOnly));
+    } catch (e) {
+      console.error('Failed to save:', e);
+    }
+  }, [allAnimations]);
+
+  // Save to localStorage whenever animations change
+  useEffect(() => {
+    try {
+      localStorage.setItem('cssframes_animations', JSON.stringify(allAnimations));
+    } catch (e) {
+      console.error('Failed to save to localStorage', e);
+    }
+  }, [allAnimations]);
+
+  // Load creation state from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedStep = localStorage.getItem('cssframes_creation_step');
+      const savedCategory = localStorage.getItem('cssframes_new_category');
+      const savedIsCreating = localStorage.getItem('cssframes_is_creating');
+
+      if (savedIsCreating === 'true') {
+        setIsCreating(true);
+        if (savedStep) setCreationStep(Number(savedStep));
+        if (savedCategory) setNewCategory(savedCategory);
+      }
+    } catch (e) {
+      console.error('Failed to load creation state', e);
+    }
+  }, []);
+
+  // Save creation state whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('cssframes_is_creating', String(isCreating));
+      localStorage.setItem('cssframes_creation_step', String(creationStep));
+      localStorage.setItem('cssframes_new_category', newCategory);
+    } catch (e) {
+      console.error('Failed to save creation state', e);
+    }
+  }, [isCreating, creationStep, newCategory]);
+
+  // clearStorage logic
+  const clearCreationStorage = () => {
+    localStorage.removeItem('cssframes_is_creating');
+    localStorage.removeItem('cssframes_creation_step');
+    localStorage.removeItem('cssframes_new_category');
+    localStorage.removeItem('cssframes_creator_draft');
+  };
 
   return (
     <>
@@ -268,7 +371,7 @@ export default function App() {
 
           <main className="flex-1 flex flex-col md:flex-row">
             <Routes>
-              {/* 1. HOME ROUTE: No Sidebar, full width */}
+              {/* HOME ROUTE */}
               <Route
                 path="/"
                 element={
@@ -278,19 +381,20 @@ export default function App() {
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
                       animations={allAnimations}
+                      onNavigate={handleNavChange}
                     />
                   </div>
                 }
               />
 
-              {/* 2. APP ROUTES: Wrapped with Sidebar logic */}
+              {/*All APP ROUTES */}
               <Route
                 path="*"
                 element={
                   <div className="flex flex-1 w-full">
-                    {/* Sidebar logic: Only show if not in creation mode */}
+                    {/* Sidebar Only show if not in creation mode */}
                     {!isCreating && (
-                      <aside className="hidden md:block sticky -top-13 self-start h-[calc(100vh-64px)] shrink-0 bg-[#050505] z-10">
+                      <aside className="hidden md:block sticky -top-5 self-start h-[calc(100vh-64px)] shrink-0 bg-[#050505] z-10">
                         <Sidebar
                           selectedCategory={selectedCategory}
                           activeNavigation={activeNavigation}
@@ -309,14 +413,21 @@ export default function App() {
                                 setNewCategory(cat);
                                 setCreationStep(2);
                               }}
-                              onClose={() => setIsCreating(false)}
+                              onClose={() => {
+                                setIsCreating(false);
+                                clearCreationStorage();
+                              }}
                             />
                           ) : (
                             <CreatorModal
                               category={newCategory}
-                              onClose={() => setIsCreating(false)}
+                              onClose={() => {
+                                setIsCreating(false);
+                                clearCreationStorage();
+                              }}
                               onSave={anim => {
                                 setIsNavigating(true);
+                                clearCreationStorage(); // for remove localStorage
                                 setTimeout(() => {
                                   setAllAnimations(prev => [anim, ...prev]);
                                   setIsCreating(false);
@@ -393,7 +504,6 @@ export default function App() {
               />
             </Routes>
           </main>
-
           <Footer />
         </div>
       </div>

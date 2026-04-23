@@ -10,10 +10,14 @@ export default function Navbar({
   categories = [],
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const navLinks = ['About' , "Docs" ,
-"Library" ,
-"Playground" ,
-"Blog"];
+  const navLinks =
+    [
+'About',
+// "Docs" ,
+// "Library" ,
+// "Playground" ,
+// "Blog"
+    ];
 
   const [showElements, setShowElements] = useState(false);
   const [showDropdown, setShowDropdown] = useState(true);
@@ -22,7 +26,7 @@ export default function Navbar({
 
   return (
     <>
-      <nav className="bg-[#050505] w-full font-grotesk px-4 lg:px-4 ">
+      <nav className="bg-[#050505] w-full font-outfit px-4 lg:px-4 ">
         <div className="max-w-full mx-auto flex items-center justify-between h-16">
           {/* LOGO */}
           <div className="flex items-center gap-8">

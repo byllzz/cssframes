@@ -1,5 +1,5 @@
-import { GiftIcon, Rocket } from "lucide-react";
-import { FaGift  , FaUsers} from "react-icons/fa6";
+import { ArrowLeft, GiftIcon, Rocket } from "lucide-react";
+import { FaArrowRightLong, FaGift  , FaUsers} from "react-icons/fa6";
 import { MdCommute, MdOutlineAnimation } from 'react-icons/md';
 import { animations  } from '../../data/animations';
 const KEYFRAMES = `
@@ -136,11 +136,17 @@ const ROW1_WIDTHS = [220, 280, 200, 260, 240, 300, 220, 280, 200, 260, 240, 300]
 const ROW2_WIDTHS = [260, 200, 300, 220, 280, 240, 260, 200, 300, 220, 280, 240];
 const ROW3_WIDTHS = [240, 300, 220, 280, 200, 260, 240, 300, 220, 280, 200, 260];
 
+const totalAnimations = animations.length;
+
+  const getCategoryCount = (categoryName) => {
+    if (categoryName === 'All') return totalAnimations;
+    return animations.filter((item) => item.category === categoryName).length;
+  };
 
 const CATEGORIES = [
   {
     demo: 'fade-in',
-    name: 'Entrances',
+    name: 'Entrance',
     count: '24 animations',
     glow: 'rgba(167,139,250,.10)',
     accent: '#a78bfa',
@@ -196,7 +202,7 @@ const CATEGORIES = [
   },
   {
     demo: 'fade-out',
-    name: 'Exits',
+    name: 'Exit',
     count: '24 animations',
     glow: 'rgba(244,114,182,.10)',
     accent: '#f472b6',
@@ -312,12 +318,12 @@ function DemoShape({ type, accent }) {
 }
 
 /*  MAIN COMPONENT*/
-export default function Home({ onEnter, searchQuery, setSearchQuery, animations = [] }) {
+export default function Home({ onEnter, searchQuery, setSearchQuery, animations = [] , onNavigate }) {
   const doubled = [...CHIPS, ...CHIPS];
 
     const totalAnimations = animations.length;
     const totalCommunityAnimations = animations.filter(item => item.isCommunity).length;
-    console.log(totalCommunityAnimations);
+
 
     const STATS = [
       {
@@ -341,12 +347,12 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
     <>
       <style>{KEYFRAMES}</style>
 
-      <div className="font-grotesk relative min-h-screen overflow-x-hidden text-[#f0eeff] bg-[#000000]">
+      <div className="font-grotesk relative min-h-screen overflow-x-hidden text-[#f0eeff] bg-[#050505]">
         {/* Hero*/}
         <section className="flex flex-col items-center relative z-[8] max-w-full px-6 md:px-12 pb-20 pt-15">
           <div className="font-outfit mb-4 inline-flex items-center gap-2 px-4 py-1.5 text-xs text-violet-400">
             <div className="anim-pulse-dot h-1.5 w-1.5 rounded-full bg-violet-400" />
-            Open-source · 180+ animations · Zero dependencies
+            Open-source · {totalAnimations}+ animations · Zero dependencies
           </div>
 
           <h1 className="text-[clamp(60px,7vw,172px)] font-bold font-heading leading-[.9] tracking-[-2px] text-center">
@@ -487,7 +493,7 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
         <section className="relative z-[5] px-6 md:px-12 py-20 md:py-40">
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <p className="font-mono-jb mb-2 text-[11px] uppercase tracking-[.2em] text-violet-400 font-heading">
+              <p className=" mb-2 text-[11px] uppercase tracking-[.2em] text-violet-400 font-heading">
                 categories
               </p>
               <h2 className="text-[24px] md:text-[28px] font-bold tracking-tight font-outfit">
@@ -496,17 +502,18 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
             </div>
             <button
               onClick={() => onEnter?.()}
-              className="font-mono-jb flex items-center gap-1.5 font-outfit text-[13px] text-[#6b6880] transition-colors duration-200 hover:text-violet-400"
+              className="font-outfit flex items-center gap-1.5 font-outfit text-[13px] text-[#6b6880] transition-colors duration-200 hover:text-violet-400"
             >
-              View all 180+ →
+              <span>View all {totalAnimations}</span> <FaArrowRightLong />
             </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {CATEGORIES.map(cat => (
               <div
+                onClick={()=> onNavigate("Home" , cat.name)}
                 key={cat.name}
-                className="cat-card-glow group relative cursor-pointer overflow-hidden rounded-[8px] border border-white/[.07] bg-[#0f0f14] px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/[.13]"
+                className="cat-card-glow group relative cursor-pointer overflow-hidden rounded-[8px] border border-white/[.07] bg-[#0f0f14] px-5 py-5 transition-all duration-200 hover:border-white/[.13]"
                 style={{ '--glow': cat.glow }}
               >
                 <div
@@ -515,21 +522,22 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
                     background: `linear-gradient(90deg,transparent,${cat.accent}66,transparent)`,
                   }}
                 />
-                <div className="mb-5 flex h-40 w-full items-center justify-center overflow-hidden rounded-[12px] bg-white/[.025]">
+                <div className="mb-5 flex h-40 w-full items-center justify-center overflow-hidden rounded-[8px] bg-white/[.025]">
                   <DemoShape type={cat.demo} accent={cat.accent} />
                 </div>
-                <div className="mb-1 text-[15px] font-semibold tracking-[-0.3px]">{cat.name}</div>
-                <div className="font-mono-jb flex items-center justify-between text-xs text-[#6b6880]">
+                <div className="mb-1 text-[19px] font-heading font-semibold tracking-[-0.3px]">
+                  {cat.name}
+                </div>
+                <div className="font-outfit flex items-center justify-between text-xs text-[#6b6880]">
                   <div className="flex items-center gap-1.5">
                     <div
                       className="h-1.5 w-1.5 rounded-full"
-                      style={{ background: cat.accent, opacity: 0.7 }}
+                      style={{ background: cat.accent, opacity: 1 }}
                     />
-                    {cat.count}
+                    {/* {cat.count} */}
+                    {getCategoryCount(cat.name)} animations
                   </div>
-                  <span className="text-[#3d3a52] group-hover:text-[#6b6880] transition-colors duration-200">
-                    View all →
-                  </span>
+
                 </div>
               </div>
             ))}
@@ -537,8 +545,8 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
         </section>
 
         {/* cta */}
-        <section className="relative z-[5] overflow-hidden px-6 md:px-12 py-20 md:py-28 text-center">
-          <h2 className="relative mb-3 text-[36px] md:text-[44px] font-bold tracking-[-2px]">
+        <section className="relative z-[5] font-outfit overflow-hidden px-6 md:px-12 py-20 md:py-28 text-center">
+          <h2 className="relative mb-3 text-[36px] md:text-[44px] font-bold tracking-[-2px] font-heading">
             Start animating <span className="gradient-text">today.</span>
           </h2>
           <p className="relative mb-10 text-[15px] text-[#6b6880]">
@@ -550,14 +558,18 @@ export default function Home({ onEnter, searchQuery, setSearchQuery, animations 
               className="inline-flex items-center gap-2 rounded-[8px] px-9 py-3.5 text-[15px] font-semibold text-white"
               style={{ background: 'linear-gradient(135deg,#a78bfa,#f472b6)' }}
             >
-              Explore Now
+              Explore Animations
             </button>
-            <button className="inline-flex items-center gap-2 rounded-xl border border-white/[.07] bg-white/[.03] px-8 py-3.5 text-[15px] font-medium text-[#6b6880] transition-all duration-200 hover:border-white/20 hover:text-[#f0eeff]">
+            <a
+              href="https://github.com/byllzz/cssframes.git"
+              target="_blank"
+              className="inline-flex items-center gap-2 rounded-[8px] border border-white/[.07] bg-white/[.03] px-8 py-3.5 text-[15px] font-medium text-[#6b6880] transition-all duration-200 hover:border-white/20 hover:text-[#f0eeff]"
+            >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
               </svg>
               View on GitHub
-            </button>
+            </a>
           </div>
         </section>
       </div>

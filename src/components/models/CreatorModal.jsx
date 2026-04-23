@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
@@ -17,6 +17,19 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 
+const DRAFT_KEY = 'cssframes_creator_draft';
+
+const getDefaultCss = (animationCategory) => `/* Note: Please always target the class .preview-element */
+.preview-element {
+  animation: ${animationCategory.toLowerCase()}-animation ;
+}
+
+@keyframes ${animationCategory.toLowerCase()}-animation {
+  0% { }
+  50% {  }
+  100% {  }
+}`;
+
 export default function CreatorModal({
   category: config,
   onClose,
@@ -26,33 +39,62 @@ export default function CreatorModal({
   const animationCategory = config?.category || 'General';
   const objectType = config?.type || 'box';
 
+  // Load draft from localStorage (or fall back to defaults)
+  const loadDraft = () => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Only restore draft if it matches the current category
+        if (parsed.animationCategory === animationCategory) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load draft', e);
+    }
+    return null;
+  };
+
+  const draft = loadDraft();
+
   const [activeTab, setActiveTab] = useState('css');
-  const [previewBg, setPreviewBg] = useState('#e8e8e8');
-
+  const [previewBg, setPreviewBg] = useState(draft?.previewBg ?? '#e8e8e8');
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  const [duration, setDuration] = useState('2s');
+  const [title, setTitle] = useState(draft?.title ?? '');
+  const [desc, setDesc] = useState(draft?.desc ?? '');
+  const [duration, setDuration] = useState(draft?.duration ?? '2s');
   const [errors, setErrors] = useState({});
+  const [cssCode, setCssCode] = useState(draft?.cssCode ?? getDefaultCss(animationCategory));
 
-  const [cssCode, setCssCode] = useState(`/* Note: Please always target the class .preview-element */
-.preview-element {
-  animation: name ;
-}
-
-@keyframes name {
-  0% { }
-  50% {  }
-  100% {  }
-}`);
-
-  const formatTimer = useRef(null);
+  // Save draft to localStorage whenever any field changes
+  useEffect(() => {
+    try {
+      const draft = {
+        animationCategory,
+        cssCode,
+        title,
+        desc,
+        duration,
+        previewBg,
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch (e) {
+      console.error('Failed to save draft', e);
+    }
+  }, [cssCode, title, desc, duration, previewBg, animationCategory]);
 
   useEffect(() => {
     Prism.highlightAll();
   }, [cssCode, activeTab]);
 
   const handleTriggerPopup = () => setShowDetailsPopup(true);
+
+  const clearDraft = () => {
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+    } catch (e) {}
+  };
 
   const handleFinalSubmit = () => {
     const newErrors = {};
@@ -76,9 +118,16 @@ export default function CreatorModal({
       isCommunity: true,
     };
 
+    clearDraft();
     onSave(newEntry);
     onClose();
   };
+
+  // Clear draft on explicit cancel/close
+  // const handleClose = () => {
+  //   clearDraft();
+  //   onClose();
+  // };
 
   const getStyleSheet = () => {
     if (!cssCode) return '';
@@ -125,7 +174,6 @@ export default function CreatorModal({
                 previewBg === '#e8e8e8' ? 'bg-zinc-300' : 'bg-[#050505]'
               } p-1 rounded-full w-[64px] h-8`}
             >
-              {/* sliding indicator */}
               <label
                 htmlFor="themeToggle"
                 className="absolute cursor-pointer top-1 left-1 h-[24px] w-[24px] rounded-full bg-white transition-all duration-300"
@@ -134,7 +182,6 @@ export default function CreatorModal({
                 }}
               />
 
-              {/* hidden input toggle (actual state driver) */}
               <input
                 id="themeToggle"
                 type="checkbox"
@@ -143,7 +190,6 @@ export default function CreatorModal({
                 onChange={e => setPreviewBg(e.target.checked ? '#161616' : '#e8e8e8')}
               />
 
-              {/* icons */}
               <div className="relative z-10 flex w-full justify-between px-1">
                 <Sun
                   size={14}
@@ -155,7 +201,7 @@ export default function CreatorModal({
                 />
               </div>
             </div>
-             {/* for whole bg changer input (type :color) */}
+
             <input
               type='color'
               value={previewBg}
@@ -247,15 +293,12 @@ export default function CreatorModal({
       {/* POPUP */}
       {showDetailsPopup && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setShowDetailsPopup(false)}
           />
 
-          {/* Modal Content */}
           <div className="relative bg-[#121212] border border-zinc-800 w-full max-w-md rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-300">
-            {/* Header */}
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <Tag className="text-indigo-500" size={20} />
@@ -269,9 +312,7 @@ export default function CreatorModal({
               </button>
             </div>
 
-            {/* Form Fields */}
             <div className="space-y-5">
-              {/* Name Input */}
               <div>
                 <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
                   Animation Name
@@ -290,7 +331,6 @@ export default function CreatorModal({
                 )}
               </div>
 
-              {/* Description Input */}
               <div>
                 <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
                   Description
@@ -308,7 +348,6 @@ export default function CreatorModal({
                 )}
               </div>
 
-              {/* Duration Input */}
               <div>
                 <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
                   Default Duration
@@ -327,7 +366,6 @@ export default function CreatorModal({
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 onClick={handleFinalSubmit}
                 className="w-full bg-white text-black font-black uppercase py-4 rounded-[5px] cursor-pointer mt-4 hover:bg-indigo-500 hover:text-white transition-all active:scale-[0.98]"
@@ -341,4 +379,3 @@ export default function CreatorModal({
     </div>
   );
 }
-

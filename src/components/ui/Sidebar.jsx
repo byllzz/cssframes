@@ -58,7 +58,7 @@ export default function Sidebar({
                   className={`w-full flex items-center cursor-pointer justify-between px-2 py-[9px] rounded-[8px] transition-all group ${
                     isActive
                       ? 'bg-[#161616] text-white'
-                      : 'text-white hover:bg-[#161616] hover:text-white'
+                      : 'text-white/80 hover:bg-[#161616] hover:text-white'
                   }`}
                 >
                   {/* Left */}

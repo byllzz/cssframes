@@ -1,87 +1,194 @@
 import React from "react";
 import {
-  Users,
+  ChevronRight,
 } from 'lucide-react';
 
-
-
-export default function Elements({ animations = [] , onNavigate  , categories=[] }) {
-  // const categories = [
-  //   { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
-  //   { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
-  //   {
-  //     name: 'Loaders',
-  //     icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
-  //   },
-  //   { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
-  //   { name: 'Text', icon: <Type size={22} strokeWidth={2.5} /> },
-  //   { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-  //   { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
-  //   { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
-  // ];
-
-  // get count per category
+export default function Elements({ animations = [], onNavigate, categories = [] }) {
   const totalAnimations = animations.length;
-  const getCategoryCount = categoryName => {
-    if (categoryName === 'All') return totalAnimations;
-    return animations.filter(item => item.category === categoryName).length;
-  };
-
-
+  const totalCommunityAnimations = animations.filter(item => item.isCommunity).length;
+  const getCategoryCount = name =>
+    name === 'All' ? totalAnimations : animations.filter(a => a.category === name).length;
 
   return (
-    <div className="w-[800px] h-[402px] bg-[#0f0f10] text-white p-5 rounded-[12px]">
-      <div className="max-w-full grid grid-cols-1 lg:grid-cols-3 gap-2">
+    <div
+      style={{
+        width: '700px',
+        maxWidth: "100%",
+        background: '#161616',
+        borderRadius: 8,
+        border: '1px solid rgba(255,255,255,0.06)',
+        padding: 10,
 
-        {/* LEFT GRID */}
-        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {categories.map((item) => {
+      }}
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px', gap: 5, height: 278 }}>
+        {/*LEFT: category grid  */}
+        <div
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, alignContent: 'start' }}
+        >
+          {categories.map(item => {
             const count = getCategoryCount(item.name);
+
+            const Icon = item.icon;
             return (
               <button
-                onClick={() => {
-                  onNavigate(item.name);
-                }}
+                className="group"
                 key={item.name}
-                className="bg-[#1a1a1c] hover:bg-[#222225] transition-all duration-200 rounded-[5px] px-2 py-1.5 flex items-center justify-between cursor-pointer border border-transparent hover:border-[#2a2a2d]"
+                onClick={() => onNavigate(item.name)}
+                style={{
+                  background: '#050505',
+                  borderRadius: 8,
+                  padding: '10px 14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  color: '#fff',
+                  position: 'relative',
+                }}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">
-                    <item.icon size={18} strokeWidth={2.5} />
-                  </span>
-                  <span className="text-sm font-medium">{item.name}</span>
-                </div>
+                {/* subtle top accent */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: '0 0 auto 0',
+                    height: 1,
+                    background: 'linear-gradient(90deg,transparent,#a78bfa66,transparent)',
+                  }}
+                  className="hidden group-hover:block"
+                />
 
-                <span className="text-sm text-gray-400">{count}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 8,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon
+                      size={15}
+                      strokeWidth={2}
+                      className={item.animate ? 'animate-spin' : ''}
+                    />
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: '#e2e0f0' }}>
+                    {item.name}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 500,
+                      color: '#fff',
+                      background: 'rgba(255,255,255,0.04)',
+                      padding: '2px 7px',
+                      borderRadius: 20,
+                      border: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    {count}
+                  </span>
+                </div>
               </button>
-            );})}
+            );
+          })}
         </div>
 
-        {/* RIGHT CARD */}
-        <div className="rounded-[5px] p-6 bg-gradient-to-br from-purple-600 to-indigo-600 flex flex-col justify-between">
+        {/* RIGHT: card */}
+        <div
+          style={{
+            borderRadius: 8,
+            background: '#050505',
+            border: '1px solid rgba(255,255,255,0.06)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '10px 16px',
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          {/* subtle top accent */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: '0 0 auto 0',
+              height: 1,
+              background: 'linear-gradient(90deg,transparent,#a78bfa66,transparent)',
+            }}
+          />
 
-          <div className="flex justify-center mb-4">
-            <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center text-3xl">
-              🚀
-            </div>
-          </div>
+          <div>
 
-          <div className="text-center space-y-3">
-            <h2 className="text-xl font-semibold">
-              We're on Social Media!
-            </h2>
-            <p className="text-sm text-white/80">
-              Follow us to find out about new challenges, updates and posts
+
+            <p style={{ fontSize: 15, fontWeight: 600, color: '#f0eeff', margin: '0 0 6px' }}>
+              180+ Animations
+            </p>
+            <p style={{ fontSize: 12, color: '#6b6880', lineHeight: 1.5, margin: 0 }}>
+              Production-ready CSS keyframes. Zero dependencies.
             </p>
           </div>
 
-          <div className="flex justify-center gap-4 mt-6">
-            <button className="w-12 h-12 rounded-lg bg-black/30 hover:bg-black/50 transition" />
-            <button className="w-12 h-12 rounded-lg bg-black/30 hover:bg-black/50 transition" />
-            <button className="w-12 h-12 rounded-lg bg-black/30 hover:bg-black/50 transition" />
+          {/* stats row */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 6,
+              margin: '16px 0',
+            }}
+          >
+            {[
+              { num: totalAnimations , label: 'Animations' },
+              { num: totalCommunityAnimations, label: 'Community' },
+              { num: '28k', label: 'GitHub Stars' },
+              { num: '0', label: 'Dependencies' },
+            ].map(s => (
+              <div
+                key={s.label}
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: 5,
+                  padding: '8px 10px',
+                }}
+              >
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#f0eeff' }}>{s.num}</div>
+                <div style={{ fontSize: 10, color: '#6b6880', marginTop: 1 }}>{s.label}</div>
+              </div>
+            ))}
           </div>
-        </div>
 
+          {/* CTA */}
+          <button
+            onClick={() => onNavigate?.('All')}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg,#a78bfa,#f472b6)',
+              border: 'none',
+              borderRadius: 7,
+              padding: '9px 0',
+              color: '#fff',
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+            }}
+          >
+            Browse all Animations
+            <ChevronRight size={14} strokeWidth={2.5} />
+          </button>
+        </div>
       </div>
     </div>
   );

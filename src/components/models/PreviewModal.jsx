@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import prettier from 'prettier/standalone';
 import parserPostcss from 'prettier/parser-postcss';
-import { FaCss3 } from 'react-icons/fa6';
+import { FaArrowLeftLong, FaCss3 } from 'react-icons/fa6';
 import {
   Copy,
   Check,
@@ -22,8 +22,6 @@ export default function PreviewModal({ animation, onClose, previewType }) {
 
   // SCROLL TO TOP LOGIC
   useEffect(() => {
-    // This ensures that when the modal opens or a new animation is selected,
-    // the view jumps to the top immediately.
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [animation]);
 
@@ -211,7 +209,7 @@ function Header({ onClose }) {
         onClick={onClose}
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-white hover:bg-zinc-900 transition-all cursor-pointer"
       >
-        <ArrowLeft size={20} />
+        <FaArrowLeftLong size={20} />
         <span className="font-medium">Go Back</span>
       </button>
     </div>

@@ -13,26 +13,26 @@ import {
 
 export const categories = [
   { name: 'All', icon: LayoutGrid },
-  { name: 'Entrances', icon: ArrowUpFromLine },
+  { name: 'Entrance', icon: ArrowUpFromLine },
   { name: 'Text', icon: Type },
   { name: 'Fading', icon: Eye },
   { name: 'Rotating', icon: RotateCcw },
   { name: 'Bouncing', icon: Bell },
-  { name: 'Loaders', icon: Loader2, animate: true },
+  { name: 'Loader', icon: Loader2, animate: true },
   { name: 'Sliding', icon: MoveRight },
   { name: 'Attention', icon: Sparkles },
-  { name: 'Exits', icon: ArrowDownFromLine },
+  { name: 'Exit', icon: ArrowDownFromLine },
 ];
 
 export const categoryList = [
   'all',
-  'entrances',
-  'exits',
+  'entrance',
+  'exit',
   'fading',
   'sliding',
   'rotating',
   'bouncing',
-  'loaders',
+  'loader',
   'attention',
   'text',
 ];
