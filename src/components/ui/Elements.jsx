@@ -1,35 +1,24 @@
 import React from "react";
 import {
   Users,
-  LayoutGrid,
-  MousePointer2,
-  Loader2,
-  LogIn,
-  Type,
-  CreditCard,
-  Shapes,
-  Zap,
-  Monitor,
-  Box,
-  Sparkles,
 } from 'lucide-react';
 
 
 
-export default function Elements({ animations = [] , onNavigate  }) {
-  const categories = [
-    { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
-    { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
-    {
-      name: 'Loaders',
-      icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
-    },
-    { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
-    { name: 'Text', icon: <Type size={22} strokeWidth={2.5} /> },
-    { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-    { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
-    { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
-  ];
+export default function Elements({ animations = [] , onNavigate  , categories=[] }) {
+  // const categories = [
+  //   { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
+  //   { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
+  //   {
+  //     name: 'Loaders',
+  //     icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" />,
+  //   },
+  //   { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
+  //   { name: 'Text', icon: <Type size={22} strokeWidth={2.5} /> },
+  //   { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
+  //   { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
+  //   { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
+  // ];
 
   // get count per category
   const totalAnimations = animations.length;
@@ -51,13 +40,15 @@ export default function Elements({ animations = [] , onNavigate  }) {
             return (
               <button
                 onClick={() => {
-                  onNavigate( item.name);
+                  onNavigate(item.name);
                 }}
                 key={item.name}
                 className="bg-[#1a1a1c] hover:bg-[#222225] transition-all duration-200 rounded-[5px] px-2 py-1.5 flex items-center justify-between cursor-pointer border border-transparent hover:border-[#2a2a2d]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">{item.icon}</span>
+                  <span className="text-lg">
+                    <item.icon size={18} strokeWidth={2.5} />
+                  </span>
                   <span className="text-sm font-medium">{item.name}</span>
                 </div>
 

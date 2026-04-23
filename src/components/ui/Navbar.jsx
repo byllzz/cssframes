@@ -22,7 +22,7 @@ export default function Navbar({
 
   return (
     <>
-      <nav className="bg-[#050505] w-full font-grotesk px-4 lg:px-4 border-b border-zinc-900/50">
+      <nav className="bg-[#050505] w-full font-grotesk px-4 lg:px-4 ">
         <div className="max-w-full mx-auto flex items-center justify-between h-16">
           {/* LOGO */}
           <div className="flex items-center gap-8">
@@ -85,10 +85,10 @@ export default function Navbar({
                   <div className="w-max">
                     <Elements
                       animations={animations}
+                      categories={categories}
                       onNavigate={cat => {
                         onNavigate('Home', cat);
                         setShowElements(false);
-
                       }}
                     />
                   </div>
@@ -161,9 +161,9 @@ export default function Navbar({
                       onNavigate('Home', item.name);
                       setTimeout(() => setIsOpen(false), 500);
                     }}
-                    className="py-2 px-4 text-left text-zinc-300 hover:text-white"
+                    className="py-4 px-4 text-left text-zinc-300 hover:text-white flex items-center gap-3"
                   >
-                    {item.name}
+                  <item.icon size={18} />  {item.name}
                   </button>
                 ))}
               </div>

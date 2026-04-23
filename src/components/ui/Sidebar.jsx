@@ -1,32 +1,12 @@
-import React  from 'react';
+import React from 'react';
 import {
   Users,
-  LayoutGrid,
-  MousePointer2,
-  Loader2,
-  LogIn,
-  Type,
-  CreditCard,
-  Shapes,
-  Zap,
-  Monitor,
-  Box,
-  Sparkles,
 } from 'lucide-react';
 
+import { categories } from '../../data/animationCategories';
+
+
 const navigations = [{ name: 'Community', icon: <Users size={20} /> }];
-
-
-const categories = [
-  { name: 'All', icon: <LayoutGrid size={18} strokeWidth={2.5} /> },
-  { name: 'Buttons', icon: <MousePointer2 size={18} strokeWidth={2.5} /> },
-  { name: 'Loaders', icon: <Loader2 size={18} strokeWidth={2.5} className="animate-spin" /> },
-  { name: 'Arrival', icon: <LogIn size={18} strokeWidth={2.5} /> },
-  { name: 'Transitions', icon: <Zap size={18} strokeWidth={2.5} /> },
-  { name: 'Text', icon: <Type size={18} strokeWidth={2.5} /> },
-  { name: 'Icons', icon: <Sparkles size={18} strokeWidth={2.5} /> },
-  { name: 'Scroll', icon: <Monitor size={18} strokeWidth={2.5} /> },
-];
 
 
 export default function Sidebar({
@@ -53,7 +33,7 @@ export default function Sidebar({
 
   return (
     <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
-      <nav className="flex-1 px-4  overflow-y-auto no-scrollbar pt-2">
+      <nav className="flex-1 px-2  overflow-y-auto no-scrollbar pt-2">
         {/* library section */}
         <section>
           {/* Heading with total */}
@@ -62,7 +42,7 @@ export default function Sidebar({
             <span className="text-xs font-semibold text-zinc-500">{totalAnimations}</span>
           </div>
 
-          <div className="space-y-[2px]">
+          <div className="space-y-[3px]  scrollbar-hide">
             {categories.map(item => {
               const isActive =
                 activeNavigation === 'Home' &&
@@ -75,7 +55,7 @@ export default function Sidebar({
                 <button
                   key={item.name}
                   onClick={() => onNavigate('Home', item.name)}
-                  className={`w-full flex items-center cursor-pointer justify-between px-3 py-[9px] rounded-[8px] transition-all group ${
+                  className={`w-full flex items-center cursor-pointer justify-between px-2 py-[9px] rounded-[8px] transition-all group ${
                     isActive
                       ? 'bg-[#161616] text-white'
                       : 'text-white hover:bg-[#161616] hover:text-white'
@@ -86,7 +66,12 @@ export default function Sidebar({
                     <span
                       className={isActive ? 'text-white' : 'text-zinc-500 group-hover:text-white'}
                     >
-                      {item.icon}
+                      {/* {item.icon} */}
+                      <item.icon
+                        size={18}
+                        strokeWidth={2.5}
+                        className={item.animate ? 'animate-spin' : ''}
+                      />
                     </span>
                     <span className="text-[14px] font-semibold ml-3 tracking-tight truncate">
                       {item.name}
@@ -132,9 +117,7 @@ export default function Sidebar({
 
                 <span
                   className={`text-[11px] font-semibold  ${
-                    isNavActive(item.name)
-                      ? 'text-black'
-                      : 'text-white'
+                    isNavActive(item.name) ? 'text-black' : 'text-white'
                   }`}
                 >
                   {totalCommunityAnimations}

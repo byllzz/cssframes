@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   X,
-  MousePointer2,
-  Loader2,
-  LogIn,
-  Zap,
-  CreditCard,
-  Type,
-  Sparkles,
-  Shapes,
-  Monitor,
-  Box,
   Square,
   Circle,
+  Type,
   Star,
 } from 'lucide-react';
+import  {categories} from '../../data/animationCategories'
 
 export default function CategorySelectModal({ onSelect, onClose }) {
   const [selectedId, setSelectedId] = useState(null);
   const [objectType, setObjectType] = useState(null);
   const [showGuide, setShowGuide] = useState(true);
-
-  const categories = [
-    { id: 'Buttons', name: 'Button Animation', icon: <MousePointer2 size={22} /> },
-    { id: 'Loaders', name: 'Loader Animation', icon: <Loader2 size={22} /> },
-    { id: 'Arrival', name: 'Entrance Animation', icon: <LogIn size={22} /> },
-    { id: 'Transitions', name: 'Transition Animation', icon: <Zap size={22} /> },
-    { id: 'Text', name: 'Text Animation', icon: <Type size={22} /> },
-    { id: 'Icons', name: 'Icon Animation', icon: <Sparkles size={22} /> },
-    { id: 'Scroll', name: 'Scroll Animation', icon: <Monitor size={22} /> },
-
-  ];
 
   const objectTypes = [
     { id: 'box', name: 'Box', icon: <Square size={14} /> },
@@ -100,12 +81,12 @@ export default function CategorySelectModal({ onSelect, onClose }) {
           {/* Categories */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 mb-8 sm:mb-10  ">
             {categories.map(cat => {
-              const isActive = selectedId === cat.id;
+              const isActive = selectedId === cat.name;
 
               return (
                 <button
-                  key={cat.id}
-                  onClick={() => setSelectedId(cat.id)}
+                  key={cat.name}
+                  onClick={() => setSelectedId(cat.name)}
                   className={`rounded-[6px] border p-4 sm:p-5 text-left transition-all ${
                     isActive
                       ? 'bg-indigo-600 border-indigo-600 scale-[0.98]'
@@ -113,7 +94,7 @@ export default function CategorySelectModal({ onSelect, onClose }) {
                   }`}
                 >
                   <div className={`mb-3 ${isActive ? 'text-white' : 'text-zinc-500'}`}>
-                    {cat.icon}
+                  <cat.icon size={18} />
                   </div>
 
                   <p

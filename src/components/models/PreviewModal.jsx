@@ -65,7 +65,9 @@ export default function PreviewModal({ animation, onClose, previewType }) {
           plugins: [parserPostcss],
         });
         setEditedCode(formatted);
-      } catch {}
+      } catch (e) {
+        console.log(e)
+      }
     }, 600);
   };
 
