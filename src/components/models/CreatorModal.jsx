@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
-import { FaCss3 } from 'react-icons/fa6';
+import { FaCss3, FaGithub, FaTwitter } from 'react-icons/fa6';
 
 import {
   X,
   Star,
   Moon,
   Sun,
-  Monitor,
   Rocket,
   Clock,
-  Tag,
   AlignLeft,
-  ArrowLeft,
+  Type,
+  Info,
+  User,
+  AlertCircle
 } from 'lucide-react';
 
 const DRAFT_KEY = 'cssframes_creator_draft';
@@ -39,16 +40,12 @@ export default function CreatorModal({
   const animationCategory = config?.category || 'General';
   const objectType = config?.type || 'box';
 
-  // Load draft from localStorage (or fall back to defaults)
   const loadDraft = () => {
     try {
       const saved = localStorage.getItem(DRAFT_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Only restore draft if it matches the current category
-        if (parsed.animationCategory === animationCategory) {
-          return parsed;
-        }
+        if (parsed.animationCategory === animationCategory) return parsed;
       }
     } catch (e) {
       console.error('Failed to load draft', e);
@@ -67,10 +64,13 @@ export default function CreatorModal({
   const [errors, setErrors] = useState({});
   const [cssCode, setCssCode] = useState(draft?.cssCode ?? getDefaultCss(animationCategory));
 
-  // Save draft to localStorage whenever any field changes
+  const [creatorName, setCreatorName] = useState('');
+  const [github, setGithub] = useState('');
+  const [twitter, setTwitter] = useState('');
+
   useEffect(() => {
     try {
-      const draft = {
+      const draftData = {
         animationCategory,
         cssCode,
         title,
@@ -78,7 +78,7 @@ export default function CreatorModal({
         duration,
         previewBg,
       };
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
     } catch (e) {
       console.error('Failed to save draft', e);
     }
@@ -96,50 +96,58 @@ export default function CreatorModal({
     } catch (e) {}
   };
 
-  const handleFinalSubmit = () => {
-    const newErrors = {};
+  const formatSocialUrl = (input, platform) => {
+    if (!input) return '';
+    const cleanInput = input.trim().replace('@', '');
+    if (cleanInput.startsWith('http')) return cleanInput;
+    return platform === 'github'
+      ? `https://github.com/${cleanInput}`
+      : `https://twitter.com/${cleanInput}`;
+  };
 
-    if (!title.trim()) newErrors.title = 'Give your animation a name';
-    if (!desc.trim()) newErrors.desc = 'Tell us what this does';
-    if (!duration.trim()) newErrors.duration = 'Set a duration';
+ const handleFinalSubmit = () => {
+    const newErrors = {};
+    if (!title.trim()) newErrors.title = 'Title required';
+    if (!desc.trim()) newErrors.desc = 'Description required';
+    if (!creatorName.trim()) newErrors.creatorName = 'Name required';
+
     if (Object.keys(newErrors).length) {
       setErrors(newErrors);
       return;
     }
 
+    // Generate a unique ID that doesn't change on re-render
+    const submissionId = `community-${Date.now()}`;
+
     const newEntry = {
-      id: `community-${Date.now()}`,
-      title,
-      desc,
+      id: submissionId,
+      title: title.trim(),
+      desc: desc.trim(),
       keyframes: cssCode,
+      // Ensure this string matches your Grid filter categories exactly
       category: animationCategory,
       type: objectType,
-      duration,
+      duration: duration || '2s',
+      previewBg: previewBg,
       isCommunity: true,
+      creator: {
+        name: creatorName.trim(),
+        github: formatSocialUrl(github, 'github'),
+        twitter: formatSocialUrl(twitter, 'twitter'),
+      }
     };
 
     clearDraft();
-    onSave(newEntry);
+    onSave(newEntry); // Make sure the parent component uses: setAnims(prev => [newEntry, ...prev])
     onClose();
   };
 
-  // Clear draft on explicit cancel/close
-  // const handleClose = () => {
-  //   clearDraft();
-  //   onClose();
-  // };
-
   const getStyleSheet = () => {
     if (!cssCode) return '';
-
     const match = cssCode.match(/@keyframes\s+([\w-]+)/);
     const keyframeName = match ? match[1] : 'my-pulse';
     const safeName = `exec-${Date.now()}`;
-
-    const processed = cssCode.replace(
-      new RegExp(keyframeName, 'g'),
-      safeName
-    );
+    const processed = cssCode.replace(new RegExp(keyframeName, 'g'), safeName);
 
     return `
       ${processed}
@@ -150,47 +158,37 @@ export default function CreatorModal({
   };
 
   return (
-    <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative md:bottom-10  bg-[#050505]">
+    <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative bottom-13 bg-[#050505]">
       <style>{activeTab === 'css' ? getStyleSheet() : ''}</style>
 
-      {/* GRID */}
-      <div className="flex h-full flex-col md:grid  md:grid-cols-2 flex-1 md:min-h-[500px]">
+      <div className="flex h-full flex-col md:grid md:grid-cols-2 flex-1 md:min-h-[500px] ">
         {/* PREVIEW */}
         <section
-          className="relative flex items-center rounded-tl-[12px] rounded-bl-[12px] justify-center overflow-hidden h-[400px] md:h-full"
+          className="relative flex items-center justify-center overflow-hidden h-[400px] md:h-full transition-colors duration-500 rounded-bl-[12px]"
           style={{ backgroundColor: previewBg }}
         >
-          <div className="absolute top-3 right-3 flex items-center  z-20">
-            <div className={`px-3 mr-1.5`}>
-              <span
-                className={`text-[18px] font-outfit font-normal ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} lowercase`}
-              >
-                {previewBg}
-              </span>
-            </div>
-
+          <div className="absolute top-3 right-3 flex items-center z-20">
+            <span
+              className={`text-[18px] mr-3 ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'}`}
+            >
+              {previewBg}
+            </span>
             <div
-              className={`relative flex items-center gap-1 ${
-                previewBg === '#e8e8e8' ? 'bg-zinc-300' : 'bg-[#050505]'
-              } p-1 rounded-full w-[64px] h-8`}
+              className={`relative flex items-center p-1 rounded-full w-[64px] h-8 ${previewBg === '#e8e8e8' ? 'bg-zinc-300' : 'bg-[#050505]'}`}
             >
               <label
-                htmlFor="themeToggle"
                 className="absolute cursor-pointer top-1 left-1 h-[24px] w-[24px] rounded-full bg-white transition-all duration-300"
                 style={{
                   transform: previewBg === '#e8e8e8' ? 'translateX(0px)' : 'translateX(32px)',
                 }}
               />
-
               <input
-                id="themeToggle"
                 type="checkbox"
-                className="absolute opacity-0 w-[64px] z-12 h-full cursor-pointer "
+                className="absolute opacity-0 w-full h-full cursor-pointer z-20"
                 checked={previewBg !== '#e8e8e8'}
                 onChange={e => setPreviewBg(e.target.checked ? '#161616' : '#e8e8e8')}
               />
-
-              <div className="relative z-10 flex w-full justify-between px-1">
+              <div className="flex w-full justify-between px-1 relative z-10 pointer-events-none">
                 <Sun
                   size={14}
                   className={previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-400'}
@@ -201,12 +199,11 @@ export default function CreatorModal({
                 />
               </div>
             </div>
-
             <input
-              type='color'
+              type="color"
               value={previewBg}
               onChange={e => setPreviewBg(e.target.value)}
-              className="h-[29px] w-7.5 ml-4 cursor-pointer rounded-[5px] border bg-transparent p-0 overflow-hidden [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-2 [&::-webkit-color-swatch]:rounded-[5px] [&::-moz-color-swatch]:border-2 [&::-moz-color-swatch]:rounded-[5px]"
+              className="h-[29px] w-7.5 ml-4 cursor-pointer rounded-[5px] border bg-transparent p-0 overflow-hidden"
             />
           </div>
 
@@ -216,21 +213,18 @@ export default function CreatorModal({
                 className={`preview-element w-16 h-16 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-[5px] shadow-2xl`}
               />
             )}
-
             {objectType === 'circle' && (
               <div
                 className={`preview-element w-16 h-16 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-full shadow-xl`}
               />
             )}
-
             {objectType === 'text' && (
               <div
-                className={`preview-element text-4xl font-black ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} tracking-tighter italic`}
+                className={`preview-element text-4xl font-black ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} italic tracking-tighter`}
               >
                 Aa
               </div>
             )}
-
             {objectType === 'icon' && (
               <Star
                 size={48}
@@ -241,30 +235,23 @@ export default function CreatorModal({
         </section>
 
         {/* EDITOR */}
-        <section className="h-[300px] md:h-full flex rounded-tr-[12px] rounded-br-[12px] flex-col bg-[#121212] border-l border-zinc-800/50">
-          <div className="flex items-center justify-between bg-[#161616] px-4 py-1.5 border-b border-zinc-800/50 rounded-tr-[12px] rounded-br-[12px]">
-            <div className="flex items-center justify-start gap-4 px-8 py-1 rounded-[5px] bg-[#000]">
-              <span className="text-blue-500 relative right-4">
-                <FaCss3 size={18} />
-              </span>
-              <h3 className="uppercase tracking-wide relative right-6"> CSS</h3>
-            </div>
+        <section className="h-[300px] md:h-full flex flex-col bg-[#121212] border-l border-zinc-800/50">
+          <div className="flex items-center bg-[#161616] px-4 py-2.5 border-b border-zinc-800/50  rounded-br-[12px]">
+            <FaCss3 className="text-blue-500 mr-2" />
+            <h3 className="text-[18px] font-bold uppercase tracking-tight">CSS</h3>
           </div>
-
-          <div className="flex-1 rounded-tr-[12px] rounded-br-[12px]">
+          <div className="flex-1">
             <Editor
               height="100%"
               language="css"
               theme="vs-dark"
               value={cssCode}
-              onChange={value => setCssCode(value || '')}
+              onChange={v => setCssCode(v || '')}
               options={{
                 fontSize: 16,
                 minimap: { enabled: false },
                 wordWrap: 'on',
-                padding: {
-                  top: 15,
-                },
+                padding: { top: 15 },
               }}
             />
           </div>
@@ -272,105 +259,129 @@ export default function CreatorModal({
       </div>
 
       {/* FOOTER */}
-      <div className="h-16 mt-3 bg-[#161616] rounded-[8px] flex items-center justify-between px-4">
+      <div className="h-17 bg-[#161616] flex items-center justify-between px-2 border-t rounded-[12px] border-zinc-800/50 mt-5">
         <button
           onClick={handleStartCreating}
-          className="flex items-center cursor-pointer gap-2 px-4 py-3  hover:bg-[#121212] rounded"
+          className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-[#050505] py-3.5 px-8 rounded-[8px] transition-colors text-sm"
         >
-          <AlignLeft size={18} />
-          Change Category
+          <AlignLeft size={18} /> Change Category
         </button>
-
         <button
           onClick={handleTriggerPopup}
-          className="flex items-center cursor-pointer gap-2 bg-indigo-600 px-5 py-2.5 rounded-[5px] font-bold"
+          className="bg-indigo-600 hover:bg-indigo-500 px-8 py-3.5 rounded-[8px] font-bold flex items-center gap-2 transition-all"
         >
-          <Rocket size={18} />
-          Submit to Community
+          <Rocket size={18} /> Submit to Community
         </button>
       </div>
 
-      {/* POPUP */}
+      {/* NEW SIDE-PANEL DETAILS POPUP */}
       {showDetailsPopup && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[500] flex items-center justify-end">
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
             onClick={() => setShowDetailsPopup(false)}
           />
 
-          <div className="relative bg-[#121212] border border-zinc-800 w-full max-w-md rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Tag className="text-indigo-500" size={20} />
-                Finalize Animation
-              </h3>
+          <div className="relative h-full w-full max-w-md bg-[#0F0F0F] border-l border-zinc-800 flex flex-col animate-in slide-in-from-right duration-300">
+            <div className="px-8 py-4 border-b border-zinc-800 bg-[#141414] flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold flex items-center gap-2">
+                  <Rocket className="text-indigo-500" size={20} /> Publish Work
+                </h3>
+                <p className="text-zinc-500 text-xs mt-1">Fill all required fields to share.</p>
+              </div>
               <button
                 onClick={() => setShowDetailsPopup(false)}
-                className="text-zinc-500 hover:text-white transition-colors cursor-pointer"
+                className="p-2 hover:bg-zinc-800 rounded-full text-zinc-400 transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
 
-            <div className="space-y-5">
-              <div>
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
-                  Animation Name
+            <div className="flex-1 overflow-y-auto p-8 space-y-8">
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-indigo-500 font-outfit uppercase tracking-wide relative bottom-2">
+                  Animation Info
                 </label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  placeholder="e.g. Hyper Glow Pulse"
-                  className={`w-full bg-[#090909] border ${errors.title ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 px-4 text-white text-sm outline-none focus:border-indigo-500 transition-all`}
-                />
-                {errors.title && (
-                  <p className="text-red-500 text-[10px] mt-1.5 font-bold uppercase tracking-tight">
-                    {errors.title}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
-                  Description
-                </label>
-                <textarea
-                  value={desc}
-                  placeholder="This animation do this.."
-                  onChange={e => setDesc(e.target.value)}
-                  className={`w-full bg-[#090909] border ${errors.desc ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 px-4 text-white text-sm h-24 resize-none outline-none focus:border-indigo-500 transition-all`}
-                />
-                {errors.desc && (
-                  <p className="text-red-500 text-[10px] mt-1.5 font-bold uppercase tracking-tight">
-                    {errors.desc}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-2 block">
-                  Default Duration
-                </label>
-                <div className="relative">
-                  <Clock
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
-                    size={16}
-                  />
-                  <input
-                    type="text"
-                    value={duration}
-                    onChange={e => setDuration(e.target.value)}
-                    className={`w-full bg-[#090909] border ${errors.duration ? 'border-red-500' : 'border-zinc-800'} rounded-lg py-3 pl-10 pr-4 text-white text-sm outline-none focus:border-indigo-500 transition-all`}
-                  />
+                <div className="space-y-3">
+                  <div className="relative">
+                    <Type size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <input
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      placeholder="Title *"
+                      className={`w-full bg-[#161616] border ${errors.title ? 'border-red-500' : 'border-zinc-800'} pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all`}
+                    />
+                  </div>
+                  <div className="relative">
+                    <Info size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <textarea
+                      value={desc}
+                      onChange={e => setDesc(e.target.value)}
+                      placeholder="Description *"
+                      rows={3}
+                      className={`w-full bg-[#161616] border ${errors.desc ? 'border-red-500' : 'border-zinc-800'} pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all resize-none`}
+                    />
+                  </div>
+                  <div className="relative">
+                    <Clock size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <input
+                      value={duration}
+                      onChange={e => setDuration(e.target.value)}
+                      placeholder="Duration (e.g. 2s)"
+                      className="w-full bg-[#161616] border border-zinc-800 pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all"
+                    />
+                  </div>
                 </div>
               </div>
 
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-indigo-500 font-outfit uppercase tracking-wide relative bottom-2">
+                  Creator Profile
+                </label>
+                <div className="space-y-3">
+                  <div className="relative">
+                    <User size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <input
+                      value={creatorName}
+                      onChange={e => setCreatorName(e.target.value)}
+                      placeholder="Your Name *"
+                      className={`w-full bg-[#161616] border ${errors.creatorName ? 'border-red-500' : 'border-zinc-800'} pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none`}
+                    />
+                  </div>
+                  <div className="relative">
+                    <FaGithub size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <input
+                      value={github}
+                      onChange={e => setGithub(e.target.value)}
+                      placeholder="Your's GitHub Username *"
+                      className={`w-full bg-[#161616] border ${errors.github ? 'border-red-500' : 'border-zinc-800'} pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none`}
+                    />
+                  </div>
+                  <div className="relative">
+                    <FaTwitter size={16} className="absolute left-3 top-3.5 text-zinc-600" />
+                    <input
+                      value={twitter}
+                      onChange={e => setTwitter(e.target.value)}
+                      placeholder="Your's Twitter Username *"
+                      className={`w-full bg-[#161616] border ${errors.twitter ? 'border-red-500' : 'border-zinc-800'} pl-10 p-3.5 rounded-xl text-sm focus:border-indigo-500 outline-none`}
+                    />
+                  </div>
+                </div>
+                {Object.keys(errors).length > 0 && (
+                  <div className="flex items-center gap-2 text-red-500 text-[11px] font-bold p-3 bg-red-500/5 rounded-lg border border-red-500/10">
+                    <AlertCircle size={14} /> Please fill all mandatory fields.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="px-8 py-5 border-t border-zinc-800 bg-[#141414]">
               <button
                 onClick={handleFinalSubmit}
-                className="w-full bg-white text-black font-black uppercase py-4 rounded-[5px] cursor-pointer mt-4 hover:bg-indigo-500 hover:text-white transition-all active:scale-[0.98]"
+                className="w-full bg-white text-black py-6 rounded-[8px] font-black uppercase text-xs tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-xl shadow-white/5"
               >
-                Publish to Community
+                Publish to Gallery
               </button>
             </div>
           </div>

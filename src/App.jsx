@@ -4,20 +4,21 @@ import { categories, categoryList } from './data/animationCategories';
 
 
 // UI Components & Data
-import Sidebar from './components/ui/Sidebar';
+import Sidebar from './components/layout/Sidebar';
 import GridContent from './components/ui/GridContent';
 import PreviewModal from './components/models/PreviewModal';
-import Navbar from './components/ui/Navbar';
-import TopLoader from './components/ui/TopLoader';
+import Navbar from './components/layout/Navbar';
+import TopLoader from './components/layout/TopLoader';
 import Footer from './components/layout/Footer';
 import CategorySelectModal from './components/models/CategorySelectModal';
 import CreatorModal from './components/models/CreatorModal';
 import SharePanel from './components/models/SharePanel';
-import DevelopmentPopup from './components/alerts/DevelopmentPopup';
-import About from './components/tabs/About';
+import About from './components/pages/About';
 import CommunityGrid from './components/ui/CommunityGrid';
-import { animations as initialAnimations } from './data/animations';
+import { animations as localAnimations } from './data/animations';
 import Home from './components/pages/Home';
+
+import { getAnimations, createAnimation } from './api/animations';
 
 //  COMPONENT WITH PROPS
 const DynamicRouteRenderer = ({
@@ -102,43 +103,142 @@ const DynamicRouteRenderer = ({
 };
 
 export default function App() {
-  const navigate = useNavigate();
+const navigate = useNavigate();
   const location = useLocation();
 
-  // All states
+  //  STATES
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeAnimation, setActiveAnimation] = useState(null);
   const [activeNavigation, setActiveNavigation] = useState('Home');
-  const [previewType, setPreviewType] = useState('text');
+  const [previewType, setPreviewType] = useState(() => {
+    return localStorage.getItem('cssframes_preview_type') || 'text';
+  });
   const [isNavigating, setIsNavigating] = useState(false);
-  const [allAnimations, setAllAnimations] = useState(initialAnimations);
+
+  const [allAnimations, setAllAnimations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const apiData = await getAnimations();
+
+      //  apiData is an array
+      const remoteAnims = Array.isArray(apiData) ? apiData : [];
+      const sortedRemote = [...remoteAnims].sort((a, b) => b.id - a.id);
+
+      //  first, then Local (Static)
+      const merged = [...sortedRemote, ...localAnimations];
+
+      setAllAnimations(merged);
+    } catch (err) {
+      console.error(err);
+      setAllAnimations(localAnimations);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+
+
   const [isCreating, setIsCreating] = useState(false);
   const [creationStep, setCreationStep] = useState(1);
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
 
-  // all useEffects
+  //NAVIGATION & SIDEBAR LOGIC
   useEffect(() => {
     const path = location.pathname.substring(1);
+
+    // Set Active Navigation Tab
     if (path === 'about') setActiveNavigation('About');
     else if (path === 'community') setActiveNavigation('Community');
-    else if (path === '') setActiveNavigation('Home');
+    else if (path === '' || path === 'animations') {
+        setActiveNavigation('Home');
+        if (path === 'animations') setSelectedCategory('All');
+    } else {
+        setActiveNavigation('Home');
+        const matchedCategory = categories.find(cat => cat.name.toLowerCase() === path.toLowerCase());
+        if (matchedCategory) setSelectedCategory(matchedCategory.name);
+    }
 
-    if (path && !['about', 'community'].includes(path)) {
-      const found = allAnimations.find(a => a.id === path);
+    // Set Active Animation Preview
+    if (path && !['about', 'community', 'animations'].includes(path)) {
+      const found = allAnimations.find(a => a.id.toLowerCase() === path.toLowerCase());
       if (found) setActiveAnimation(found);
     } else {
       setActiveAnimation(null);
     }
   }, [location.pathname, allAnimations]);
 
+
+// Document title logic
+useEffect(() => {
+  const baseName = "CssFrames";
+  const pathname = location.pathname.toLowerCase();
+
+  // remove leading slash for matching animation IDs
+  const path = pathname.replace("/", "");
+
+  const currentAnim = allAnimations.find(
+    (a) => a.id.toLowerCase() === path
+  );
+
+  let title = baseName;
+
+  if (currentAnim) {
+    title = `${currentAnim.title} made with CSS Keyframes | ${baseName}`;
+  }
+  else if (pathname === "/community") {
+    const communityCount = allAnimations.filter(
+      (item) => item.isCommunity
+    ).length;
+
+    title = `${communityCount} Community Creations | ${baseName}`;
+  }
+  else if (pathname === "/about") {
+    title = `Our Story | ${baseName}`;
+  }
+  else if (pathname === "/" || pathname === "/home") {
+    title = `${baseName} | Open-source animation library using Pure CSS Keyframes `;
+  }
+  else {
+    const displayCategory =
+      selectedCategory.charAt(0).toUpperCase() +
+      selectedCategory.slice(1);
+
+    const count =
+      selectedCategory === "All"
+        ? allAnimations.length
+        : allAnimations.filter(
+            (a) =>
+              a.category?.toLowerCase() ===
+              selectedCategory.toLowerCase()
+          ).length;
+
+    title =
+      selectedCategory === "All"
+        ? `${count} CSS Animations | ${baseName} open-source animations library using CSS Keyframes`
+        : `${count} ${displayCategory} Animations | ${baseName}`;
+  }
+
+  document.title = title;
+}, [location.pathname, selectedCategory, allAnimations]);
+
+  // ALl Handlers
   const handleNavChange = (targetPath, category = null) => {
     setIsNavigating(true);
     setTimeout(() => {
-      if (targetPath === 'Home') {
-        const urlSlug =
-          category?.toLowerCase() === 'all' ? 'animations' : category?.toLowerCase() || '';
+      if (targetPath === 'Animations') {
+        navigate('/animations');
+        setSelectedCategory('All');
+        setActiveNavigation('Home');
+      } else if (targetPath === 'Home') {
+        const urlSlug = category?.toLowerCase() === 'all' ? 'animations' : category?.toLowerCase() || '';
         navigate(`/${urlSlug}`);
         setSelectedCategory(category || 'All');
         setActiveNavigation('Home');
@@ -155,19 +255,28 @@ export default function App() {
 
   const handleOpenPreview = animation => {
     setIsNavigating(true);
+
     setTimeout(() => {
       setActiveAnimation(animation);
-      navigate(`/${animation.id.toLowerCase().trim()}`);
+
+      navigate(`/${animation.id.toLowerCase().trim()}`, {
+        state: { from: location.pathname }, // this store where user came from
+      });
     }, 400);
+
     setTimeout(() => setIsNavigating(false), 800);
   };
 
   const handleClosePreview = () => {
     setIsNavigating(true);
+
     setTimeout(() => {
+      const from = location.state?.from || '/animations'; // fallback
+
       setActiveAnimation(null);
-      navigate('/animations');
+      navigate(from); //  go back to actual previous route
     }, 400);
+
     setTimeout(() => setIsNavigating(false), 800);
   };
 
@@ -180,19 +289,7 @@ export default function App() {
     setTimeout(() => setIsNavigating(false), 800);
   };
 
-  // for home Page
   const handleEnter = () => {
-    if (!searchQuery.trim()) {
-      setIsNavigating(true);
-
-      setTimeout(() => {
-        navigate('/animations');
-        setIsNavigating(false);
-      }, 400);
-
-      return;
-    }
-
     setIsNavigating(true);
     setTimeout(() => {
       navigate('/animations');
@@ -200,146 +297,37 @@ export default function App() {
     }, 400);
   };
 
-  // for title previews
+  // Local Storage logic
+  //Single effect to save ONLY community items (this prevents duplication)
+  // useEffect(() => {
+  //   try {
+  //     const communityOnly = allAnimations.filter(a => a.isCommunity);
+  //     localStorage.setItem('cssframes_animations', JSON.stringify(communityOnly));
+  //   } catch (e) {
+  //     console.error('Failed to save animations:', e);
+  //   }
+  // }, [allAnimations]);
+
+  // Load Creation state
   useEffect(() => {
-    const baseName = 'CSSFrames';
-    const path = location.pathname.substring(1).toLowerCase();
-
-    const currentAnim = allAnimations.find(a => a.id.toLowerCase() === path);
-    console.log('PATH:', path);
-    console.log('FOUND ANIM:', currentAnim);
-    console.log(
-      'ALL IDS:',
-      allAnimations.map(a => a.id),
-    );
-    let title = baseName;
-
-    if (currentAnim) {
-      title = `${currentAnim.title} made with CSS Keyframes | ${baseName}`;
-    } else if (path === 'community') {
-      const communityCount = allAnimations.filter(item => item.isCommunity).length;
-      title = `${communityCount} Community Creations | CSSFrames Open-source Library of Pure CSS Animations`;
-    } else if (path === 'about') {
-      title = `Our Story | CSSFrames Open-source Library of Pure CSS Animations`;
-    } else if (path === '') {
-      title = `${baseName} | Open-source Library of Pure CSS Animations`;
-    } else {
-      // Category or /animations route
-      const displayCategory = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
-
-      if (selectedCategory === 'All') {
-        title = `${allAnimations.length} CSS Animations: ${baseName}`;
-      } else {
-        const categoryCount = allAnimations.filter(
-          item => item.category?.toLowerCase() === selectedCategory.toLowerCase(),
-        ).length;
-        title = `${categoryCount} ${displayCategory} Animations: ${baseName}`;
-      }
-    }
-
-    document.title = title;
-  }, [location.pathname, selectedCategory, allAnimations]);
-
-  // for sidebar option store in localStorage
-  useEffect(() => {
-    const path = location.pathname.substring(1);
-    if (path === 'about') setActiveNavigation('About');
-    else if (path === 'community') setActiveNavigation('Community');
-    else if (path === '') setActiveNavigation('Home');
-    else {
-      setActiveNavigation('Home');
-      if (path === 'animations') {
-        setSelectedCategory('All');
-      } else {
-        const matchedCategory = categories.find(
-          cat => cat.name.toLowerCase() === path.toLowerCase(),
-        );
-        if (matchedCategory) {
-          setSelectedCategory(matchedCategory.name);
-        }
-      }
-    }
-
-    if (path && !['about', 'community'].includes(path)) {
-      const found = allAnimations.find(a => a.id === path);
-      if (found) setActiveAnimation(found);
-    } else {
-      setActiveAnimation(null);
-    }
-  }, [location.pathname, allAnimations]);
-
-  // saving the community card in localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('cssframes_animations');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const communityAnims = parsed.filter(a => a && a.isCommunity && a.id && a.title);
-          if (communityAnims.length > 0) {
-            setAllAnimations([...communityAnims, ...initialAnimations]);
-          }
-        }
-      }
-    } catch (e) {
-      console.error('Corrupted localStorage, clearing:', e);
-      localStorage.removeItem('cssframes_animations');
+    const savedIsCreating = localStorage.getItem('cssframes_is_creating');
+    if (savedIsCreating === 'true') {
+      setIsCreating(true);
+      setCreationStep(Number(localStorage.getItem('cssframes_creation_step') || 1));
+      setNewCategory(localStorage.getItem('cssframes_new_category') || 'box');
     }
   }, []);
 
-  //  save community only
+  // Save Creation/Preview state
   useEffect(() => {
-    try {
-      const communityOnly = allAnimations.filter(a => a.isCommunity);
-      localStorage.setItem('cssframes_animations', JSON.stringify(communityOnly));
-    } catch (e) {
-      console.error('Failed to save:', e);
-    }
-  }, [allAnimations]);
+    localStorage.setItem('cssframes_is_creating', String(isCreating));
+    localStorage.setItem('cssframes_creation_step', String(creationStep));
+    localStorage.setItem('cssframes_new_category', newCategory);
+    localStorage.setItem('cssframes_preview_type', previewType);
+  }, [isCreating, creationStep, newCategory, previewType]);
 
-  // Save to localStorage whenever animations change
-  useEffect(() => {
-    try {
-      localStorage.setItem('cssframes_animations', JSON.stringify(allAnimations));
-    } catch (e) {
-      console.error('Failed to save to localStorage', e);
-    }
-  }, [allAnimations]);
-
-  // Load creation state from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedStep = localStorage.getItem('cssframes_creation_step');
-      const savedCategory = localStorage.getItem('cssframes_new_category');
-      const savedIsCreating = localStorage.getItem('cssframes_is_creating');
-
-      if (savedIsCreating === 'true') {
-        setIsCreating(true);
-        if (savedStep) setCreationStep(Number(savedStep));
-        if (savedCategory) setNewCategory(savedCategory);
-      }
-    } catch (e) {
-      console.error('Failed to load creation state', e);
-    }
-  }, []);
-
-  // Save creation state whenever it changes
-  useEffect(() => {
-    try {
-      localStorage.setItem('cssframes_is_creating', String(isCreating));
-      localStorage.setItem('cssframes_creation_step', String(creationStep));
-      localStorage.setItem('cssframes_new_category', newCategory);
-    } catch (e) {
-      console.error('Failed to save creation state', e);
-    }
-  }, [isCreating, creationStep, newCategory]);
-
-  // clearStorage logic
   const clearCreationStorage = () => {
-    localStorage.removeItem('cssframes_is_creating');
-    localStorage.removeItem('cssframes_creation_step');
-    localStorage.removeItem('cssframes_new_category');
-    localStorage.removeItem('cssframes_creator_draft');
+    ['cssframes_is_creating', 'cssframes_creation_step', 'cssframes_new_category', 'cssframes_creator_draft'].forEach(key => localStorage.removeItem(key));
   };
 
   return (
@@ -425,16 +413,27 @@ export default function App() {
                                 setIsCreating(false);
                                 clearCreationStorage();
                               }}
-                              onSave={anim => {
-                                setIsNavigating(true);
-                                clearCreationStorage(); // for remove localStorage
-                                setTimeout(() => {
-                                  setAllAnimations(prev => [anim, ...prev]);
-                                  setIsCreating(false);
-                                  navigate('/community');
-                                  setIsNavigating(false);
-                                }, 100);
-                              }}
+
+                              onSave={async anim => {
+  setIsNavigating(true);
+  clearCreationStorage();
+
+  try {
+    const saved = await createAnimation({
+      ...anim,
+      isCommunity: true,
+      createdAt: Date.now()
+    });
+    setAllAnimations(prev => [saved, ...prev]);
+
+    setIsCreating(false);
+    navigate('/community');
+  } catch (err) {
+    console.error('Failed to save animation:', err);
+  } finally {
+    setIsNavigating(false);
+  }
+}}
                               handleStartCreating={handleStartCreating}
                             />
                           )}
@@ -466,17 +465,14 @@ export default function App() {
                                   previewType={previewType}
                                   handleStartCreating={handleStartCreating}
                                   onShareClick={setSelectedShare}
-                                  onBack={() => handleNavChange('Home')}
+                                  onNavigate={handleNavChange}
                                 />
                               }
                             />
                             <Route
                               path="/about"
                               element={
-                                <About
-                                  onBack={() => handleNavChange('Home')}
-                                  animations={allAnimations}
-                                />
+                                <About onNavigate={handleNavChange} animations={allAnimations} />
                               }
                             />
                             <Route

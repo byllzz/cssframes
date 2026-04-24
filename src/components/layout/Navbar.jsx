@@ -31,15 +31,12 @@ export default function Navbar({
           {/* LOGO */}
           <div className="flex items-center gap-8">
             <div
-             onClick={() => {
-  onNavigate('Home' ,null);
-
-}}
+              onClick={() => {
+                onNavigate('Home', null);
+              }}
               className="flex items-center gap-0.5 group cursor-pointer select-none"
             >
-              <span className="text-purple-500 font-black text-2xl tracking-tighter transition-transform group-hover:-rotate-6">
-                CSS
-              </span>
+              <span className="text-indigo-500 font-black text-2xl tracking-tighter">CSS</span>
               <span className="text-white font-black text-2xl tracking-tighter uppercase">
                 frames
               </span>
@@ -167,7 +164,7 @@ export default function Navbar({
                     }}
                     className="py-4 px-4 text-left text-zinc-300 hover:text-white flex items-center gap-3"
                   >
-                  <item.icon size={18} />  {item.name}
+                    <item.icon size={18} /> {item.name}
                   </button>
                 ))}
               </div>

@@ -7,7 +7,6 @@ import {
   Copy,
   Check,
   BookmarkIcon,
-  ArrowLeft,
   Star,
   Moon,
   Sun,
@@ -17,12 +16,19 @@ import {
 export default function PreviewModal({ animation, onClose, previewType }) {
   const [copied, setCopied] = useState(false);
   const [editedCode, setEditedCode] = useState('');
-  const [previewBg, setPreviewBg] = useState('#e8e8e8');
+  const [previewBg, setPreviewBg] = useState(animation?.previewBg || '#e8e8e8');
   const formatTimer = useRef(null);
 
-  // SCROLL TO TOP LOGIC
+  // FIX: Priority logic for the object type
+  // This ensures that if a user has selected "Circle" in the toolbar,
+  // the modal opens with "Circle" regardless of the card's default.
+  const displayType = previewType || animation?.type || 'box';
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+    if (animation?.previewBg) {
+      setPreviewBg(animation.previewBg);
+    }
   }, [animation]);
 
   const uniqueId = animation?.id?.replace(/[^a-zA-Z0-9]/g, '') || 'default';
@@ -46,6 +52,8 @@ export default function PreviewModal({ animation, onClose, previewType }) {
 
   if (!animation) return null;
 
+  const isDarkBg = previewBg !== '#e8e8e8' && previewBg !== '#ffffff';
+
   const handleCopy = () => {
     navigator.clipboard.writeText(editedCode);
     setCopied(true);
@@ -64,7 +72,7 @@ export default function PreviewModal({ animation, onClose, previewType }) {
         });
         setEditedCode(formatted);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }, 600);
   };
@@ -82,11 +90,12 @@ export default function PreviewModal({ animation, onClose, previewType }) {
       ${processedCSS}
       .modal-preview-target {
         animation: ${modalAnimName} ${animation.duration || '2s'} ease-in-out infinite !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     `;
   };
-
-  const displayType = animation.isCommunity ? animation.type : previewType;
 
   return (
     <>
@@ -98,31 +107,31 @@ export default function PreviewModal({ animation, onClose, previewType }) {
           <span className='px-4 text-[15px] text-white/60'>Category: {animation.category} Animation</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 flex-1 w-full min-h-0 rounded-xl overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 flex-1 w-full min-h-0 rounded-xl overflow-hidden shadow-2xl">
           <section
-            className="relative flex items-center justify-center min-h-[510px] bg-zinc-100 transition-colors duration-300"
+            className="relative flex items-center justify-center min-h-[510px] transition-colors duration-500"
             style={{ backgroundColor: previewBg }}
           >
-            <div className="absolute top-3 right-4 flex items-center z-20 ">
-              <span className={`text-[16px] font-medium font-heading mr-3 ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'}`}>
+            <div className="absolute top-3 right-4 flex items-center z-20">
+              <span className={`text-[16px] font-medium font-heading mr-3 ${!isDarkBg ? 'text-black' : 'text-white'}`}>
                 {previewBg}
               </span>
-              <div className={`relative flex items-center gap-1 ${previewBg === '#e8e8e8' ? 'bg-zinc-300' : 'bg-zinc-800'} p-1 rounded-full w-14 h-7`}>
+              <div className={`relative flex items-center gap-1 ${!isDarkBg ? 'bg-zinc-300' : 'bg-white/10'} p-1 rounded-full w-14 h-7 backdrop-blur-sm`}>
                 <label
                   htmlFor="themeToggle"
                   className="absolute cursor-pointer top-0.5 left-0.5 h-6 w-6 rounded-full bg-white shadow-sm transition-all duration-300"
-                  style={{ transform: previewBg === '#e8e8e8' ? 'translateX(0px)' : 'translateX(28px)' }}
+                  style={{ transform: !isDarkBg ? 'translateX(0px)' : 'translateX(28px)' }}
                 />
                 <input
                   id="themeToggle"
                   type="checkbox"
                   className="absolute opacity-0 w-full h-full cursor-pointer z-10"
-                  checked={previewBg !== '#e8e8e8'}
+                  checked={isDarkBg}
                   onChange={e => setPreviewBg(e.target.checked ? '#161616' : '#e8e8e8')}
                 />
                 <div className="flex w-full justify-between px-1 pointer-events-none">
-                  <Sun size={12} className={previewBg === '#e8e8e8' ? 'text-black' : 'text-zinc-500'} />
-                  <Moon size={12} className={previewBg !== '#e8e8e8' ? 'text-black' : 'text-zinc-500'} />
+                  <Sun size={12} className={!isDarkBg ? 'text-black' : 'text-zinc-500'} />
+                  <Moon size={12} className={isDarkBg ? 'text-black' : 'text-zinc-500'} />
                 </div>
               </div>
               <input
@@ -135,10 +144,20 @@ export default function PreviewModal({ animation, onClose, previewType }) {
 
             <div className="modal-preview-target">
               <div className="scale-[2.0] lg:scale-[2.5]">
-                {displayType === 'text' && <h1 className={`text-4xl font-black ${previewBg === '#e8e8e8' ? 'text-black' : 'text-white'} tracking-tighter italic`}>Aa</h1>}
-                {displayType === 'box' && <div className={`w-12 h-12 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-xl shadow-2xl`} />}
-                {displayType === 'circle' && <div className={`w-12 h-12 ${previewBg === '#e8e8e8' ? 'bg-black' : 'bg-white'} rounded-full shadow-xl`} />}
-                {displayType === 'icon' && <Star size={40} className={`${previewBg === '#e8e8e8' ? 'text-black fill-black' : 'text-white fill-white'}`} />}
+                {displayType === 'text' && (
+                  <h1 className={`text-4xl font-black tracking-tighter italic ${isDarkBg ? 'text-white' : 'text-black'}`}>
+                    Aa
+                  </h1>
+                )}
+                {displayType === 'box' && (
+                  <div className={`w-12 h-12 rounded-xl shadow-2xl ${isDarkBg ? 'bg-white' : 'bg-black'}`} />
+                )}
+                {displayType === 'circle' && (
+                  <div className={`w-12 h-12 rounded-full shadow-xl ${isDarkBg ? 'bg-white' : 'bg-black'}`} />
+                )}
+                {displayType === 'icon' && (
+                  <Star size={40} className={`${isDarkBg ? 'text-white fill-white' : 'text-black fill-black'}`} />
+                )}
               </div>
             </div>
           </section>

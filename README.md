@@ -1,10 +1,8 @@
 # <a href="https://cssframes.vercel.app" target="_blank">CSSFrames - Animations using Pure CSS Keyframes</a>
 
 **CSSFrames** is an open-source motion system for building high-performance UI animations using pure CSS keyframes.
-
 It provides a curated library of **pre-engineered motion presets** designed to replace inconsistent, ad-hoc animation usage across modern web apps.
-
-Built for **performance, consistency, and developer speed** — with no JavaScript animation runtime, no animation libraries, and no layout thrashing.
+Built for **performance, consistency, and developer speed** - with no JavaScript animation runtime, no animation libraries, and no layout thrashing.
 
 <p align="left">
   <a href="./LICENSE">
@@ -24,8 +22,9 @@ Built for **performance, consistency, and developer speed** — with no JavaScri
 
 [![Visit CSSFrames](https://img.shields.io/badge/View-CSSFrames-9B72FF?style=flat)](https://cssframes.vercel.app)
 
-<!-- Optional preview image -->
-<img width="100%" alt="CSSFrames Preview" src="./src/assets/preview.png" />
+<!-- preview image -->
+<img width="100%" alt="CSSFrames Preview" src="./src/assets/homePreview.png" />
+<img width="100%" alt="CSSFrames Preview" src="./src/assets/appPreview.png" />
 
 ⭐ **Star the repo if you like it — it helps the project grow.**
 
@@ -42,7 +41,6 @@ Built for **performance, consistency, and developer speed** — with no JavaScri
 ✔️ Live Interactive Preview Grid<br>
 ✔️ Creator Suite for Building Custom Presets<br>
 ✔️ Instant Export to CSS @keyframes<br>
-✔️ Tailwind Animation Class Output<br>
 ✔️ Theater Mode for Focused Previewing<br>
 ✔️ Community Motion Ecosystem<br>
 ✔️ Performance-First Architecture<br>
@@ -67,20 +65,20 @@ Built for **performance, consistency, and developer speed** — with no JavaScri
 
 ## Core Philosophy
 
-### Motion is Functional
-Animations are not decoration. They communicate state, hierarchy, and feedback.
+- **Motion is Functional**
+  Animations are not decoration. They communicate state, hierarchy, and feedback.
 
-### Performance First
-Every animation is built to:
-- avoid layout shifts
-- avoid paint recalculations
-- stay GPU composited
+- **Performance First**
+  Every animation is built to:
+  - avoid layout shifts
+  - avoid paint recalculations
+  - stay GPU composited
 
-### Composable System
-Animations are modular building blocks, not one-off effects.
+- **Composable System**
+  Animations are modular building blocks, not one-off effects.
 
-### Design Consistency
-All motion follows a unified rhythm and timing system.
+- **Design Consistency**
+  All motion follows a unified rhythm and timing system.
 
 ---
 
@@ -176,7 +174,6 @@ CSSFrames includes curated motion presets across:
 - Vercel
 - Static-first architecture
 
----
 
 ## Installation & Setup
 
@@ -219,8 +216,3 @@ git checkout -b motion/style-redefined-UI
 
 This project is licensed under the MIT License - see the [LICENSE.md](./LICENSE) file for details.
 
-# Feedback
-
-Reach out at **bilalmlkdev@gmail.com**.
-
-If you like this project, please ⭐ star the repo. It helps the project keep moving instead of politely dying in a corner.

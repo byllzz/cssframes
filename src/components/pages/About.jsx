@@ -1,30 +1,25 @@
 import React from 'react';
 import { Sparkles, ArrowUpRight, ArrowLeft } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa6';
+import { FaArrowLeft, FaGithub } from 'react-icons/fa6';
 import { FaInfinity } from 'react-icons/fa6';
 
-export default function About({ onBack , animations }) {
+export default function About({ onNavigate }) {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-outfit select-none selection:bg-indigo-500 selection:text-white">
       {/* STICKY TOP NAVIGATION */}
       <nav className="sticky top-0  w-full bg-[#050505]/80 backdrop-blur-md border-b border-white/5 px-6 md:px-12 py-6">
         <button
-          onClick={onBack}
-          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-all cursor-pointer group"
+          onClick={() => onNavigate('Animations')}
+          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-wide text-zinc-500 hover:text-white transition-all cursor-pointer group"
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <FaArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span>Exit to Library</span>
         </button>
       </nav>
 
-      <div className="px-6 md:px-12 lg:px-24 py-24 max-w-7xl mx-auto">
+      <div className="px-6 md:px-5 lg:px-12 py-24 max-w-7xl mx-auto">
         {/*HERO SECTION */}
         <header className="mb-32 md:mb-56">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[4px] bg-zinc-900/50 border border-white/5 text-zinc-400 text-[9px] font-black tracking-[0.2em] uppercase mb-10">
-            <Sparkles size={12} className="text-indigo-500" />
-            <span>Core Protocol v1.0</span>
-          </div>
-
           <h1 className="text-[14vw] md:text-[120px] font-black leading-[0.8] tracking-[-0.05em] uppercase mb-12">
             Motion is <br />
             <span className="text-zinc-900 outline-text transition-all duration-700 hover:text-indigo-600 hover:tracking-normal cursor-default">
@@ -91,16 +86,11 @@ export default function About({ onBack , animations }) {
           </div>
         </div>
 
-        {/* STATS GRID */}
-        <div className="border-y border-zinc-900 py-20 grid grid-cols-2 lg:grid-cols-4 gap-12">
-          <Stat value={`${animations.length}+`} label="Presets" />
-          <Stat value="0.0kb" label="JS Overhead" />
-          <Stat value="2026" label="Inception" />
-        </div>
+
 
         {/* GIANT BRANDING SIGNATURE */}
         <div className="mt-40 overflow-hidden py-20">
-          <span className="text-[18vw] font-black text-zinc-900/20 tracking-[-0.08em] select-none block text-center leading-none">
+          <span className="text-[18vw] font-black text-zinc-800/90 tracking-[-0.08em] select-none block text-center leading-none">
             FRAMES
           </span>
         </div>

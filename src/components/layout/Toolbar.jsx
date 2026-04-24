@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutGrid, Columns } from 'lucide-react';
-import PreviewType from './PreviewType';
-import SearchNavigation from './SearchNavigation';
+import PreviewType from '../ui/PreviewType';
+import SearchNavigation from '../ui/SearchNavigation';
 
 const Toolbar = ({
   searchQuery,

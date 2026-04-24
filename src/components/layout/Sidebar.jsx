@@ -33,7 +33,7 @@ export default function Sidebar({
 
   return (
     <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
-      <nav className="flex-1 px-2  overflow-y-auto no-scrollbar pt-2">
+      <nav className="flex-1 px-4  overflow-y-auto no-scrollbar pt-2">
         {/* library section */}
         <section>
           {/* Heading with total */}

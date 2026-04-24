@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaArrowRight ,FaArrowLeft } from 'react-icons/fa6';
 
 const Pagination = ({ currentPage, totalPages, paginate }) => {
   if (totalPages <= 1) return null;
@@ -11,27 +12,24 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
 
   return (
     <div className="mt-20 px-4 font-outfit">
-      <div className="max-w-xl mx-auto flex flex-col items-center gap-6">
-
+      <div className="max-w-full mx-auto flex flex-col items-center gap-6">
         {/* Button Container */}
         <div
           className={`
-            flex items-center gap-3 transition-all duration-300
-            ${isFirst || isLast ? 'w-1/2 justify-center' : 'w-full justify-between'}
+            flex items-center gap-3 transition-all duration-300 w-full
+            ${isFirst || isLast ? ' justify-end' : ' justify-start '}
           `}
         >
-
           {/* Prev (only show if not first page) */}
           {!isFirst && (
             <button
               onClick={goPrev}
               className="
-                flex-1 py-3 rounded-full text-sm font-semibold
-                bg-zinc-900 text-white border border-white/10
-                hover:bg-zinc-800 transition
+                flex w-1/2 py-6 px-5 rounded-[8px] text-xl font-semibold
+                bg-zinc-900 justify-start text-white items-center gap-2
               "
             >
-              Previous
+              <FaArrowLeft /> Previous
             </button>
           )}
 
@@ -40,15 +38,13 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
             <button
               onClick={goNext}
               className="
-                flex-1 py-3 rounded-full text-sm font-semibold
-                bg-white text-black hover:scale-[1.02] active:scale-[0.98]
-                transition
+                flex justify-end px-5 py-6 w-1/2 rounded-[8px] text-xl font-semibold
+                bg-white text-black items-center gap-2
               "
             >
-              Next
+              Next <FaArrowRight />
             </button>
           )}
-
         </div>
 
         {/* Page indicator */}
@@ -56,7 +52,6 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
           Page <span className="text-white font-medium">{currentPage}</span> of{' '}
           <span className="text-zinc-400">{totalPages}</span>
         </p>
-
       </div>
     </div>
   );

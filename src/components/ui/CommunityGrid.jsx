@@ -8,20 +8,19 @@ export default function CommunityGrid({
   previewType,
   handleStartCreating,
   onShareClick,
-  onBack
+  onNavigate
 }) {
   const communityAnims = animations.filter(anim => anim.isCommunity);
 
   return (
     <div className="p-6 md:py-10 md:px-10 w-full min-h-screen bg-[#050505] relative overflow-hidden font-outfit">
-
       {/* Background Decorative Glows */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-40 bg-blue-600/5 blur-[120px] rounded-full -mr-64 -mt-64 pointer-events-none" />
       <div className="absolute top-0 left-0 w-[300px] h-[300px] opacity-40 bg-purple-600/5 blur-[100px] rounded-full -ml-32 -mt-32 pointer-events-none" />
 
       {/* Top Navigation */}
       <button
-        onClick={onBack}
+        onClick={() => onNavigate('Animations')}
         className="mb-12 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors cursor-pointer group"
       >
         <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
@@ -104,7 +103,10 @@ export default function CommunityGrid({
 
           <p className="relative text-zinc-100 text-center max-w-3xl px-6 text-3xl md:text-5xl font-black uppercase tracking-wide leading-[0.9] mb-12 transition-all">
             The community database is <span className="text-zinc-800">empty.</span> <br />
-            Contribute the first <span className="underline decoration-zinc-800 underline-offset-8 text-zinc-400">preset.</span>
+            Contribute the first{' '}
+            <span className="underline decoration-zinc-800 underline-offset-8 text-zinc-400">
+              preset.
+            </span>
           </p>
 
           <button
