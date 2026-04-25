@@ -134,8 +134,7 @@ const handleFinalSubmit = () => {
   };
 
   clearDraft();
-  // ✅ ONLY call onSave — never onClose() here
-  // App.jsx owns the lifecycle: it keeps CreatorModal mounted until the async POST finishes
+  // keeps CreatorModal mounted until the async POST finishes
   onSave(newEntry);
 };
   const getStyleSheet = () => {

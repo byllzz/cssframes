@@ -13,8 +13,8 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
   <a href="https://github.com/byllzz">
     <img src="https://img.shields.io/badge/Author-Bilal%20Malik-9B72FF.svg?style=flat" />
   </a>
-    <a href="https://github.com/byllzz/cssframes/releases">
-     <img src="https://img.shields.io/badge/Latest%20Release-19%20April%202026-9B72FF.svg" />
+  <a href="https://github.com/byllzz/cssframes/releases">
+    <img src="https://img.shields.io/badge/Latest%20Release-19%20April%202026-9B72FF.svg" />
   </a>
 </p>
 
@@ -22,7 +22,6 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
 
 [![Visit CSSFrames](https://img.shields.io/badge/View-CSSFrames-9B72FF?style=flat)](https://cssframes.vercel.app)
 
-<!-- preview image -->
 <img width="100%" alt="CSSFrames Preview" src="./src/assets/homePreview.png" />
 <img width="100%" alt="CSSFrames Preview" src="./src/assets/appPreview.png" />
 
@@ -30,7 +29,7 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
 
 ---
 
-# Features
+## Features
 
 <p align="left">
 ✔️ Pure CSS Keyframe Animations<br>
@@ -43,6 +42,7 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
 ✔️ Instant Export to CSS @keyframes<br>
 ✔️ Theater Mode for Focused Previewing<br>
 ✔️ Community Motion Ecosystem<br>
+✔️ Persistent Community Submissions via REST API<br>
 ✔️ Performance-First Architecture<br>
 ✔️ Open Source MIT License<br>
 ✔️ Designed for Production UI Work
@@ -69,10 +69,7 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
   Animations are not decoration. They communicate state, hierarchy, and feedback.
 
 - **Performance First**
-  Every animation is built to:
-  - avoid layout shifts
-  - avoid paint recalculations
-  - stay GPU composited
+  Every animation is built to avoid layout shifts, avoid paint recalculations, and stay GPU composited.
 
 - **Composable System**
   Animations are modular building blocks, not one-off effects.
@@ -84,34 +81,23 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
 
 ## System Architecture
 
-CSSFrames is structured into three layers:
+CSSFrames is structured into four layers:
 
 ### 1. Motion Presets Layer
-Predefined animation objects for:
-- buttons
-- loaders
-- entrances
-- cards
-- icons
-- shapes
+Predefined animation objects for buttons, loaders, entrances, cards, icons, and shapes.
 
 ### 2. Rendering Engine
-React-based preview system with:
-- live CSS injection
-- dynamic keyframe binding
-- preview type mapping
+React-based preview system with live CSS injection, dynamic keyframe binding, and preview type mapping.
 
 ### 3. Export Layer
-Generates production-ready output:
-- CSS keyframes
-- Tailwind classes
-- duration configs
+Generates production-ready output — CSS keyframes, Tailwind classes, and duration configs.
+
+### 4. Community API Layer
+A persistent REST API built with Express and hosted on Railway. Handles storing and retrieving community-submitted animations so submissions survive page reloads and are shared across all users.
 
 ---
 
 ## Animation Categories
-
-CSSFrames includes curated motion presets across:
 
 ### Buttons
 - micro-interaction feedback
@@ -166,14 +152,20 @@ CSSFrames includes curated motion presets across:
 - GPU-composited transforms
 - Dynamic style injection
 
+### Backend (Community API)
+- Express.js
+- JSON Server (data store)
+- Hosted on Railway
+
 ### Code Tools
 - Prettier
 - Prism.js
 
 ### Deployment
-- Vercel
-- Static-first architecture
+- Vercel (frontend)
+- Railway (backend API)
 
+---
 
 ## Installation & Setup
 
@@ -183,7 +175,8 @@ CSSFrames includes curated motion presets across:
 - Tailwind CSS knowledge
 - A basic understanding of CSS keyframes
 
-### Clone the Repository
+### Clone and run the frontend
+
 ```bash
 git clone https://github.com/byllzz/cssframes.git
 cd cssframes
@@ -191,28 +184,108 @@ npm install
 npm run dev
 ```
 
+### Run the backend API locally
+
+The community submissions API lives in the `server/` folder and runs as a separate process.
+
+```bash
+cd server
+npm install
+npm start
+```
+
+The API will be available at `http://localhost:3001/animations`.
+
+### Environment variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+For production, set `VITE_API_URL` to your deployed Railway API URL in your Vercel environment variables.
+
+---
+
+## Backend Architecture
+
+The backend is a lightweight Express server that persists community animations to a `db.json` file. It is deployed as a separate service on Railway so data survives across frontend redeployments.
+
+```
+server/
+├── db.json       ← persistent data store
+├── server.js     ← Express API with CORS
+└── package.json
+```
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/animations` | Fetch all community animations |
+| `POST` | `/animations` | Submit a new community animation |
+| `DELETE` | `/animations/:id` | Delete an animation by ID |
+
+### Deploying the backend to Railway
+
+1. Push your repo to GitHub (the `server/` folder must be included).
+2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub repo.
+3. Set the **Root Directory** to `server`.
+4. Set the **Start Command** to `node server.js`.
+5. Add environment variable: `PORT = 3001`.
+6. Generate a public domain under Settings → Networking.
+7. Copy the Railway URL and add it to Vercel as `VITE_API_URL`.
+
+---
+
+## Project Structure
+```
+cssframes/
+├── src/
+│   ├── api/
+│   │   └── animations.js       ← API calls (GET, POST)
+│   ├── components/
+│   │   ├── layout/             ← Navbar, Sidebar, Footer, TopLoader
+│   │   ├── models/             ← PreviewModal, CreatorModal, SharePanel
+│   │   ├── pages/              ← Home, About
+│   │   └── ui/                 ← GridContent, CommunityGrid
+│   ├── data/
+│   │   ├── animations.js       ← static local animation presets
+│   │   └── animationCategories.js
+│   ├── App.jsx                 ← routing, state, data fetching
+│   └── main.jsx
+├── server/
+│   ├── db.json                 ← community submissions store
+│   ├── server.js               ← Express API
+│   └── package.json
+└── package.json
+```
+
 ## Guidelines
 
-- Keep animations GPU-friendly
-- Avoid layout-triggering properties
-- Ensure Tailwind compatibility
-- Provide both CSS and metadata
-- Include preview examples when possible
+- Keep animations GPU-friendly.
+- Avoid layout-triggering properties.
+- Ensure Tailwind compatibility.
+- Provide both CSS and metadata.
+- Include preview examples when possible.
 
-<br>
+---
 
-
-# Contributing
+## Contributing
 
 We welcome contributions from developers and motion designers.
 
-## Workflow
-
 ```bash
-git checkout -b motion/style-redefined-UI
+git checkout -b motion/your-feature-name
 ```
 
-# License 📄
+1. Fork the repository.
+2. Create your feature branch.
+3. Commit your changes with a clear message.
+4. Push to your branch and open a pull request.
 
-This project is licensed under the MIT License - see the [LICENSE.md](./LICENSE) file for details.
+---
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.

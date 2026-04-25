@@ -25,7 +25,7 @@ import Home from './components/pages/Home';
 
 import { getAnimations, createAnimation } from './api/animations';
 
-// ─── Shared Loading Spinner ───────────────────────────────────────────────────
+// Loading Spinner
 const LoadingSpinner = () => (
   <div className="min-h-[80vh] flex flex-col items-center justify-center gap-7">
     <style>{`
@@ -108,7 +108,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// ─── 404 UI ───────────────────────────────────────────────────────────────────
+//  404 UI
 const NotFound = ({ onBack }) => (
   <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
     <div className="absolute size-64 bg-purple-500/5 blur-[120px] pointer-events-none" />
@@ -135,7 +135,7 @@ const NotFound = ({ onBack }) => (
   </div>
 );
 
-// ─── /:category Route ─────────────────────────────────────────────────────────
+//  /:category Route
 const CategoryRoute = ({
   allAnimations,
   loading,
@@ -181,7 +181,7 @@ const CategoryRoute = ({
   );
 };
 
-// ─── /:category/:id Route ─────────────────────────────────────────────────────
+// /:category/:id Route
 const AnimationRoute = ({
   allAnimations,
   loading,
@@ -206,7 +206,7 @@ const AnimationRoute = ({
   );
 };
 
-// ─── App ──────────────────────────────────────────────────────────────────────
+//  App
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -227,7 +227,7 @@ export default function App() {
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
 
-  // ─── Fetch Animations ───────────────────────────────────────────────────────
+  //  Fetch Animations
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -246,15 +246,15 @@ export default function App() {
     fetchData();
   }, []);
 
-  // ─── Sync URL → isCreating state on refresh ──────────────────────────────────
-  // ✅ If someone lands on /create directly, activate creator mode
+  //  Sync URL → isCreating state on refresh
+  //  If someone lands on /create directly, activate creator mode
   useEffect(() => {
     if (location.pathname === '/create' || location.pathname === '/create/details') {
       setIsCreating(true);
     }
   }, []); // only on mount
 
-  // ─── Sync sidebar + activeAnimation from URL ────────────────────────────────
+  //  Sync sidebar + activeAnimation from URL
   useEffect(() => {
     const parts = location.pathname.split('/').filter(Boolean);
     const [seg1, seg2] = parts;
@@ -301,7 +301,7 @@ export default function App() {
     }
   }, [location.pathname, allAnimations]);
 
-  // ─── Document Title ─────────────────────────────────────────────────────────
+  //  Document Title
   useEffect(() => {
     const baseName = 'CssFrames';
     const parts = location.pathname.split('/').filter(Boolean);
@@ -344,7 +344,7 @@ export default function App() {
     document.title = title;
   }, [location.pathname, selectedCategory, allAnimations]);
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
+  //  Helpers
   const withTransition = (fn, delay = 400) => {
     setIsNavigating(true);
     setTimeout(() => {
@@ -353,7 +353,7 @@ export default function App() {
     }, delay);
   };
 
-  // ─── Handlers ───────────────────────────────────────────────────────────────
+  //  Handlers
   const handleNavChange = (targetPath, category = null) => {
     withTransition(() => {
       if (targetPath === 'Animations') {
@@ -393,13 +393,13 @@ export default function App() {
     });
   };
 
-  // ✅ FIX: navigate to /create so URL reflects creator mode
+  //   navigate to /create so URL reflects creator mode
   const handleStartCreating = () => {
     setIsNavigating(true);
     setTimeout(() => {
       setIsCreating(true);
       setCreationStep(1);
-      navigate('/create');         // ✅ URL now shows /create
+      navigate('/create');         // URL shows /create
       setIsNavigating(false);
     }, 600);
   };
@@ -417,7 +417,7 @@ export default function App() {
     ].forEach(key => localStorage.removeItem(key));
   };
 
-  // ─── localStorage ───────────────────────────────────────────────────────────
+  //  localStorage
   useEffect(() => {
     const savedIsCreating = localStorage.getItem('cssframes_is_creating');
     if (savedIsCreating === 'true') {
@@ -447,7 +447,7 @@ export default function App() {
     handleClosePreview,
   };
 
-  // ─── Creator UI (rendered outside Routes so URL /create works cleanly) ───────
+  //  Creator UI (rendered outside Routes so URL /create works cleanly)
   const isOnCreateRoute =
     location.pathname === '/create' || location.pathname.startsWith('/create');
 
@@ -478,7 +478,7 @@ export default function App() {
 
           <main className="flex-1 flex flex-col md:flex-row">
             <Routes>
-              {/* ── HOME ── */}
+              {/* Home */}
               <Route
                 path="/"
                 element={
@@ -494,7 +494,7 @@ export default function App() {
                 }
               />
 
-              {/* ✅ DEDICATED /create ROUTE — no more isCreating toggle hiding inside * */}
+              {/*  /create ROUTE * */}
               <Route
                 path="/create"
                 element={
@@ -506,7 +506,7 @@ export default function App() {
                             onSelect={cat => {
                               setNewCategory(cat);
                               setCreationStep(2);
-                              navigate('/create/details'); // ✅ step 2 gets its own URL too
+                              navigate('/create/details'); //  gets its own URL too
                             }}
                             onClose={() => {
                               setIsCreating(false);
@@ -515,7 +515,7 @@ export default function App() {
                             }}
                           />
                         ) : (
-                          // Step 2 redirects to /create/details, handled below
+                          //  redirects to /create/details, handled below
                           <CategorySelectModal
                             onSelect={cat => {
                               setNewCategory(cat);
@@ -535,7 +535,7 @@ export default function App() {
                 }
               />
 
-              {/* ✅ /create/details — the actual CSS editor step */}
+              {/*/create/details - CSS editor step */}
               <Route
                 path="/create/details"
                 element={
@@ -550,20 +550,19 @@ export default function App() {
                             navigate('/animations');
                           }}
                           onSave={async anim => {
-                            // ✅ KEY FIX: set loader on, do NOT touch isCreating yet
                             // CreatorModal stays mounted until save is done
                             setIsNavigating(true);
 
                             try {
                               const saved = await createAnimation(anim);
-                              // ✅ Save succeeded — now safe to close creator and update state
+                              //Save succeeded - now safe to close creator and update state
                               setAllAnimations(prev => [saved, ...prev]);
                               clearCreationStorage();
                               setIsCreating(false);
                               navigate('/community');
                             } catch (err) {
                               console.error('Failed to save animation:', err);
-                              // ✅ Save failed — add locally so work isn't lost, still navigate
+                              //Save failed — add locally so work isn't lost, still navigate
                               setAllAnimations(prev => [{ ...anim, id: anim.id || `community-${Date.now()}` }, ...prev]);
                               clearCreationStorage();
                               setIsCreating(false);
@@ -584,7 +583,7 @@ export default function App() {
                 }
               />
 
-              {/* ── ALL OTHER APP ROUTES (with sidebar) ── */}
+              {/*  ALl other routes */}
               <Route
                 path="*"
                 element={
