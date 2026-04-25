@@ -23,6 +23,7 @@ import { getAnimations, createAnimation } from './api/animations';
 //  COMPONENT WITH PROPS
 const DynamicRouteRenderer = ({
   allAnimations,
+  loading,
   searchQuery,
   setSearchQuery,
   handleOpenPreview,
@@ -37,13 +38,30 @@ const DynamicRouteRenderer = ({
 
   if (!id) return <Navigate to="/" replace />;
 
-
   const lowerId = id.toLowerCase();
+
+  // Handle Loading State
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center">
+        <div className="relative flex items-center justify-center">
+          {/* Subtle outer glow */}
+          <div className="absolute size-12 bg-purple-500/20 blur-xl animate-pulse" />
+          {/* Spinner */}
+          <div className="size-8 border-2 border-zinc-800 border-t-purple-500 rounded-full animate-spin" />
+        </div>
+        <p className="mt-4 text-zinc-500 text-xs tracking-widest uppercase animate-pulse">
+          Loading Data
+        </p>
+      </div>
+    );
+  }
 
   // Category Logic
   if (categoryList.includes(lowerId)) {
     const formattedCategory =
       lowerId === 'animations' ? 'All' : id.charAt(0).toUpperCase() + id.slice(1);
+
     return (
       <GridContent
         animations={allAnimations}
@@ -59,7 +77,8 @@ const DynamicRouteRenderer = ({
   }
 
   // Animation Logic
-  const currentAnim = activeAnimation || allAnimations.find(a => a.id === id);
+  const currentAnim = activeAnimation || allAnimations.find(a => a.id.toLowerCase() === lowerId);
+
   if (currentAnim) {
     return (
       <div className="p-4 md:pl-2 md:pr-3 md:py-9">
@@ -72,25 +91,25 @@ const DynamicRouteRenderer = ({
     );
   }
 
+  //Final Fallback: 404 UI
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6">
-      {/* Subtle background element for depth */}
-      <div className="absolute size-64 bg-zinc-500/5 blur-[120px] pointer-events-none" />
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
+      <div className="absolute size-64 bg-purple-500/5 blur-[120px] pointer-events-none" />
 
       <div className="relative space-y-8 flex flex-col items-center">
-        <div className="space-y-2 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-medium">Error 404</p>
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-[0.2em] text-zinc-600 font-medium">Error 404</p>
           <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white">
             Animation not found
           </h2>
-          <p className="text-zinc-400 max-w-[280px] text-sm leading-relaxed mx-auto">
+          <p className="text-zinc-500 max-w-[280px] text-sm leading-relaxed mx-auto">
             The piece you're looking for might have been moved or doesn't exist yet.
           </p>
         </div>
 
         <button
-          onClick={() => navigate('/')}
-          className="group relative px-8 py-3 bg-white text-black rounded-full font-medium text-sm transition-all duration-300 hover:bg-zinc-200 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+          onClick={() => navigate('/animations')}
+          className="group relative px-8 py-3 bg-white text-black rounded-full font-medium text-sm transition-all duration-300 hover:bg-zinc-200 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
         >
           <span className="flex items-center gap-2">
             Back to Library
