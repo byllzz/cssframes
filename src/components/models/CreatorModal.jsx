@@ -105,43 +105,39 @@ export default function CreatorModal({
       : `https://twitter.com/${cleanInput}`;
   };
 
- const handleFinalSubmit = () => {
-    const newErrors = {};
-    if (!title.trim()) newErrors.title = 'Title required';
-    if (!desc.trim()) newErrors.desc = 'Description required';
-    if (!creatorName.trim()) newErrors.creatorName = 'Name required';
+const handleFinalSubmit = () => {
+  const newErrors = {};
+  if (!title.trim()) newErrors.title = 'Title required';
+  if (!desc.trim()) newErrors.desc = 'Description required';
+  if (!creatorName.trim()) newErrors.creatorName = 'Name required';
 
-    if (Object.keys(newErrors).length) {
-      setErrors(newErrors);
-      return;
-    }
+  if (Object.keys(newErrors).length) {
+    setErrors(newErrors);
+    return;
+  }
 
-    // Generate a unique ID that doesn't change on re-render
-    const submissionId = `community-${Date.now()}`;
-
-    const newEntry = {
-      id: submissionId,
-      title: title.trim(),
-      desc: desc.trim(),
-      keyframes: cssCode,
-      // Ensure this string matches your Grid filter categories exactly
-      category: animationCategory,
-      type: objectType,
-      duration: duration || '2s',
-      previewBg: previewBg,
-      isCommunity: true,
-      creator: {
-        name: creatorName.trim(),
-        github: formatSocialUrl(github, 'github'),
-        twitter: formatSocialUrl(twitter, 'twitter'),
-      }
-    };
-
-    clearDraft();
-    onSave(newEntry); // Make sure the parent component uses: setAnims(prev => [newEntry, ...prev])
-    onClose();
+  const newEntry = {
+    id: `community-${Date.now()}`,
+    title: title.trim(),
+    desc: desc.trim(),
+    keyframes: cssCode,
+    category: animationCategory,
+    type: objectType,
+    duration: duration || '2s',
+    previewBg,
+    isCommunity: true,
+    creator: {
+      name: creatorName.trim(),
+      github: formatSocialUrl(github, 'github'),
+      twitter: formatSocialUrl(twitter, 'twitter'),
+    },
   };
 
+  clearDraft();
+  // ✅ ONLY call onSave — never onClose() here
+  // App.jsx owns the lifecycle: it keeps CreatorModal mounted until the async POST finishes
+  onSave(newEntry);
+};
   const getStyleSheet = () => {
     if (!cssCode) return '';
     const match = cssCode.match(/@keyframes\s+([\w-]+)/);
