@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 import { categories, categoryList } from './data/animationCategories';
-
+import { ArrowRight } from 'lucide-react';
 
 // UI Components & Data
 import Sidebar from './components/layout/Sidebar';
