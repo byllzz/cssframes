@@ -47,7 +47,7 @@ export default function AnimationCard({ animation, onCardClick, previewType, onS
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-full max-w-[380px] bg-white border border-zinc-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:border-zinc-300"
+      className="w-full max-w-full bg-white border border-zinc-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:border-zinc-300"
     >
       <div
         onClick={() => onCardClick(animation)}

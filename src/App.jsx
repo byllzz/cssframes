@@ -594,6 +594,7 @@ export default function App() {
                         activeNavigation={activeNavigation}
                         onNavigate={handleNavChange}
                         animations={allAnimations}
+              handleStartCreating={handleStartCreating}
                       />
                     </aside>
 

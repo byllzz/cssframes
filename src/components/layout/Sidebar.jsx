@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Users,
+   Plus
 } from 'lucide-react';
 
 import { categories } from '../../data/animationCategories';
@@ -13,6 +14,7 @@ export default function Sidebar({
   selectedCategory,
   activeNavigation,
   onNavigate,
+  handleStartCreating ,
   animations = [],
 }) {
 
@@ -34,6 +36,17 @@ export default function Sidebar({
   return (
     <div className="h-full w-[230px] pt-6 bg-[#050505] flex flex-col font-outfit shrink-0 ">
       <nav className="flex-1 px-4  overflow-y-auto no-scrollbar pt-2">
+        {/* isCreate animation Card */}
+          <div className=' w-full mb-10'>
+           <button
+          onClick={() => {
+            handleStartCreating();
+          }}
+          className="flex items-center justify-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white py-3 rounded-[5px] w-[90%] "
+        >
+          <Plus size={20} /> Create 
+        </button>
+       </div>
         {/* library section */}
         <section>
           {/* Heading with total */}
@@ -126,6 +139,8 @@ export default function Sidebar({
             ))}
           </div>
         </section>
+
+
       </nav>
     </div>
   );

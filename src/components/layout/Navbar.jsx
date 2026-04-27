@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Menu, X, ChevronDown, Rocket, Plus } from 'lucide-react';
 import Elements from './Elements';
+import { RiGithubLine } from 'react-icons/ri';
 
 export default function Navbar({
   activeNavigation,
@@ -115,12 +116,13 @@ export default function Navbar({
           {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
-              <button
-                onClick={handleStartCreating}
-                className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-2.5 rounded-[5px] text-[14px]"
+              <a href="https://github.com/byllzz/cssframes.git"
+                target='_blank'
+                // className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-2.5 rounded-[5px] text-[14px]"
+                className='max-w-full overflow-hidden'
               >
-                <Plus size={18} /> Create
-              </button>
+                <RiGithubLine size={28} />
+              </a>
 
               {/* <button className="flex items-center gap-2 bg-[#161616] text-white px-5 py-2.5 rounded-[5px] text-[15px]">
                 <Rocket size={18} />
@@ -190,7 +192,7 @@ export default function Navbar({
 
           <div className="h-px bg-zinc-900 my-2" />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3"> {/* on later when adding logic setup make cols-2*/}
             <button
               onClick={() => {
                 handleStartCreating();
