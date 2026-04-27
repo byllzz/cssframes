@@ -239,6 +239,7 @@ server/
 ---
 
 ## Project Structure
+
 ```
 cssframes/
 ├── src/
