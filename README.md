@@ -25,7 +25,7 @@ Built for **performance, consistency, and developer speed** - with no JavaScript
 <img width="100%" alt="CSSFrames Preview" src="./src/assets/homePreview.png" />
 <img width="100%" alt="CSSFrames Preview" src="./src/assets/appPreview.png" />
 
-⭐ **Star the repo if you like it — it helps the project grow.**
+ **Star** the repo if you like it — it helps the project grow.**
 
 ---
 
