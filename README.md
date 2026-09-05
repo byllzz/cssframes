@@ -1,32 +1,26 @@
-<p align="center">
+<div align="center">
+
   <a href="https://cssframes.vercel.app/">
-    <img src="./src/assets/homePreview.png" alt="CSSFrames Preview">
+    <img src="https://raw.githubusercontent.com/bilalmlkdev/cssframes/main/src/assets/favicon/favicon.svg" alt="cssframes Logo" width="100%" height="120">
   </a>
-</p>
 
-<h1 align="center">CSSFrames</h1>
+# Cssframes
 
-<p align="center">
-  A modern, open-source motion system for building high-performance UI animations using pure CSS keyframes. Create smooth, production-ready animations without JavaScript runtime overhead.
-</p>
+Open-source motion system for building high-performance UI animations using pure CSS <br> keyframes. Create smooth, production-ready animations without JavaScript runtime overhead.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Status-Active-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Website-Online-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/React-Vite-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Tailwind-v4-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Express-API-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Deploy-Vercel%2FRailway-9B26FF?style=flat"/>
-</p>
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-black?style=for-the-badge)](https://cssframes.vercel.app)
+[![GitHub Stars](https://img.shields.io/github/stars/bilalmlkdev/cssframes?style=for-the-badge&logo=github&color=yellow)](https://github.com/bilalmlkdev/cssframes.git)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
 
-<p align="center">
-  <a href="https://cssframes.vercel.app/">Live Demo</a> •
-  <a href="https://github.com/byllzz/cssframes/issues/new">Report Bug</a> •
-  <a href="https://github.com/byllzz/cssframes/issues/new">Request Feature</a>
-</p>
+</div>
 
----
+<!-- <p align="center">
+  <i>Created by <a href="https://bilalmlkdev.vercel.app" target="_blank">Bilal Malik</a></i><br>
+  <i>Follow on Github <a href="https://github.com/bilalmlkdev" target="_blank">bilalmlkdev</a></i>
+</p> -->
+
+[![cssframes Dashboard](https://raw.githubusercontent.com/bilalmlkdev/cssframes/main/src/assets/homePreview.png)](https://cssframes.vercel.app/)
+
 
 # About
 
@@ -38,7 +32,6 @@ Built with performance as the foundation, every animation avoids layout thrashin
 
 Alongside its animation library, CSSFrames includes a visual preview system, export tools, a Creator Suite for custom animations, and a community platform where developers can publish and discover new motion presets.
 
----
 
 # Features
 
@@ -53,7 +46,6 @@ Alongside its animation library, CSSFrames includes a visual preview system, exp
 - **Community library** powered by a REST API for sharing animations.
 - **Completely open source** under the MIT License.
 
----
 
 # How It Works
 
@@ -67,7 +59,7 @@ Using CSSFrames takes only a few steps:
 
 Every preset is designed to be lightweight, reusable, and easy to integrate into modern frontend applications.
 
----
+
 
 # Design Principles
 
@@ -99,65 +91,6 @@ The library is organized into purpose-driven categories for common UI interactio
 - **Icons** - Bounce, rotate, stroke drawing, alerts, and floating motion.
 - **Shapes** - Morphing blobs, geometric transitions, pulse systems, and rotations.
 
----
-
-# Tech Stack
-
-CSSFrames is powered by a modern frontend and backend stack.
-
-### Frontend
-
-- React
-- Vite
-- Tailwind CSS v4
-- JavaScript (ES6+)
-- Lucide React
-- Monaco Editor
-- Prism.js
-
-### Backend
-
-- Express.js
-- JSON Server
-
-### Deployment
-
-- Vercel (Frontend)
-- Railway (Community API)
-
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,js,express,vercel" />
-</p>
-
----
-# Getting Started
-
-Run CSSFrames locally in just a few steps.
-
-## Prerequisites
-
-Make sure you have the following installed:
-
-- Node.js (Latest LTS recommended)
-- npm or Yarn
-- A modern web browser
-
-## Installation
-
-```bash
-git clone https://github.com/byllzz/cssframes.git
-cd cssframes
-npm install
-npm run dev
-```
-
-The development server will start at:
-
-```text
-http://localhost:5173
-```
-
----
 
 # Community API
 
@@ -187,7 +120,6 @@ VITE_API_URL=http://localhost:3001
 
 For production deployments, replace the value with your Railway backend URL inside your Vercel environment variables.
 
----
 
 # Backend Overview
 
@@ -210,7 +142,6 @@ server/
 └── package.json
 ```
 
----
 
 # API Endpoints
 
@@ -238,7 +169,6 @@ DELETE /animations/:id
 
 Removes an animation by its ID.
 
----
 
 # Deploying the Backend
 
@@ -303,64 +233,11 @@ CSSFrames is built around modern animation best practices.
 - Provide a preview for every new animation preset.
 - Ensure exported animations work with both plain CSS and Tailwind CSS.
 
----
-
-
-# Contributing
-
-Contributions are always welcome, whether you're fixing bugs, improving documentation, or creating new motion presets.
-
-## Development Workflow
-
-```bash
-# Fork the repository
-
-git checkout -b motion/your-feature-name
-
-# Make your changes
-
-git commit -m "feat: add new motion preset"
-
-git push origin motion/your-feature-name
-```
-
-Open a Pull Request with a clear description of your changes and include previews whenever possible.
-
-### Contribution Guidelines
-
-- Follow the existing code style.
-- Keep animations GPU-friendly.
-- Test animations before submitting.
-- Include animation metadata and preview examples.
-- Write clear, descriptive commit messages.
-
----
-
-# Author
-
-<img src="https://github.com/byllzz.png" width="90" alt="Bilal Malik"/>
-
-## Bilal Malik
-
-[![GitHub](https://img.shields.io/badge/GitHub-byllzz-9B26FF?style=flat&logo=github&logoColor=white)](https://github.com/byllzz)
-[![X](https://img.shields.io/badge/X-@bilalmlkdev-9B26FF?style=flat&logo=x&logoColor=white)](https://x.com/bilalmlkdev)
-[![Portfolio](https://img.shields.io/badge/Portfolio-bilalmlkdev.vercel.app-9B26FF?style=flat&logo=vercel&logoColor=white)](https://bilalmlkdev.vercel.app)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Bilal%20Malik-9B26FF?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/bilalmlkdev/)
-[![Email](https://img.shields.io/badge/Email-bilalmlkdev@gmail.com-9B26FF?style=flat&logo=gmail&logoColor=white)](mailto:bilalmlkdev@gmail.com)
-
-If you enjoyed this project, consider giving it a ⭐ on GitHub. It helps others discover the project and motivates future improvements.
-
-<p align="right">
-  <a href="#texturae">⬆ Back to Top</a>
-</p>
 
 # License (MIT)
 
 
-
 This project is licensed under the **MIT License**.
-
-
 
 ```text
 
@@ -383,10 +260,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-# Support the Project
-
-If CSSFrames helped you, consider giving the repository a ⭐ on GitHub.
-Your support helps the project reach more developers and motivates future improvements.
 
 
-© 2026 CSSFRAMES. Licensed under the MIT License.

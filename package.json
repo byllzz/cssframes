@@ -3,6 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "author": "Bilal Malik (bilalmlkdev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bilalmlkdev/cssframes.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

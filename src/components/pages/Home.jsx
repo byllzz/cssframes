@@ -6,7 +6,7 @@ import { animations as animationsData } from "../../data/animations";
 import BrowseByTags from "../sections/BrowseByTags";
 import FaqSection from "../sections/FaqSection";
 
-//  Keyframes & global styles
+// Keyframes & global styles
 const KEYFRAMES = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -161,20 +161,20 @@ const KEYFRAMES = `
   .syn-cm   { color: #3d3a52; }
 `;
 
-//  Hero ticker data
+// Hero ticker data
 const CHIPS = [
-  { label: "bounce",   color: "#a78bfa" },
-  { label: "fade-in",  color: "#f472b6" },
+  { label: "bounce", color: "#a78bfa" },
+  { label: "fade-in", color: "#f472b6" },
   { label: "slide-up", color: "#34d399" },
-  { label: "rotate",   color: "#fb923c" },
-  { label: "shake",    color: "#67e8f9" },
-  { label: "pulse",    color: "#a78bfa" },
-  { label: "flip-x",   color: "#f472b6" },
-  { label: "zoom-in",  color: "#34d399" },
-  { label: "rubber",   color: "#fb923c" },
-  { label: "wobble",   color: "#67e8f9" },
-  { label: "jello",    color: "#c084fc" },
-  { label: "swing",    color: "#f9a8d4" },
+  { label: "rotate", color: "#fb923c" },
+  { label: "shake", color: "#67e8f9" },
+  { label: "pulse", color: "#a78bfa" },
+  { label: "flip-x", color: "#f472b6" },
+  { label: "zoom-in", color: "#34d399" },
+  { label: "rubber", color: "#fb923c" },
+  { label: "wobble", color: "#67e8f9" },
+  { label: "jello", color: "#c084fc" },
+  { label: "swing", color: "#f9a8d4" },
 ];
 
 const ROW_WIDTHS = [
@@ -184,42 +184,79 @@ const ROW_WIDTHS = [
 ];
 const ROW_HEIGHTS = [180, 200, 190];
 
-//  How it works steps
+// How it works steps
 const STEPS = [
   {
-    num: "01", accent: "#a78bfa", isPreview: true, code: null,
+    num: "01",
+    accent: "#a78bfa",
+    isPreview: true,
+    code: null,
     title: "Browse & pick",
     desc: "Explore the library by category. Each card shows a live preview of the animation running in real time.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-4.35-4.35" />
       </svg>
     ),
   },
   {
-    num: "02", accent: "#f472b6", isPreview: false, code: "@keyframes bounce { … }",
+    num: "02",
+    accent: "#f472b6",
+    isPreview: false,
+    code: "@keyframes bounce { … }",
     title: "Copy the keyframe",
     desc: "One click copies the full @keyframes block and the animation class. Paste it directly into your stylesheet.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <rect x="9" y="9" width="13" height="13" rx="2" />
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
       </svg>
     ),
   },
   {
-    num: "03", accent: "#34d399", isPreview: false, code: 'class="kf-bounce"',
+    num: "03",
+    accent: "#34d399",
+    isPreview: false,
+    code: 'class="kf-bounce"',
     title: "Apply & ship",
     desc: "Add the class to any element. Works with plain CSS, Tailwind, styled-components, or any framework.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
       </svg>
     ),
   },
 ];
 
-//  Component
+// Component
 export default function Home({
   onEnter,
   searchQuery,
@@ -253,7 +290,9 @@ export default function Home({
   useEffect(() => {
     const el = inputRef.current;
     if (!el) return;
-    const onKey = (e) => { if (e.key === "Enter") onEnter?.(); };
+    const onKey = (e) => {
+      if (e.key === "Enter") onEnter?.();
+    };
     el.addEventListener("keydown", onKey);
     return () => el.removeEventListener("keydown", onKey);
   }, [onEnter]);
@@ -263,8 +302,7 @@ export default function Home({
       <style>{KEYFRAMES}</style>
 
       <div className="font-grotesk relative min-h-screen overflow-x-hidden text-[#f0eeff] bg-[#050505]">
-
-        {/*  HERO */}
+        {/* HERO */}
         <section className="flex flex-col items-center relative z-[8] max-w-full px-6 md:px-12 pb-20 pt-15">
           <div className="font-outfit mb-4 inline-flex items-center gap-2 px-4 py-1.5 text-xs text-violet-400">
             <div className="anim-pulse-dot h-1.5 w-1.5 rounded-full bg-violet-400" />
@@ -278,14 +316,23 @@ export default function Home({
           </h1>
 
           <p className="mt-5 max-w-[90%] md:max-w-lg text-[13px] md:text-[17px] font-normal leading-[1.25] text-center text-white/80">
-            A production-ready CSS keyframe animation library. Drop in buttery-smooth transitions,
-            entrances, and micro-interactions with a single class name.
+            A production-ready CSS keyframe animation library. Drop in
+            buttery-smooth transitions, entrances, and micro-interactions with a
+            single class name.
           </p>
 
           <div className="search-box mt-5 flex w-full max-w-[550px] h-14 md:h-16 items-center overflow-hidden rounded-[12px] border border-white/10 transition-all duration-200 bg-white">
             <div className="flex items-center px-4 text-[#6b6880]">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
               </svg>
             </div>
             <input
@@ -306,7 +353,7 @@ export default function Home({
           </div>
         </section>
 
-        {/*  HERO TICKER */}
+        {/* HERO TICKER */}
         <div className="relative z-[5] bottom-28 overflow-hidden bg-black">
           {[0, 1, 2].map((row) => (
             <div
@@ -318,10 +365,19 @@ export default function Home({
                 <div
                   key={`r${row}-${i}`}
                   className="flex cursor-pointer flex-col justify-between rounded-[8px] border border-white/[.07] bg-[#111111] whitespace-nowrap transition-colors duration-200 hover:border-violet-400/30"
-                  style={{ width: ROW_WIDTHS[row][i % 12], height: ROW_HEIGHTS[row], padding: "18px 20px" }}
+                  style={{
+                    width: ROW_WIDTHS[row][i % 12],
+                    height: ROW_HEIGHTS[row],
+                    padding: "18px 20px",
+                  }}
                 >
-                  <div className="h-4 w-4 rounded-full" style={{ background: chip.color }} />
-                  <span className="font-mono-jb text-sm text-[#6b6880]">{chip.label}</span>
+                  <div
+                    className="h-4 w-4 rounded-full"
+                    style={{ background: chip.color }}
+                  />
+                  <span className="font-mono-jb text-sm text-[#6b6880]">
+                    {chip.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -330,7 +386,10 @@ export default function Home({
           {/* Fade + CTA overlay */}
           <div
             className="absolute bottom-0 left-0 right-0 h-48 flex items-end justify-center"
-            style={{ background: "linear-gradient(to top, #000 0%, #000 30%, transparent 100%)" }}
+            style={{
+              background:
+                "linear-gradient(to top, #000 0%, #000 30%, transparent 100%)",
+            }}
           >
             <button
               onClick={() => onEnter?.()}
@@ -343,10 +402,13 @@ export default function Home({
           </div>
         </div>
 
-        {/*  STATS  */}
+        {/* STATS */}
         <div className="anim-fade-up-4 relative z-[5] py-10 gap-5 px-6 md:px-12 md:pt-30 md:pb-20 flex flex-col md:flex-row items-center flex-nowrap justify-center">
           {STATS.map((s, i) => (
-            <div key={s.label} className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+            <div
+              key={s.label}
+              className="flex flex-col md:flex-row items-center gap-6 md:gap-10"
+            >
               <div className="flex flex-col gap-0.5 items-center">
                 <span>{s.icon}</span>
                 <span className="text-[48px] md:text-[55px] font-extrabold font-heading tracking-tight text-[#f0eeff]">
@@ -356,18 +418,19 @@ export default function Home({
                   {s.label}
                 </span>
               </div>
-              {i < STATS.length - 1 && <div className="h-8 w-px bg-white/[.07]" />}
+              {i < STATS.length - 1 && (
+                <div className="h-8 w-px bg-white/[.07]" />
+              )}
             </div>
           ))}
         </div>
 
-        {/*  BROWSE BY TAGS  */}
+        {/* BROWSE BY TAGS */}
         <BrowseByTags onNavigate={onNavigate} />
 
-        {/*  GITHUB + FIGMA */}
+        {/* GITHUB + FIGMA */}
         <section className="relative z-[5] md:px-12 py-10 md:py-16">
           <div className="max-w-full grid grid-cols-1 md:grid-cols-2 gap-5">
-
             {/* GitHub card */}
             <div className="discord-card p-8 flex flex-col justify-between min-h-[350px]">
               <div className="flex items-center gap-2 mb-6">
@@ -377,14 +440,14 @@ export default function Home({
                 <h3 className="font-heading text-[22px] md:text-[26px] font-bold text-white mb-2 leading-tight">
                   Star on Github
                   <br />
-                  CssFrames <span className="text-indigo-500">Galaxy</span>
+                  CSSFrames <span className="text-indigo-500">Galaxy</span>
                 </h3>
                 <p className="font-outfit text-[13px] text-white/40 mb-6">
                   An open space for CSS animation designers and developers.
                 </p>
               </div>
               <a
-                href="https://github.com/byllzz/cssframes.git"
+                href="https://github.com/bilalmlkdev/cssframes"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2.5 self-start rounded-[10px] px-5 py-2.5 text-[14px] font-semibold text-white transition-all duration-150 hover:opacity-85 active:scale-95"
@@ -395,7 +458,11 @@ export default function Home({
               </a>
               <div
                 className="absolute bottom-0 right-0 w-32 h-32 rounded-full pointer-events-none"
-                style={{ background: "radial-gradient(circle, rgba(88,101,242,0.12), transparent 70%)", transform: "translate(30%, 30%)" }}
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(88,101,242,0.12), transparent 70%)",
+                  transform: "translate(30%, 30%)",
+                }}
               />
             </div>
 
@@ -403,13 +470,30 @@ export default function Home({
             <div className="figma-card p-8 flex flex-col justify-between min-h-[220px]">
               <div className="flex items-center gap-3 mb-6">
                 <svg width="28" height="28" viewBox="0 0 38 57" fill="none">
-                  <path d="M19 28.5C19 25.48 21.46 23 24.5 23C27.54 23 30 25.48 30 28.5C30 31.52 27.54 34 24.5 34C21.46 34 19 31.52 19 28.5Z" fill="#1ABCFE" />
-                  <path d="M8 39.5C8 36.48 10.46 34 13.5 34H19V39.5C19 42.52 16.54 45 13.5 45C10.46 45 8 42.52 8 39.5Z" fill="#0ACF83" />
-                  <path d="M19 12V23H24.5C27.54 23 30 20.52 30 17.5C30 14.48 27.54 12 24.5 12H19Z" fill="#FF7262" />
-                  <path d="M8 17.5C8 20.52 10.46 23 13.5 23H19V12H13.5C10.46 12 8 14.48 8 17.5Z" fill="#F24E1E" />
-                  <path d="M8 28.5C8 31.52 10.46 34 13.5 34H19V23H13.5C10.46 23 8 25.48 8 28.5Z" fill="#A259FF" />
+                  <path
+                    d="M19 28.5C19 25.48 21.46 23 24.5 23C27.54 23 30 25.48 30 28.5C30 31.52 27.54 34 24.5 34C21.46 34 19 31.52 19 28.5Z"
+                    fill="#1ABCFE"
+                  />
+                  <path
+                    d="M8 39.5C8 36.48 10.46 34 13.5 34H19V39.5C19 42.52 16.54 45 13.5 45C10.46 45 8 42.52 8 39.5Z"
+                    fill="#0ACF83"
+                  />
+                  <path
+                    d="M19 12V23H24.5C27.54 23 30 20.52 30 17.5C30 14.48 27.54 12 24.5 12H19Z"
+                    fill="#FF7262"
+                  />
+                  <path
+                    d="M8 17.5C8 20.52 10.46 23 13.5 23H19V12H13.5C10.46 12 8 14.48 8 17.5Z"
+                    fill="#F24E1E"
+                  />
+                  <path
+                    d="M8 28.5C8 31.52 10.46 34 13.5 34H19V23H13.5C10.46 23 8 25.48 8 28.5Z"
+                    fill="#A259FF"
+                  />
                 </svg>
-                <span className="font-heading text-[15px] font-bold text-white">Use in Figma</span>
+                <span className="font-heading text-[15px] font-bold text-white">
+                  Use in Figma
+                </span>
               </div>
               <div className="flex-1">
                 <h3 className="font-heading text-[22px] md:text-[26px] font-bold text-white mb-2 leading-tight">
@@ -418,7 +502,8 @@ export default function Home({
                   straight to Figma.
                 </h3>
                 <p className="font-outfit text-[13px] text-white/40 mb-6">
-                  Grab any keyframe and paste it directly into your Figma prototypes and motion specs.
+                  Grab any keyframe and paste it directly into your Figma
+                  prototypes and motion specs.
                 </p>
               </div>
               <button
@@ -430,25 +515,28 @@ export default function Home({
               </button>
               <div
                 className="absolute top-0 right-0 w-40 h-40 pointer-events-none"
-                style={{ background: "radial-gradient(circle at 80% 20%, rgba(167,139,250,0.08), transparent 60%)" }}
+                style={{
+                  background:
+                    "radial-gradient(circle at 80% 20%, rgba(167,139,250,0.08), transparent 60%)",
+                }}
               />
             </div>
           </div>
         </section>
 
-
-
-        {/*  HOW IT WORKS */}
+        {/* HOW IT WORKS */}
         <section className="relative z-[5] px-6 md:px-12 py-24 md:py-36 bg-[#050505]">
           <div className="mb-16 flex flex-col items-center text-center">
             <p className="mb-3 text-[11px] uppercase tracking-[.25em] text-violet-400 font-heading">
               how it works
             </p>
             <h2 className="text-[28px] md:text-[46px] font-bold tracking-tight font-heading mb-4">
-              From zero to animated in <span className="gradient-text">three steps</span>
+              From zero to animated in{" "}
+              <span className="gradient-text">three steps</span>
             </h2>
             <p className="font-outfit text-[14px] text-white/40 max-w-md leading-relaxed">
-              No build tools, no config, no headaches. Just copy, paste, and watch it move.
+              No build tools, no config, no headaches. Just copy, paste, and
+              watch it move.
             </p>
           </div>
 
@@ -456,7 +544,10 @@ export default function Home({
             {/* Connector line */}
             <div
               className="hidden md:block absolute top-[60px] left-[20%] right-[20%] h-px"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(167,139,250,0.4), rgba(244,114,182,0.4), transparent)" }}
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(167,139,250,0.4), rgba(244,114,182,0.4), transparent)",
+              }}
             />
 
             {STEPS.map((step) => (
@@ -467,13 +558,18 @@ export default function Home({
                 {/* Glow backdrop */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: `radial-gradient(circle at 50% 0%, ${step.accent}22, transparent 70%)` }}
+                  style={{
+                    background: `radial-gradient(circle at 50% 0%, ${step.accent}22, transparent 70%)`,
+                  }}
                 />
 
                 {/* Step header */}
                 <div className="relative flex items-center justify-between">
                   <div className="relative w-11 h-11 flex items-center justify-center rounded-xl border border-white/10 bg-black">
-                    <span className="font-mono-jb text-[13px] font-bold" style={{ color: step.accent }}>
+                    <span
+                      className="font-mono-jb text-[13px] font-bold"
+                      style={{ color: step.accent }}
+                    >
                       {step.num}
                     </span>
                     <div
@@ -481,7 +577,10 @@ export default function Home({
                       style={{ boxShadow: `0 0 20px ${step.accent}55` }}
                     />
                   </div>
-                  <div className="opacity-60 group-hover:opacity-100 transition" style={{ color: step.accent }}>
+                  <div
+                    className="opacity-60 group-hover:opacity-100 transition"
+                    style={{ color: step.accent }}
+                  >
                     {step.icon}
                   </div>
                 </div>
@@ -501,30 +600,38 @@ export default function Home({
                 {step.isPreview && (
                   <div className="rounded-[10px] bg-black/70 border border-white/[0.06] px-3 py-2.5 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-violet-400 anim-pulse-dot" />
-                    <span className="font-mono-jb text-[11px] text-white/30">live preview</span>
+                    <span className="font-mono-jb text-[11px] text-white/30">
+                      live preview
+                    </span>
                   </div>
                 )}
 
                 {/* Text */}
                 <div className="relative">
-                  <p className="font-heading text-[17px] font-semibold text-white mb-2">{step.title}</p>
-                  <p className="font-outfit text-[13px] leading-relaxed text-white/45">{step.desc}</p>
+                  <p className="font-heading text-[17px] font-semibold text-white mb-2">
+                    {step.title}
+                  </p>
+                  <p className="font-outfit text-[13px] leading-relaxed text-white/45">
+                    {step.desc}
+                  </p>
                 </div>
 
                 {/* Accent line */}
                 <div
                   className="mt-auto h-[2px] w-full rounded-full opacity-60 group-hover:opacity-100 transition"
-                  style={{ background: `linear-gradient(90deg, ${step.accent}, transparent)` }}
+                  style={{
+                    background: `linear-gradient(90deg, ${step.accent}, transparent)`,
+                  }}
                 />
               </div>
             ))}
           </div>
         </section>
 
-                {/*  FAQ */}
+        {/* FAQ */}
         <FaqSection />
-        
-        {/*  CTA */}
+
+        {/* CTA */}
         <section className="relative z-[5] font-outfit overflow-hidden px-6 md:px-12 py-20 md:py-28 text-center">
           <h2 className="relative mb-3 text-[36px] md:text-[44px] font-bold tracking-[-2px] font-heading">
             Start animating <span className="gradient-text">today.</span>
@@ -542,7 +649,7 @@ export default function Home({
               Browse Animations
             </button>
             <a
-              href="https://github.com/byllzz/cssframes.git"
+              href="https://github.com/bilalmlkdev/cssframes"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-[8px] border border-white/[.07] bg-white/[.03] px-8 py-3.5 text-[15px] font-medium text-[#6b6880] transition-all duration-200 hover:border-white/20 hover:text-[#f0eeff]"
@@ -552,7 +659,6 @@ export default function Home({
             </a>
           </div>
         </section>
-
       </div>
     </>
   );

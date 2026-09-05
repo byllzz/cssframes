@@ -2,8 +2,8 @@ import { useState } from "react";
 
 const FAQ_ITEMS = [
   {
-    q: "Is CssFrames completely free to use?",
-    a: "Yes — 100% free and open-source under the MIT license. Use it in personal and commercial projects with no restrictions, no attribution required.",
+    q: "Is CSSFrames completely free to use?",
+    a: "Yes - 100% free and open-source under the MIT license. Use it in personal and commercial projects with no restrictions, no attribution required.",
   },
   {
     q: "Do I need to install anything?",
@@ -11,7 +11,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Does it work with React, Vue, Svelte, or Angular?",
-    a: "Absolutely. Since every animation is pure CSS, it works with any JavaScript framework or vanilla HTML — just add the class name to any element.",
+    a: "Absolutely. Since every animation is pure CSS, it works with any JavaScript framework or vanilla HTML - just add the class name to any element.",
   },
   {
     q: "Can I use it with Tailwind CSS?",
@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I customise timing, easing, or colors?",
-    a: "Of course. Every animation is just a CSS class — override animation-duration, animation-timing-function, or any property right on the element or in your own class.",
+    a: "Of course. Every animation is just a CSS class - override animation-duration, animation-timing-function, or any property right on the element or in your own class.",
   },
 ];
 
@@ -37,12 +37,10 @@ export default function FaqSection() {
 
   return (
     <section className="relative z-[5] px-6 md:px-12 py-20 md:py-28 bg-[#050505]">
-
       {/* Header */}
       <div className="max-w-3xl mx-auto mb-12 text-center">
         <h2 className="text-[28px] md:text-[62px] font-bold tracking-tight font-heading mb-4">
-          Questions?{" "}
-          <span className="gradient-text">Answered.</span>
+          Questions? <span className="gradient-text">Answered.</span>
         </h2>
         <p className="font-outfit text-[14px] text-white/40 leading-relaxed">
           Everything you need to know before you start animating.
@@ -60,8 +58,11 @@ export default function FaqSection() {
               key={i}
               className={[
                 "px-6 md:px-8 transition-colors duration-200",
-                !isLast && "border-b border-white/[0.06] hover:border-violet-400/20",
-              ].filter(Boolean).join(" ")}
+                !isLast &&
+                  "border-b border-white/[0.06] hover:border-violet-400/20",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               {/* Trigger */}
               <button
@@ -78,7 +79,7 @@ export default function FaqSection() {
                   {item.q}
                 </span>
 
-                {/* Plus,  icon */}
+                {/* Plus icon */}
                 <span
                   className={[
                     "flex-shrink-0 w-5 h-5 rounded-full border flex items-center justify-center",
@@ -90,20 +91,32 @@ export default function FaqSection() {
                 >
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <line
-                      x1="5" y1="1" x2="5" y2="9"
-                      strokeWidth="1.5" strokeLinecap="round"
-                      className={isOpen ? "stroke-violet-400" : "stroke-white/40"}
+                      x1="5"
+                      y1="1"
+                      x2="5"
+                      y2="9"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      className={
+                        isOpen ? "stroke-violet-400" : "stroke-white/40"
+                      }
                     />
                     <line
-                      x1="1" y1="5" x2="9" y2="5"
-                      strokeWidth="1.5" strokeLinecap="round"
-                      className={isOpen ? "stroke-violet-400" : "stroke-white/40"}
+                      x1="1"
+                      y1="5"
+                      x2="9"
+                      y2="5"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      className={
+                        isOpen ? "stroke-violet-400" : "stroke-white/40"
+                      }
                     />
                   </svg>
                 </span>
               </button>
 
-              {/* Animated body  */}
+              {/* Animated body */}
               <div
                 className={[
                   "overflow-hidden transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)]",
@@ -124,7 +137,7 @@ export default function FaqSection() {
         <p className="font-outfit text-[13px] text-white/25">
           Still have questions?{" "}
           <a
-            href="https://github.com/byllzz/cssframes.git"
+            href="https://github.com/bilalmlkdev/cssframes/issues"
             target="_blank"
             rel="noreferrer"
             className="text-violet-400 hover:text-violet-300 transition-colors duration-200"
