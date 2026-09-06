@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   X,
   Square,
@@ -11,7 +11,6 @@ import  {categories} from '../../data/animationCategories'
 export default function CategorySelectModal({ onSelect, onClose }) {
   const [selectedId, setSelectedId] = useState(null);
   const [objectType, setObjectType] = useState(null);
-  const [showGuide, setShowGuide] = useState(true);
 
   const objectTypes = [
     { id: 'box', name: 'Box', icon: <Square size={14} /> },
@@ -21,15 +20,14 @@ export default function CategorySelectModal({ onSelect, onClose }) {
   ];
 
   const isReady = selectedId && objectType;
+  // Derived directly from state, rather than tracked separately and
+  // synced via an effect — one less render, one less place to drift.
+  const showGuide = !selectedId && !objectType;
 
   const handleContinue = () => {
     if (!isReady) return;
     onSelect({ category: selectedId, type: objectType });
   };
-
-  useEffect(() => {
-    if (selectedId || objectType) setShowGuide(false);
-  }, [selectedId, objectType]);
 
   return (
     <div className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/70 backdrop-blur-md px-3 sm:px-4 font-outfit ">

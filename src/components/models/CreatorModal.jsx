@@ -55,7 +55,6 @@ export default function CreatorModal({
 
   const draft = loadDraft();
 
-  const [activeTab, setActiveTab] = useState('css');
   const [previewBg, setPreviewBg] = useState(draft?.previewBg ?? '#e8e8e8');
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
   const [title, setTitle] = useState(draft?.title ?? '');
@@ -86,14 +85,16 @@ export default function CreatorModal({
 
   useEffect(() => {
     Prism.highlightAll();
-  }, [cssCode, activeTab]);
+  }, [cssCode]);
 
   const handleTriggerPopup = () => setShowDetailsPopup(true);
 
   const clearDraft = () => {
     try {
       localStorage.removeItem(DRAFT_KEY);
-    } catch (e) {}
+    } catch (e) {
+      console.error('Failed to clear draft', e);
+    }
   };
 
   const formatSocialUrl = (input, platform) => {
@@ -137,11 +138,17 @@ const handleFinalSubmit = () => {
   // keeps CreatorModal mounted until the async POST finishes
   onSave(newEntry);
 };
+  // A stable per-mount suffix instead of Date.now() called at render
+  // time — the old version generated a brand-new "unique" name on every
+  // single re-render, which restarted the CSS animation from scratch on
+  // every keystroke or color change in the preview.
+  const [instanceId] = useState(() => Math.random().toString(36).slice(2, 9));
+
   const getStyleSheet = () => {
     if (!cssCode) return '';
     const match = cssCode.match(/@keyframes\s+([\w-]+)/);
     const keyframeName = match ? match[1] : 'my-pulse';
-    const safeName = `exec-${Date.now()}`;
+    const safeName = `exec-${instanceId}`;
     const processed = cssCode.replace(new RegExp(keyframeName, 'g'), safeName);
 
     return `
@@ -154,7 +161,15 @@ const handleFinalSubmit = () => {
 
   return (
     <div className="w-full h-full flex flex-col text-white font-outfit overflow-hidden rounded-[12px] relative bottom-13 bg-[#050505]">
-      <style>{activeTab === 'css' ? getStyleSheet() : ''}</style>
+      <style>{getStyleSheet()}</style>
+
+      <button
+        onClick={onClose}
+        aria-label="Close creator"
+        className="absolute top-3 left-3 z-30 p-2 rounded-full bg-black/40 hover:bg-black/60 text-zinc-300 hover:text-white transition-colors"
+      >
+        <X size={18} />
+      </button>
 
       <div className="flex h-full flex-col md:grid md:grid-cols-2 flex-1 md:min-h-[500px] ">
         {/* PREVIEW */}

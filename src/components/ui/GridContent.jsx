@@ -4,7 +4,8 @@ import Toolbar from '../layout/Toolbar';
 import Pagination from './Pagination';
 import { Box, Type, Circle, Star, SearchX } from 'lucide-react';
 import EmptyState from './EmptyState';
-import { motion } from 'framer-motion'; // Configuration
+// eslint-disable-next-line no-unused-vars -- `motion` is used via JSX (<motion.main>, <motion.div>), which this rule doesn't detect
+import { motion } from 'framer-motion';
 
 const previewOptions = [
   { id: 'box', label: 'Box', icon: <Box size={16} /> },
@@ -69,9 +70,13 @@ export default function GridContent({
     });
   }, [animations, searchQuery, selectedCategory]); // Reset to first page whenever user searches or changes category
 
+  // Reset to page 1 whenever the search query or category filter changes
+  // (external, user-driven) — can't be derived purely during render since
+  // it needs to distinguish "filter just changed" from normal browsing.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
-  }, [searchQuery, selectedCategory]); // Pagination
+  }, [searchQuery, selectedCategory]);
 
   const totalPages = Math.ceil(filteredPlates.length / cardsPerPage);
 

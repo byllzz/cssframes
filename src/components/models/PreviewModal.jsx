@@ -24,9 +24,13 @@ export default function PreviewModal({ animation, onClose, previewType }) {
   // the modal opens with "Circle" regardless of the card's default.
   const displayType = previewType || animation?.type || 'box';
 
+  // Reacts to the animation prop changing (a new animation was opened) to
+  // reset scroll and sync the preview background — external, parent-driven
+  // state, not derivable during render.
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (animation?.previewBg) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPreviewBg(animation.previewBg);
     }
   }, [animation]);

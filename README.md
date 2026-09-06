@@ -92,129 +92,33 @@ The library is organized into purpose-driven categories for common UI interactio
 - **Shapes** - Morphing blobs, geometric transitions, pulse systems, and rotations.
 
 
-# Community API
+# Community Animations
 
-The community animation library runs as a separate Express server located inside the `server/` directory.
-
-```bash
-cd server
-npm install
-npm start
-```
-
-The API will be available at:
+Animations created through the in-app creator are saved directly in
+your browser's `localStorage` — no backend, no server to run or
+deploy. Every visitor's created animations persist for them across
+reloads, entirely client-side.
 
 ```text
-http://localhost:3001/animations
+src/utils/communityAnimations.js
 ```
 
----
+This keeps the project genuinely zero-infrastructure: clone it, run
+`npm install && npm run dev`, and every feature — including creating
+and saving your own animations — works immediately with nothing else
+to configure or host.
 
-# Environment Variables
-
-Create a `.env` file in the project root.
-
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-For production deployments, replace the value with your Railway backend URL inside your Vercel environment variables.
-
-
-# Backend Overview
-
-The backend is intentionally lightweight and only handles community animation storage.
-
-### Responsibilities
-
-- Store community-submitted animations
-- Fetch animation collections
-- Delete existing submissions
-- Persist data using `db.json`
-- Expose a simple REST API
-
-### Directory
-
-```text
-server/
-├── db.json
-├── server.js
-└── package.json
-```
-
-
-# API Endpoints
-
-### Get All Animations
-
-```http
-GET /animations
-```
-
-Returns every community animation.
-
-### Submit Animation
-
-```http
-POST /animations
-```
-
-Adds a new animation to the collection.
-
-### Delete Animation
-
-```http
-DELETE /animations/:id
-```
-
-Removes an animation by its ID.
-
-
-# Deploying the Backend
-
-Deploying the API to Railway takes only a few minutes.
-
-1. Push the repository to GitHub.
-2. Create a new Railway project.
-3. Select **Deploy from GitHub**.
-4. Set the **Root Directory** to `server`.
-5. Use the start command:
-
-```bash
-node server.js
-```
-
-6. Add the following environment variable:
-
-```env
-PORT=3001
-```
-
-7. Generate a public Railway domain.
-8. Copy the generated URL.
-9. Add it to Vercel as:
-
-```env
-VITE_API_URL=https://your-railway-url
-```
-
----
 
 # Project Structure
 
 ```text
 cssframes/
 ├── src/
-│   ├── api/              # API utilities
 │   ├── components/       # Reusable UI components
 │   ├── data/             # Motion presets & categories
+│   ├── utils/            # Community animation storage (localStorage)
 │   ├── App.jsx
 │   └── main.jsx
-│
-├── server/               # Community REST API
-│   ├── db.json
-│   ├── server.js
-│   └── package.json
 │
 ├── package.json
 └── vite.config.js

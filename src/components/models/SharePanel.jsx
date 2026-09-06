@@ -36,7 +36,9 @@ export default function SharePanel({ animation, isOpen, onClose }) {
       await navigator.clipboard.writeText(text);
       setCopiedType(type);
     } catch (err) {
-      // Fallback
+      // Clipboard API unavailable/blocked — fall back to the legacy
+      // textarea+execCommand approach, but still note why we fell back.
+      console.warn('Clipboard API failed, using fallback:', err);
       const textArea = document.createElement('textarea');
       textArea.value = text;
       document.body.appendChild(textArea);

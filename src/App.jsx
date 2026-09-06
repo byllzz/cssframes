@@ -23,7 +23,7 @@ import CommunityGrid from './components/ui/CommunityGrid';
 import { animations as localAnimations } from './data/animations';
 import Home from './components/pages/Home';
 
-import { getAnimations, createAnimation } from './api/animations';
+import { getStoredCommunityAnimations, saveCommunityAnimation } from './utils/communityAnimations';
 
 // Loading Spinner
 const LoadingSpinner = () => (
@@ -227,32 +227,31 @@ export default function App() {
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
 
-  //  Fetch Animations
+  //  Load community animations from localStorage — no backend, works
+  //  fully offline, and every visitor's "create" actually persists for
+  //  them across reloads instead of silently vanishing.
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiData = await getAnimations();
-        const remoteAnims = Array.isArray(apiData) ? apiData : [];
-        const sortedRemote = [...remoteAnims].sort((a, b) => b.id - a.id);
-        const merged = [...sortedRemote, ...localAnimations];
-        setAllAnimations(merged);
-      } catch (err) {
-        console.error(err);
-        setAllAnimations(localAnimations);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    try {
+      const stored = getStoredCommunityAnimations();
+      setAllAnimations([...stored, ...localAnimations]);
+    } catch (err) {
+      console.error('Failed to load community animations:', err);
+      setAllAnimations(localAnimations);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   //  Sync URL → isCreating state on refresh
-  //  If someone lands on /create directly, activate creator mode
+  //  If someone lands on /create directly, activate creator mode.
+  //  Intentionally mount-only: this handles a direct page load/refresh,
+  //  not ongoing navigation (a separate effect below handles that).
   useEffect(() => {
     if (location.pathname === '/create' || location.pathname === '/create/details') {
       setIsCreating(true);
     }
-  }, []); // only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //  Sync sidebar + activeAnimation from URL
   useEffect(() => {
@@ -447,10 +446,6 @@ export default function App() {
     handleClosePreview,
   };
 
-  //  Creator UI (rendered outside Routes so URL /create works cleanly)
-  const isOnCreateRoute =
-    location.pathname === '/create' || location.pathname.startsWith('/create');
-
   return (
     <>
       <div className="fixed top-0 left-0 w-full z-[20000] pointer-events-none">
@@ -549,27 +544,17 @@ export default function App() {
                             clearCreationStorage();
                             navigate('/animations');
                           }}
-                          onSave={async anim => {
-                            // CreatorModal stays mounted until save is done
+                          onSave={anim => {
+                            // Persist to localStorage — this always
+                            // succeeds locally, so no try/catch needed
+                            // for a network call that no longer exists.
                             setIsNavigating(true);
-
-                            try {
-                              const saved = await createAnimation(anim);
-                              //Save succeeded - now safe to close creator and update state
-                              setAllAnimations(prev => [saved, ...prev]);
-                              clearCreationStorage();
-                              setIsCreating(false);
-                              navigate('/community');
-                            } catch (err) {
-                              console.error('Failed to save animation:', err);
-                              //Save failed — add locally so work isn't lost, still navigate
-                              setAllAnimations(prev => [{ ...anim, id: anim.id || `community-${Date.now()}` }, ...prev]);
-                              clearCreationStorage();
-                              setIsCreating(false);
-                              navigate('/community');
-                            } finally {
-                              setIsNavigating(false);
-                            }
+                            const saved = saveCommunityAnimation(anim);
+                            setAllAnimations(prev => [saved, ...prev]);
+                            clearCreationStorage();
+                            setIsCreating(false);
+                            navigate('/community');
+                            setIsNavigating(false);
                           }}
                           handleStartCreating={() => {
                             // "Change Category" goes back to step 1

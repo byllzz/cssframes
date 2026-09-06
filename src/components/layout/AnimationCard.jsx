@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Share2, Star, Code2, User, Clock } from 'lucide-react';
 import { FaGithub, FaTwitter } from 'react-icons/fa6';
-import { motion, AnimatePresence } from 'framer-motion'; // Added motion
+// eslint-disable-next-line no-unused-vars -- `motion` is used via JSX (<motion.div>), which this rule doesn't detect
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AnimationCard({ animation, onCardClick, previewType, onShareClick }) {
   const [hovered, setHovered] = useState(false);

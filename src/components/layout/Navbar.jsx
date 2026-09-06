@@ -116,7 +116,7 @@ export default function Navbar({
           {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
-              <a href="https://github.com/byllzz/cssframes.git"
+              <a href="https://github.com/bilalmlkdev/cssframes.git"
                 target='_blank'
                 // className="flex items-center gap-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white px-4 py-2.5 rounded-[5px] text-[14px]"
                 className='max-w-full overflow-hidden'

@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react';
 export default function TopLoader({ isLoading }) {
   const [width, setWidth] = useState(0);
 
+  // Reacts to the isLoading prop (external, parent-driven) to animate a
+  // progress bar via setInterval — a real animation loop, not state
+  // derivable during render.
   useEffect(() => {
     let interval;
     if (isLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWidth(0);
       interval = setInterval(() => {
         setWidth((prev) => {

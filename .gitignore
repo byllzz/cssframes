@@ -23,7 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-
+.vite/
+.vite/deps
 
 # Dependencies
 node_modules/
