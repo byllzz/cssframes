@@ -13,119 +13,89 @@ export default function CommunityGrid({
   const communityAnims = animations.filter(anim => anim.isCommunity);
 
   return (
-    <div className="p-6 md:py-10 md:px-10 w-full min-h-screen bg-[#050505] relative overflow-hidden font-outfit">
-      {/* Background Decorative Glows */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-40 bg-blue-600/5 blur-[120px] rounded-full -mr-64 -mt-64 pointer-events-none" />
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] opacity-40 bg-purple-600/5 blur-[100px] rounded-full -ml-32 -mt-32 pointer-events-none" />
-
-      {/* Top Navigation */}
+    <div className="p-6 md:py-10 md:px-10 w-full min-h-screen font-outfit">
+      {/* Back navigation */}
       <button
         onClick={() => onNavigate('Animations')}
-        className="mb-12 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors cursor-pointer group"
+        className="mb-10 flex items-center gap-2 text-[13px] font-medium text-white/50 hover:text-white transition-colors group"
       >
-        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-        Back to Curated Library
+        <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
+        Back to library
       </button>
 
-      {/* Header Section */}
-      <div className="relative mb-14 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-indigo-400">
-            <div className="p-1.5 bg-indigo-500/10 rounded-[5px] border border-indigo-500/20">
-              <Users size={14} />
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] leading-none">
-              Source Repository
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10 pb-8 border-b border-white/10">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 text-[#7c3aed]">
+            <Users size={15} />
+            <span className="text-[12px] font-semibold uppercase tracking-wider">
+              Community
             </span>
           </div>
-
-          <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.85] uppercase">
-              Community <br />
-              <span className="text-zinc-800 transition-colors duration-500 hover:text-zinc-700">
-                Library
-              </span>
-            </h1>
-          </div>
-
-          <p className="text-zinc-500 text-sm md:text-base max-w-xl leading-tight font-medium">
-            A collective of motion presets designed for scale. <br />
-            Inspect, fork, and integrate production-grade CSS.
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            Community library
+          </h1>
+          <p className="text-white/50 text-[14px] max-w-md leading-relaxed">
+            Animations submitted by other developers - inspect, copy, and use
+            them freely.
           </p>
         </div>
 
-        {/* action & states area*/}
-        <div className="flex items-center gap-4 self-start lg:self-auto">
-          <div className="hidden sm:flex flex-col items-end mr-6 border-r border-zinc-900 pr-6">
-            <span className="text-white font-black text-6xl tracking-wider leading-none">
-              {String(communityAnims.length).padStart(2, '0')}
+        <div className="flex items-center gap-6 self-start lg:self-auto">
+          <div className="flex flex-col">
+            <span className="text-white font-bold text-3xl leading-none">
+              {communityAnims.length}
             </span>
-            <span className="text-zinc-700 text-[10px] uppercase font-bold tracking-[0.2em] mt-1">
-              Total Units
+            <span className="text-white/40 text-[12px] mt-1">
+              submitted
             </span>
           </div>
 
           <button
             onClick={handleStartCreating}
-            className="flex items-center gap-2 bg-white hover:bg-zinc-200 text-black px-8 py-4 rounded-[5px] font-black text-[11px] uppercase tracking-[0.15em] transition-all active:scale-95 cursor-pointer shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+            className="flex items-center gap-2 bg-[#7c3aed] hover:opacity-90 text-[#fff] px-5 py-2.5 rounded-[10px] font-semibold text-[13px] transition-all active:scale-95"
           >
-            <Plus size={16} strokeWidth={4} /> Submit Animation
+            <Plus size={15} strokeWidth={2.5} /> Submit animation
           </button>
         </div>
       </div>
 
-      {/* Grid Content */}
+      {/* Grid */}
       {communityAnims.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {communityAnims.map(anim => (
-            <div key={anim.id} className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <AnimationCard
-                animation={anim}
-                onCardClick={onCardClick}
-                previewType={previewType}
-                onShareClick={onShareClick}
-              />
-            </div>
+            <AnimationCard
+              key={anim.id}
+              animation={anim}
+              onCardClick={onCardClick}
+              previewType={previewType}
+              onShareClick={onShareClick}
+            />
           ))}
         </div>
       ) : (
-        /* Sharp Empty State */
-        <div className="relative flex flex-col items-center justify-center py-40 border border-zinc-900 bg-[#060606] rounded-[5px] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/10 via-transparent to-transparent opacity-50" />
-
-          <div className="relative p-5 text-zinc-800 mb-8">
-            <Sparkles size={40} strokeWidth={1} />
+        /* Empty state */
+        <div className="flex flex-col items-center justify-center py-28 border border-white/10 rounded-[16px] bg-[#161616]">
+          <div className="p-4 rounded-full bg-white/5 mb-5">
+            <Sparkles size={28} className="text-white/40" strokeWidth={1.5} />
           </div>
 
-          <h3 className="relative text-zinc-800 font-black text-xs uppercase tracking-[0.5em] mb-6">
-            Nothing to Show
+          <h3 className="text-white font-semibold text-[17px] mb-2">
+            No submissions yet
           </h3>
 
-          <p className="relative text-zinc-100 text-center max-w-3xl px-6 text-3xl md:text-5xl font-black uppercase tracking-wide leading-[0.9] mb-12 transition-all">
-            The community database is <span className="text-zinc-800">empty.</span> <br />
-            Contribute the first{' '}
-            <span className="underline decoration-zinc-800 underline-offset-8 text-zinc-400">
-              preset.
-            </span>
+          <p className="text-white/40 text-[14px] text-center max-w-sm mb-7 leading-relaxed">
+            Be the first to share an animation with the community.
           </p>
 
           <button
             onClick={handleStartCreating}
-            className="relative bg-zinc-100 hover:bg-white text-black px-10 py-4 rounded-[5px] font-black text-xs uppercase tracking-[0.2em] transition-all cursor-pointer"
+            className="bg-[#7c3aed] hover:opacity-90 text-[#fff] px-6 py-3 rounded-[10px] font-semibold text-[13px] transition-all active:scale-95"
           >
-            Deploy Animation
+            Submit animation
           </button>
         </div>
       )}
-
-      {/*  Footnote Decoration */}
-      <div className="mt-20 flex items-center gap-4 opacity-20 group pb-10">
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-zinc-500 to-transparent" />
-        <span className="text-[9px] font-bold uppercase tracking-[1em] text-zinc-500">
-          CSSFRAMES
-        </span>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-zinc-500 to-transparent" />
-      </div>
     </div>
   );
 }

@@ -2,15 +2,15 @@
 import { Copyright, Scale } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 export default function Footer() {
-  const footerLinks = {
-    Information: ["Blog", "Post Guidelines", "Give feedback", "Report bug"],
-    Legal: [
-      "Terms and Conditions",
-      "Privacy policy",
-      "Cookie policy",
-      "Disclaimer",
-    ],
-  };
+  // const footerLinks = {
+  //   Information: ["Blog", "Post Guidelines", "Give feedback", "Report bug"],
+  //   Legal: [
+  //     "Terms and Conditions",
+  //     "Privacy policy",
+  //     "Cookie policy",
+  //     "Disclaimer",
+  //   ],
+  // };
 
   return (
     <footer className="w-full bg-[#050505] text-zinc-400 pt-36 pb-30 md:pb-60 px-6 md:px-10  font-outfit">
@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="hidden lg:block lg:col-span-1" />
 
         {/* Link Columns */}
-        {Object.entries(footerLinks).map(([title, links]) => (
+        {/* {Object.entries(footerLinks).map(([title, links]) => (
           <div key={title} className="space-y-5 lg:col-span-1 relative">
             <h4 className="text-white font-outfit font-bold text-[17px] tracking-normal">
               {title}
@@ -94,7 +94,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-        ))}
+        ))} */}
       </div>
 
       {/* Bottom Bar */}

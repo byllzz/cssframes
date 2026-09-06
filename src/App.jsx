@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Routes,
   Route,
+  Navigate,
   useNavigate,
   useLocation,
   useParams,
@@ -21,7 +22,8 @@ import SharePanel from './components/models/SharePanel';
 import About from './components/pages/About';
 import CommunityGrid from './components/ui/CommunityGrid';
 import { animations as localAnimations } from './data/animations';
-import Home from './components/pages/Home';
+// Landing page disabled for now - see the commented-out "/" route below.
+// import Home from './components/pages/Home';
 
 import { getStoredCommunityAnimations, saveCommunityAnimation } from './utils/communityAnimations';
 
@@ -111,29 +113,23 @@ const LoadingSpinner = () => (
 //  404 UI
 const NotFound = ({ onBack }) => (
   <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
-    <div className="absolute size-64 bg-purple-500/5 blur-[120px] pointer-events-none" />
-    <div className="relative space-y-8 flex flex-col items-center">
-      <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.2em] text-zinc-600 font-medium">Error 404</p>
-        <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white">
-          Animation not found
-        </h2>
-        <p className="text-zinc-500 max-w-[280px] text-sm leading-relaxed mx-auto">
-          The piece you're looking for might have been moved or doesn't exist yet.
-        </p>
-      </div>
-      <button
-        onClick={onBack}
-        className="group relative px-8 py-3 bg-white text-black rounded-full font-medium text-sm transition-all duration-300 hover:bg-zinc-200 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
-      >
-        <span className="flex items-center gap-2">
-          Back to Library
-          <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-        </span>
-      </button>
-    </div>
+    <span className="text-[13px] font-mono text-white/30 mb-4">404</span>
+    <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white mb-2">
+      Animation not found
+    </h2>
+    <p className="text-white/40 max-w-[300px] text-sm leading-relaxed mb-8">
+      The animation you're looking for might have been moved or doesn't exist.
+    </p>
+    <button
+      onClick={onBack}
+      className="group flex items-center gap-2 px-6 py-3 bg-white text-black rounded-[10px] font-medium text-sm transition-colors hover:bg-white/90 active:scale-95"
+    >
+      Back to library
+      <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+    </button>
   </div>
 );
+
 
 //  /:category Route
 const CategoryRoute = ({
@@ -227,7 +223,7 @@ export default function App() {
   const [newCategory, setNewCategory] = useState('box');
   const [selectedShare, setSelectedShare] = useState(null);
 
-  //  Load community animations from localStorage — no backend, works
+  //  Load community animations from localStorage - no backend, works
   //  fully offline, and every visitor's "create" actually persists for
   //  them across reloads instead of silently vanishing.
   useEffect(() => {
@@ -403,9 +399,11 @@ export default function App() {
     }, 600);
   };
 
-  const handleEnter = () => {
-    withTransition(() => navigate('/animations'));
-  };
+  // Only used by the landing page's "Enter" button, which is currently
+  // disabled (see the commented-out "/" route above).
+  // const handleEnter = () => {
+  //   withTransition(() => navigate('/animations'));
+  // };
 
   const clearCreationStorage = () => {
     [
@@ -473,7 +471,10 @@ export default function App() {
 
           <main className="flex-1 flex flex-col md:flex-row">
             <Routes>
-              {/* Home */}
+              {/* Landing page temporarily disabled - root now redirects
+                  straight into the app. To bring the landing page back,
+                  uncomment this Route and remove the redirect below it. */}
+              {/*
               <Route
                 path="/"
                 element={
@@ -488,6 +489,8 @@ export default function App() {
                   </div>
                 }
               />
+              */}
+              <Route path="/" element={<Navigate to="/animations" replace />} />
 
               {/*  /create ROUTE * */}
               <Route
@@ -545,7 +548,7 @@ export default function App() {
                             navigate('/animations');
                           }}
                           onSave={anim => {
-                            // Persist to localStorage — this always
+                            // Persist to localStorage - this always
                             // succeeds locally, so no try/catch needed
                             // for a network call that no longer exists.
                             setIsNavigating(true);

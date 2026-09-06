@@ -4,9 +4,10 @@
     <img src="https://raw.githubusercontent.com/bilalmlkdev/cssframes/main/src/assets/favicon/favicon.svg" alt="cssframes Logo" width="100%" height="120">
   </a>
 
-# Cssframes
+# cssframes
 
-Open-source motion system for building high-performance UI animations using pure CSS <br> keyframes. Create smooth, production-ready animations without JavaScript runtime overhead.
+A place to build, save, and reuse CSS animations - entirely in your browser. <br>
+No sign-up, no server, no lost work between sessions.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-black?style=for-the-badge)](https://cssframes.vercel.app)
 [![GitHub Stars](https://img.shields.io/github/stars/bilalmlkdev/cssframes?style=for-the-badge&logo=github&color=yellow)](https://github.com/bilalmlkdev/cssframes.git)
@@ -14,109 +15,89 @@ Open-source motion system for building high-performance UI animations using pure
 
 </div>
 
-<!-- <p align="center">
-  <i>Created by <a href="https://bilalmlkdev.vercel.app" target="_blank">Bilal Malik</a></i><br>
-  <i>Follow on Github <a href="https://github.com/bilalmlkdev" target="_blank">bilalmlkdev</a></i>
-</p> -->
-
 [![cssframes Dashboard](https://raw.githubusercontent.com/bilalmlkdev/cssframes/main/src/assets/homePreview.png)](https://cssframes.vercel.app/)
 
+# Why I built this
 
-# About
+I kept reaching for the same handful of CSS animations across projects,
+and kept rewriting them from memory or digging through old files to
+find the keyframes I liked. So I built cssframes as the place I wished
+I already had: browse a library of ready-made animations, preview them
+live, and when I make something new, save it right there in the
+browser so it's still there next time.
 
-**CSSFrames** is an open-source motion system that helps developers build fast, consistent UI animations using **pure CSS keyframes**.
+There's no backend, no account, no database. Everything - the library,
+your own creations, your preview settings - lives in `localStorage`.
+Clone it, open it, and it just works.
 
-Instead of creating animations from scratch for every project, CSSFrames provides a curated collection of reusable motion presets that work seamlessly with traditional CSS and Tailwind CSS.
+# What it does
 
-Built with performance as the foundation, every animation avoids layout thrashing by relying on GPU-accelerated properties like `transform` and `opacity`. No JavaScript animation runtime, no heavy dependencies, and no unnecessary complexity.
+- **Browse a library** of ready-made CSS keyframe animations, organized
+  by category - entrances, exits, text, loaders, and more.
+- **Live preview** every animation on a box, circle, text, or icon
+  before you commit to it.
+- **Create your own** with a visual editor: pick a shape, write or tweak
+  the keyframes, adjust the preview background, and see it move in
+  real time.
+- **Save what you make.** Every animation you create is stored locally
+  in your browser, so it's there the next time you open the app -
+  no account required.
+- **Copy the exact CSS** for anything in the library or anything you've
+  made, ready to paste into your own project.
 
-Alongside its animation library, CSSFrames includes a visual preview system, export tools, a Creator Suite for custom animations, and a community platform where developers can publish and discover new motion presets.
+# How it works
 
+1. Browse the library or search for an animation by name.
+2. Preview it live against a box, circle, text, or icon.
+3. Copy the CSS keyframes straight into your project - or open the
+   creator to build your own from scratch.
+4. Anything you create is saved locally and shows up in your community
+   library on your next visit.
 
-# Features
+# Design principles
 
-- **40+ production-ready motion presets** for buttons, cards, text, loaders, icons, entrances, and shapes.
-- **100% Pure CSS animations** with zero JavaScript runtime.
-- **GPU-optimized** using compositor-friendly properties for smooth rendering.
-- **Tailwind CSS compatible** with ready-to-use utility classes.
-- **Interactive live preview** to test animations before exporting.
-- **Creator Suite** for building and customizing your own keyframes.
-- **One-click export** for CSS keyframes, Tailwind classes, and animation metadata.
-- **Theater Mode** for distraction-free animation previews.
-- **Community library** powered by a REST API for sharing animations.
-- **Completely open source** under the MIT License.
+- **Performance first.** Every animation relies on GPU-friendly
+  properties - `transform` and `opacity` - instead of layout-triggering
+  ones like `width`, `top`, or `margin`.
+- **No dependencies to run it.** Pure CSS keyframes, no JavaScript
+  animation runtime required in your own project.
+- **Nothing to configure.** No API keys, no backend, no environment
+  variables - clone it and it runs.
 
+# Animation categories
 
-# How It Works
+- **Entrance** - fade, slide, zoom, and reveal animations.
+- **Exit** - mirrored versions for elements leaving the screen.
+- **Text** - typewriter, glitch, and kinetic text effects.
+- **Fading** - opacity-based transitions.
+- **Rotating** - spin and rotation-based motion.
+- **Bouncing** - spring and bounce feedback.
+- **Sliding** - directional movement.
+- **Attention** - pulse, shake, and emphasis effects for drawing focus.
+- **Loader** - spinners and progress indicators.
 
-Using CSSFrames takes only a few steps:
+# Local, persistent storage
 
-1. Browse the animation library or community collection.
-2. Preview animations on different UI components.
-3. Customize timing, easing, and playback.
-4. Export production-ready CSS or Tailwind utilities.
-5. Drop the animation directly into your project.
-
-Every preset is designed to be lightweight, reusable, and easy to integrate into modern frontend applications.
-
-
-
-# Design Principles
-
-CSSFrames is built around a simple philosophy:
-
-- **Performance First**
-  Every animation is optimized for smooth rendering by avoiding expensive layout calculations.
-
-- **Functional Motion**
-  Motion should communicate hierarchy, feedback, and state instead of being decorative.
-
-- **Composable System**
-  Animations are reusable building blocks that can be mixed together across projects.
-
-- **Consistent Experience**
-  Shared timing, easing, and motion patterns create a unified design language.
-
----
-
-# Animation Categories
-
-The library is organized into purpose-driven categories for common UI interactions.
-
-- **Buttons** - Hover effects, click feedback, press states, success and error interactions.
-- **Loaders** - Spinners, pulse animations, shimmer effects, and progress indicators.
-- **Entrances** - Fade, slide, zoom, blur, and staggered reveal animations.
-- **Text** - Typewriter effects, kinetic typography, glitch animations, and text reveals.
-- **Cards** - Floating, elevation, glow, hover transitions, and shimmer effects.
-- **Icons** - Bounce, rotate, stroke drawing, alerts, and floating motion.
-- **Shapes** - Morphing blobs, geometric transitions, pulse systems, and rotations.
-
-
-# Community Animations
-
-Animations created through the in-app creator are saved directly in
-your browser's `localStorage` — no backend, no server to run or
-deploy. Every visitor's created animations persist for them across
-reloads, entirely client-side.
+Animations you create through the in-app creator save directly to your
+browser's `localStorage` - no backend, no server to run or deploy.
 
 ```text
 src/utils/communityAnimations.js
 ```
 
-This keeps the project genuinely zero-infrastructure: clone it, run
-`npm install && npm run dev`, and every feature — including creating
-and saving your own animations — works immediately with nothing else
-to configure or host.
+This is what makes the project genuinely zero-infrastructure: clone
+it, run `npm install && npm run dev`, and every feature - including
+creating and saving your own animations - works immediately, with
+nothing else to configure or host.
 
-
-# Project Structure
+# Project structure
 
 ```text
 cssframes/
 ├── src/
 │   ├── components/       # Reusable UI components
 │   ├── data/             # Motion presets & categories
-│   ├── utils/            # Community animation storage (localStorage)
+│   ├── utils/            # Local animation storage (localStorage)
 │   ├── App.jsx
 │   └── main.jsx
 │
@@ -124,27 +105,32 @@ cssframes/
 └── vite.config.js
 ```
 
----
+# Getting started
 
-# Performance Guidelines
+```bash
+git clone https://github.com/bilalmlkdev/cssframes.git
+cd cssframes
+npm install
+npm run dev
+```
 
-CSSFrames is built around modern animation best practices.
+No environment variables, no API keys, nothing else to set up.
 
-- Prefer `transform` and `opacity` for smooth GPU-accelerated motion.
-- Avoid animating layout-triggering properties such as `width`, `height`, `top`, `left`, or `margin`.
-- Keep animations reusable and composable.
-- Include meaningful metadata such as duration, easing, and description.
-- Provide a preview for every new animation preset.
-- Ensure exported animations work with both plain CSS and Tailwind CSS.
+# Performance guidelines
 
+If you're contributing a new animation:
 
-# License (MIT)
+- Prefer `transform` and `opacity` for smooth, GPU-accelerated motion.
+- Avoid animating layout-triggering properties such as `width`,
+  `height`, `top`, `left`, or `margin`.
+- Keep animations short, reusable, and easy to compose with others.
+- Include a clear title, duration, and one-line description.
 
+# License
 
-This project is licensed under the **MIT License**.
+Distributed under the MIT License. See [`LICENSE`](./LICENSE) for details.
 
 ```text
-
 MIT License
 
 Copyright (c) 2026 Bilal Malik
@@ -152,17 +138,18 @@ Copyright (c) 2026 Bilal Malik
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software.The above copyright notice and this permission notice shall
-be included in all copies or substantial portions of the Software.
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-
